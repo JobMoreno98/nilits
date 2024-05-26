@@ -2,11 +2,17 @@
 
 use App\Http\Controllers\alumnosContorller;
 use App\Http\Controllers\asesoresController;
+use App\Http\Controllers\aspirantesController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\normatividadController;
+use App\Http\Controllers\numeraliaController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\tutorController;
 use App\Http\Controllers\usuarioController;
 use Illuminate\Support\Facades\Route;
+use illuminate\Support\Facades\Mail;
+use App\Mail\enviarcorreo;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -88,3 +94,21 @@ Route::post('/maestros/store',[asesoresController::class,'store'])->name('/maest
 
 Route::get('/generar-oficio-asignacion', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion');
 Route::get('/generar-constancia-tutoria', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria');
+
+
+//Ruta numeralia
+
+Route::get('numeralia', [numeraliaController::class,'index'])->name('numeralia');
+
+//Ruta aspirantes
+
+Route::get('aspirante', [aspirantesController::class,'index'])->name('aspirante');
+
+Route::post('/aspirante/crear', [aspirantesController::class, 'store'])->name('aspirantes.store');
+
+
+
+
+//Ruta normatividad
+
+Route::get('normatividad', [normatividadController::class,'indexNo'])->name('normatividad');

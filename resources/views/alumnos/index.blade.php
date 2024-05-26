@@ -296,7 +296,7 @@
             {{ $alumnos->appends(request()->query())->links() }}
         </div>
 
-
+{{--  Aqui empieza el modal del agregar alumno --}}
         <div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">

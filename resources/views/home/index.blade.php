@@ -80,6 +80,7 @@
 
             <!-- Tarjeta Numeralia -->
             <div class="col-md-4 mb-4">
+                <a href="{{ route('numeralia') }}" style="color: black; font-family: arial; text-decoration: none ">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Numeralia</h5>
@@ -90,6 +91,7 @@
             </div>
             <!-- Tarjeta Aspirantes -->
             <div class="col-md-4 mb-4">
+                <a href="{{ route('aspirante') }}" style="color: black; font-family: arial; text-decoration: none ">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Aspirantes</h5>
@@ -100,6 +102,7 @@
             </div>
             <!-- Tarjeta Normatividad -->
             <div class="col-md-4 mb-4">
+                <a href="{{ route('normatividad') }}" style="color: black; font-family: arial; text-decoration: none ">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Normatividad</h5>
