@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\ContactanosMailable;
 use App\Http\Controllers\alumnosContorller;
 use App\Http\Controllers\asesoresController;
 use App\Http\Controllers\aspirantesController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\tutorController;
 use App\Http\Controllers\usuarioController;
 use Illuminate\Support\Facades\Route;
 use illuminate\Support\Facades\Mail;
-use App\Mail\enviarcorreo;
 
 
 /*
@@ -100,12 +100,24 @@ Route::get('/generar-constancia-tutoria', [PDFController::class, 'constanciaTuto
 
 Route::get('numeralia', [numeraliaController::class,'index'])->name('numeralia');
 
-//Ruta aspirantes
+Route::get('grafica', [alumnosContorller::class, 'obtenerDatosGrafica'])->name('grafica');
+
+Route::get('/grafica', [alumnosContorller::class, 'obtenerDatosGrafica']);
+
+
+
+//!Ruta aspirantes
 
 Route::get('aspirante', [aspirantesController::class,'index'])->name('aspirante');
 
 Route::post('/aspirante/crear', [aspirantesController::class, 'store'])->name('aspirantes.store');
 
+Route::get('contactanos', function(){
+
+    Mail::to('ezequielmora.chk@gmail.com')->send(new \App\Mail\ContactanosMailable);
+    return "Mensaje enviado";
+
+})->name('contactanos');
 
 
 

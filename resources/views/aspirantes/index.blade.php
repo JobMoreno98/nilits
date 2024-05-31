@@ -56,7 +56,7 @@
 
                                 <!-- Nombre -->
                                 <div class="form-group">
-                                    <label for="nombre">Nombre</label>
+                                    <label for="nombre">Nombre completo</label>
                                     <input type="text" name="nombre" class="form-control" id="Nombre" required>
                                 </div>
 
@@ -118,6 +118,7 @@
                                         <option value="30">Yucatán</option>
                                         <option value="31">Zacatecas</option>
                                     </select>
+
                                 </div>
 
                                 <!-- Fecha de Nacimiento -->

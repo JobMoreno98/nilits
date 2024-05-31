@@ -7,12 +7,16 @@ use App\Models\alumnos_model;
 use App\Models\maestrosModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class alumnosContorller extends Controller
 {
     public function index()
     {
+
+
+
         $totalRegistros = alumnos_model::count();
         $totalEgresados = alumnos_model::where('estatus', 3)->count();
         $totalActivos = alumnos_model::where('estatus', 1)->count();
@@ -29,7 +33,7 @@ class alumnosContorller extends Controller
         // Listar a los maestros para poder asignarlos al crear un registro
         $tutores = maestrosModel::all();
 
-        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos'));
+        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechaTitulacion'));
     }
 
 
@@ -42,11 +46,11 @@ class alumnosContorller extends Controller
         $totalBajas = alumnos_model::where('estatus', 4)->count();
 
         $alumnos = DB::table('alumnos')
-        ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-        ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-        ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-        ->orderBy('alumnos.codigo', 'desc')
-        ->paginate(10);
+            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
+            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
+            ->orderBy('alumnos.codigo', 'desc')
+            ->paginate(10);
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         /* $alumnos = DB::table('alumnos')
             ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
@@ -140,7 +144,7 @@ class alumnosContorller extends Controller
         $tutor_alumno->activo = 1;
         // Asigna el resto de los campos
         $tutor_alumno->save();
-       //$alumno->update();
+        //$alumno->update();
 
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
@@ -325,22 +329,95 @@ class alumnosContorller extends Controller
 
 
     public function asignacion(Request $request)
-{
-    $validated = $request->validate([
-        'maestro' => 'required',
-        'alumno' => 'required|array', // Asumiendo que puedes tener múltiples alumnos seleccionados
-    ]);
-
-    foreach ($request->alumno as $codigoAlumno) {
-        alumno_tutorModel::create([
-            'id_tutor' => $request->maestro,
-            'codigo' => $codigoAlumno,
-
+    {
+        $validated = $request->validate([
+            'maestro' => 'required',
+            'alumno' => 'required|array', // Asumiendo que puedes tener múltiples alumnos seleccionados
         ]);
+
+        foreach ($request->alumno as $codigoAlumno) {
+            alumno_tutorModel::create([
+                'id_tutor' => $request->maestro,
+                'codigo' => $codigoAlumno,
+
+            ]);
+        }
+
+        return redirect()->route('gestionar-tutores');
     }
 
-    return redirect()->route('gestionar-tutores');
-}
+
+    //solicitud para las gráficas
+    public function obtenerDatosGrafica(Request $request)
+
+
+    {       
+    
+        // Recibir los parámetros de la solicitud
+        $showHombres = $request->query('hombres') === 'true';
+        $showMujeres = $request->query('mujeres') === 'true';
+        $tipoTitulacion = $request->query('tipoTitulacion');
+        $tipoMateria = $request->query('materia');
+
+        // Inicializar la consulta
+        $query = DB::table('alumnos')
+            ->select('sexo', DB::raw('COUNT(*) as count'))
+            ->groupBy('sexo');
+
+        // Filtrar por carrera si se proporciona en la solicitud
+        if ($request->query('carrera')!== 'carrera') {
+            $query->where('carrera', $request->query('carrera'));
+        }
+
+        if ($tipoTitulacion && $tipoTitulacion !== 'Tipo deTitulacion') {
+            error_log($tipoTitulacion);
+            $query->where('tipoTitulacion', $tipoTitulacion);
+        }
+
+        if ($tipoMateria && $tipoMateria !== 'materia') {
+            error_log($tipoMateria);
+            $query->where('materia', $tipoMateria);
+        }
+
+
+
+        // Ejecutar la consulta
+        $counts = $query->get();
+
+        // Inicializar los resultados
+        $result = [
+            'hombres' => 0,
+            'mujeres' => 0,
+        ];
+
+        // Iterar sobre los resultados y asignar los conteos a las variables correspondientes
+        foreach ($counts as $count) {
+            if ($count->sexo == '0' && $showHombres) {
+                $result['hombres'] = $count->count;
+            } elseif ($count->sexo == '1' && $showMujeres) {
+                $result['mujeres'] = $count->count;
+            }
+        }
+
+
+
+        // Filtrar el resultado según los checkboxes seleccionados
+        $filteredResult = [];
+        if ($showHombres) {
+            $filteredResult['hombres'] = $result['hombres'];
+        }
+        if ($showMujeres) {
+            $filteredResult['mujeres'] = $result['mujeres'];
+        }
+
+        Log::info('Consulta ejecutada: ' . $query->toSql());
+        Log::info('Parámetros: ', $query->getBindings());
+        Log::info('Resultados: ', $result);
+
+        // Devolver la respuesta en formato JSON
+        return response()->json($filteredResult);
+    }
+    
 
 
 }

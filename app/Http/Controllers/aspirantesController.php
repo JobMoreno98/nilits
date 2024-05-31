@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\enviarcorreo;
+use App\Mail\ContactanosMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\alumno_tutorModel;
@@ -11,6 +11,9 @@ use App\Models\maestrosModel;
 use Illuminate\Support\Facades\DB;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistroAspiranteMailable;
+
+
 
 
 class aspirantesController extends Controller
@@ -94,9 +97,10 @@ class aspirantesController extends Controller
         $alumno->moda = 'No convencional';
         
         $alumno->save();
-        
-        
-    
+
+        Mail::to($alumno->correo)->send(new ContactanosMailable($alumno));
+
+        return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente y correo de confirmación enviado.');
     
         return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente');
     }
@@ -364,3 +368,5 @@ class aspirantesController extends Controller
 }
 
 }
+
+
