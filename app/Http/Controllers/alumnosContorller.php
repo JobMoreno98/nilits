@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Contracts\Service\Attribute\Required;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AlumnosExport;
 
 class alumnosContorller extends Controller
 {
@@ -21,6 +23,9 @@ class alumnosContorller extends Controller
         $totalEgresados = alumnos_model::where('estatus', 3)->count();
         $totalActivos = alumnos_model::where('estatus', 1)->count();
         $totalBajas = alumnos_model::where('estatus', 4)->count();
+
+        // Obtener las fechas de titulación únicas
+        $fechasTitulacion = alumnos_model::select('fechaTitulacion')->distinct()->get();
 
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         $alumnos = DB::table('alumnos')
@@ -196,6 +201,7 @@ class alumnosContorller extends Controller
         // Asigna el resto de los campos
         $tutor_alumno->save();
         $alumno->save();
+        
 
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
@@ -346,13 +352,23 @@ class alumnosContorller extends Controller
         return redirect()->route('gestionar-tutores');
     }
 
+    // public function export(Request $request)
+    // {
+    //     $showHombres = $request->query('hombres') === 'true';
+    //     $showMujeres = $request->query('mujeres') === 'true';
+    //     $carrera = $request->query('carrera');
+    //     $tipoTitulacion = $request->query('tipoTitulacion');
+    //     $materia = $request->query('materia');
+
+    //     return Excel::download(new AlumnosExport($showHombres, $showMujeres, $carrera, $tipoTitulacion, $materia), 'alumnos.xlsx');
+    // }
 
     //solicitud para las gráficas
     public function obtenerDatosGrafica(Request $request)
 
 
-    {       
-    
+    {
+
         // Recibir los parámetros de la solicitud
         $showHombres = $request->query('hombres') === 'true';
         $showMujeres = $request->query('mujeres') === 'true';
@@ -365,7 +381,7 @@ class alumnosContorller extends Controller
             ->groupBy('sexo');
 
         // Filtrar por carrera si se proporciona en la solicitud
-        if ($request->query('carrera')!== 'carrera') {
+        if ($request->query('carrera') !== 'carrera') {
             $query->where('carrera', $request->query('carrera'));
         }
 
@@ -390,7 +406,7 @@ class alumnosContorller extends Controller
             'mujeres' => 0,
         ];
 
-        // Iterar sobre los resultados y asignar los conteos a las variables correspondientes
+        // Iterar sobre los resultados y asignar los conteos php artisan make:export UsersExport --model=Usera las variables correspondientes
         foreach ($counts as $count) {
             if ($count->sexo == '0' && $showHombres) {
                 $result['hombres'] = $count->count;
@@ -410,14 +426,11 @@ class alumnosContorller extends Controller
             $filteredResult['mujeres'] = $result['mujeres'];
         }
 
-        Log::info('Consulta ejecutada: ' . $query->toSql());
-        Log::info('Parámetros: ', $query->getBindings());
-        Log::info('Resultados: ', $result);
+        // Log::info('Consulta ejecutada: ' . $query->toSql());
+        // Log::info('Parámetros: ', $query->getBindings());
+        // Log::info('Resultados: ', $result);
 
         // Devolver la respuesta en formato JSON
         return response()->json($filteredResult);
     }
-    
-
-
 }

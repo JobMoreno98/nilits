@@ -98,6 +98,8 @@ class aspirantesController extends Controller
         
         $alumno->save();
 
+        
+
         Mail::to($alumno->correo)->send(new ContactanosMailable($alumno));
 
         return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente y correo de confirmación enviado.');

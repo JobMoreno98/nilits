@@ -19,68 +19,73 @@
 
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Numeralia</h2>
 
-            <div>
-                <h4>Estudiantes por carrera</h4>
+            <div class="d-flex">
+                <div class="me-3">
+                    <h4>Estudiantes por carrera</h4>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="checkHombres" name="checkHombres">
-                    <label class="form-check-label" for="checkHombres">
-                        Hombres
-                    </label>
-                </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkHombres" name="checkHombres">
+                        <label class="form-check-label" for="checkHombres">
+                            Hombres
+                        </label>
+                    </div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="checkMujeres" name="checkMujeres">
-                    <label class="form-check-label" for="checkMujeres">
-                        Mujeres
-                    </label>
-                </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkMujeres" name="checkMujeres">
+                        <label class="form-check-label" for="checkMujeres">
+                            Mujeres
+                        </label>
+                    </div>
 
 
-                <select class="form-control" id="semestre" name="semestre">
+                    {{-- <select class="form-control" id="semestre" name="semestre">
                     <option selected value="">Semestre</option>
                     <option value="1">Ene-Jul</option>
                     <option value="2">Ago-Dic</option>
 
-                </select>
+                </select> --}}
 
-                <select class="form-control" id="anio" name="anio">
+                    {{-- <select class="form-control" id="anio" name="anio">
                     <option selected>Año</option>
-                    {{-- @foreach ($collection as $item)
+                    @foreach ($collection as $item)
                         <option value="anio">{{anio}}</option>
-                    @endforeach --}}
-                </select>
+                    @endforeach
+                </select> --}}
 
 
-                <select class="form-control" id="carrera" name="carrera">
-                    <option selected value="carrera">Carrera</option>
-                    <option value="NILITS">Abogado</option>
-                    <option value="NILITS1">Licenciatura en Antropología</option>
-                    <option value="NILITS2">Licenciatura en Criminología</option>
-                </select>
+                    <select class="form-control" id="carrera" name="carrera">
+                        <option selected value="carrera">Carrera</option>
+                        <option value="NILITS">Abogado</option>
+                        <option value="NILITS1">Licenciatura en Antropología</option>
+                        <option value="NILITS2">Licenciatura en Criminología</option>
+                    </select>
 
-                <h4>Modalidades de titulación</h4>
-                <select class="form-control" id="tipoTitulacion" name="tipoTitulacion">
-                    <option selected>Tipo deTitulacion</option>
-                    <option value="tesis">Tesis</option>
-                    <option value="prac">Practicas Profesionales</option>
-                    <option value="exce">Excelencia Académica</option>
-                    <option value="prom">Promedio</option>
-                </select>
+                    <h4>Modalidades de titulación</h4>
+                    <select class="form-control" id="tipoTitulacion" name="tipoTitulacion">
+                        <option selected>Tipo deTitulacion</option>
+                        <option value="tesis">Tesis</option>
+                        <option value="prac">Practicas Profesionales</option>
+                        <option value="exce">Excelencia Académica</option>
+                        <option value="prom">Promedio</option>
+                    </select>
 
 
-                <h4>Materia mas reprobada</h4>
-                <select class="form-control" id="materia" name="materia">
-                    <option selected value="materia">Materia</option>
-                    <option value="Ética jurídica">Ética jurídica</option>
-                    <option value="Derecho constitucional">Derecho constitucional</option>
-                    <option value="materia">Three</option>
-                </select>
+                    <h4>Materia mas reprobada</h4>
+                    <select class="form-control" id="materia" name="materia">
+                        <option selected value="materia">Materia</option>
+                        <option value="Ética jurídica">Ética jurídica</option>
+                        <option value="Derecho constitucional">Derecho constitucional</option>
+                        <option value="materia">Three</option>
+                    </select>
 
-            </div>
+                </div>
 
-            <div>
-                <canvas id="myChart"></canvas>
+
+
+                <div style="flex-grow: 1; margin-left: 20px;">
+                    <canvas id="myChart" style="width: 50%; height: 100px;"></canvas>
+                </div>
+
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -132,7 +137,7 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     const checkHombres = document.getElementById('checkHombres');
                     const checkMujeres = document.getElementById('checkMujeres');
-                    const inputSemestre = document.getElementById('semestre');
+                    // const inputSemestre = document.getElementById('semestre');
                     const inputCarrera = document.getElementById('carrera');
                     const inputTipoTitulacion = document.getElementById('tipoTitulacion');
                     const inputMateria = document.getElementById('materia');
@@ -142,13 +147,13 @@
                     function handleChange(event) {
                         const hombres = checkHombres.checked ? 'true' : 'false';
                         const mujeres = checkMujeres.checked ? 'true' : 'false';
-                        const semestreValue = inputSemestre.value;
+                        // const semestreValue = inputSemestre.value;
                         const carreraValue = inputCarrera.value;
                         const tipoTitulacionValue = inputTipoTitulacion.value;
                         const materiaValue = inputMateria.value;
 
                         const queryParams =
-                            `hombres=${hombres}&mujeres=${mujeres}&semestre=${semestreValue}&carrera=${carreraValue}&tipoTitulacion=${tipoTitulacionValue}&materia=${materiaValue}`;
+                            `hombres=${hombres}&mujeres=${mujeres}&carrera=${carreraValue}&tipoTitulacion=${tipoTitulacionValue}&materia=${materiaValue}`;
 
                         // Obtener el protocolo y el dominio
                         const protocolo = window.location.protocol;
@@ -213,7 +218,7 @@
                     // Agregar event listeners a los elementos
                     checkHombres.addEventListener('change', handleChange);
                     checkMujeres.addEventListener('change', handleChange);
-                    inputSemestre.addEventListener('change', handleChange);
+                    // inputSemestre.addEventListener('change', handleChange);
                     inputCarrera.addEventListener('change', handleChange);
                     inputTipoTitulacion.addEventListener('change', handleChange);
                     inputMateria.addEventListener('change', handleChange);

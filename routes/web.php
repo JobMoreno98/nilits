@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use illuminate\Support\Facades\Mail;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -103,6 +104,8 @@ Route::get('numeralia', [numeraliaController::class,'index'])->name('numeralia')
 Route::get('grafica', [alumnosContorller::class, 'obtenerDatosGrafica'])->name('grafica');
 
 Route::get('/grafica', [alumnosContorller::class, 'obtenerDatosGrafica']);
+
+// Route::get('/export', [alumnosContorller::class, 'export'])->name('export');
 
 
 
