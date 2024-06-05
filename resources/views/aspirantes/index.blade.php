@@ -62,7 +62,7 @@
 
                                 <!-- Teléfono -->
                                 <div class="form-group">
-                                    <label for="telefono">Telefono</label>
+                                    <label for="telefono">Teléfono</label>
                                     <input type="text" name="telefono" class="form-control" id="telefono"
                                         pattern="[0-9]*">
                                 </div>

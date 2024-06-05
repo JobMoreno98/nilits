@@ -70,13 +70,13 @@
                     </select>
 
 
-                    <h4>Materia mas reprobada</h4>
+                    {{-- <h4>Materia más reprobada</h4>
                     <select class="form-control" id="materia" name="materia">
                         <option selected value="materia">Materia</option>
                         <option value="Ética jurídica">Ética jurídica</option>
                         <option value="Derecho constitucional">Derecho constitucional</option>
                         <option value="materia">Three</option>
-                    </select>
+                    </select> --}}
 
                 </div>
 
@@ -140,7 +140,7 @@
                     // const inputSemestre = document.getElementById('semestre');
                     const inputCarrera = document.getElementById('carrera');
                     const inputTipoTitulacion = document.getElementById('tipoTitulacion');
-                    const inputMateria = document.getElementById('materia');
+                    // const inputMateria = document.getElementById('materia');
 
 
                     // Función para manejar el cambio de valor
@@ -150,10 +150,11 @@
                         // const semestreValue = inputSemestre.value;
                         const carreraValue = inputCarrera.value;
                         const tipoTitulacionValue = inputTipoTitulacion.value;
-                        const materiaValue = inputMateria.value;
+                        // const materiaValue = inputMateria.value;
 
                         const queryParams =
-                            `hombres=${hombres}&mujeres=${mujeres}&carrera=${carreraValue}&tipoTitulacion=${tipoTitulacionValue}&materia=${materiaValue}`;
+                            `hombres=${hombres}&mujeres=${mujeres}&carrera=${carreraValue}&tipoTitulacion=${tipoTitulacionValue}`;
+                            //se borro para después agregar : &materia=${materiaValue}
 
                         // Obtener el protocolo y el dominio
                         const protocolo = window.location.protocol;
@@ -221,7 +222,7 @@
                     // inputSemestre.addEventListener('change', handleChange);
                     inputCarrera.addEventListener('change', handleChange);
                     inputTipoTitulacion.addEventListener('change', handleChange);
-                    inputMateria.addEventListener('change', handleChange);
+                    // inputMateria.addEventListener('change', handleChange);
 
 
                     function identifyTitulacion() {
