@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Contracts\Service\Attribute\Required;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\AlumnosExport;
+use App\Exports\GraficaExport;
+
 
 class alumnosContorller extends Controller
 {
@@ -294,9 +295,9 @@ class alumnosContorller extends Controller
 
 
         $totalRegistros = alumnos_model::count();
-        $totalEgresados = alumnos_model::where('estatus', 3)->count();
-        $totalActivos = alumnos_model::where('estatus', 1)->count();
-        $totalBajas = alumnos_model::where('estatus', 4)->count();
+        $totalEgresados = alumnos_model::where('estatus', 'Egresado')->count();
+        $totalActivos = alumnos_model::where('estatus', 'Activo')->count();
+        $totalBajas = alumnos_model::where('estatus', 'baja')->count();
 
         $tutores = maestrosModel::all();
 
@@ -353,21 +354,9 @@ class alumnosContorller extends Controller
         return redirect()->route('gestionar-tutores');
     }
 
-    // public function export(Request $request)
-    // {
-    //     $showHombres = $request->query('hombres') === 'true';
-    //     $showMujeres = $request->query('mujeres') === 'true';
-    //     $carrera = $request->query('carrera');
-    //     $tipoTitulacion = $request->query('tipoTitulacion');
-    //     $materia = $request->query('materia');
 
-    //     return Excel::download(new AlumnosExport($showHombres, $showMujeres, $carrera, $tipoTitulacion, $materia), 'alumnos.xlsx');
-    // }
 
     //solicitud para las gráficas
-
-
-
 
 
     public function LlenadoComboBox()
@@ -433,6 +422,8 @@ class alumnosContorller extends Controller
         return response($opcionesHtml);
     }
 
+    
+
 
 
     public function obtenerDatosGrafica(Request $request)
@@ -491,5 +482,6 @@ class alumnosContorller extends Controller
         }
 
         return response()->json($filteredResult);
+        return Excel::download(new GraficaExport($filteredResult), 'grafica.xlsx');
     }
 }

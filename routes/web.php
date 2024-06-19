@@ -111,6 +111,9 @@ Route::get('grafica-estatus', [alumnosContorller::class, 'LlenadoComboBoxEstatus
 
 Route::get('grafica-ciclo', [alumnosContorller::class, 'LlenadoComboBoxCiclo'])->name('grafica-ciclo');
 
+Route::get('export-grafica', [alumnosContorller::class, 'exportGrafica'])->name('export-grafica');
+
+
 // Route::get('/export', [alumnosContorller::class, 'export'])->name('export');
 
 
