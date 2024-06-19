@@ -66,7 +66,7 @@
         <div class="footer">
             <p>Saludos,</p>
             <p>Equipo de Admisión CUCSH</p>
-            <p><a href="mailto:admisiones@universidad.edu.mx">admisiones@universidad.edu.mx</a></p>
+            <p><a href="mailto:coordinacion.nilits@academicos.udg.mx">coordinacion.nilits@academicos.udg.mx</a></p>
         </div>
     </div>
 </body>

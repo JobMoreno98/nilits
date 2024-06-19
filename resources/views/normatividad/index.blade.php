@@ -21,7 +21,7 @@
 
             <div class="d-flex justify-content-center">
                 <div class="card m-2"  style="width: 18rem;">
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 285px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 190px; width: 285px;">
                     <div class="card-body">
                         <h5 class="card-title">Código de Conducta</h5>
                         <p class="card-text"> </p>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="card m-2" style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 285px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 190px; width: 285px;">
                     <div class="card-body">
                         <h5 class="card-title">Reglamento de responsabilidades vinculadas con faltas a la normatividad universitaria de la UdeG</h5>
                         <p class="card-text"> </p>
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="card m-2" style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 285px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 190px; width: 285px;">
                     <div class="card-body">
                         <h5 class="card-title">Protocolo para la prevención, atención, sanción y erradicación de la violencia de género en la UdeG</h5>
                         <p class="card-text"> </p>
@@ -61,11 +61,10 @@
             </div>
             <div class="d-flex justify-content-center">
                 <div class="card m-2"  style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 250px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 180px; width: 250px;">
                     <div class="card-body">
                         <h5 class="card-title">Ley Orgánica de la UdeG</h5>
                         <p class="card-text"> </p>
-                        <br>
                         <br>
                         <a href="https://secgral.udg.mx/sites/default/files/Normatividad_general/lo-septiembre-2021.pdf
                         " class="btn btn-primary">Ver</a>
@@ -73,18 +72,17 @@
                 </div>
 
                 <div class="card m-2" style="width: 18rem;">
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 250px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 180px; width: 250px;">
                     <div class="card-body">
                         <h5 class="card-title">Estatuto General de la UdeG</h5>
                         <p class="card-text"> </p>
-                        <br>
                         <br>
                         <a href="https://secgral.udg.mx/sites/default/files/Normatividad_general/EG%20%28Abril%202024%29_rev.pdf" class="btn btn-primary">Ver</a>
                     </div>
                 </div>
 
                 <div class="card m-2" style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 250px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 180px; width: 250px;">
                     <div class="card-body">
                         <h5 class="card-title">Reglamento General de Evaluación y Promoción de Alumnos</h5>
                         <p class="card-text"> </p>
@@ -93,11 +91,10 @@
                 </div>
 
                 <div class="card m-2" style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 250px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 180px; width: 250px;">
                     <div class="card-body">
                         <h5 class="card-title">Reglamento General de Titulación</h5>
                         <p class="card-text"> </p>
-                        <br>
                         <br>
                         <a href="https://secgral.udg.mx/sites/default/files/Normatividad_general/RGT%20%28Abril%202023%29%2026.pdf" class="btn btn-primary">Ver</a>
                     </div>
@@ -117,7 +114,7 @@
 
 
                 <div class="card m-2" style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 285px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 190px; width: 285px;">
                     <div class="card-body">
                         <h5 class="card-title">Reglamento de Protección contra la Exposición al Humo de Tabaco</h5>
                         <p class="card-text"> </p>
@@ -126,7 +123,7 @@
                 </div>
 
                 <div class="card m-2"   style="width: 18rem;" >
-                    <img src="{{ asset('imgs/prueba.jpg') }}" class="card-img-top" alt="..."  style="height: 170px; width: 285px;">
+                    <img src="{{ asset('imgs/udglogo2.jpeg') }}" class="card-img-top" alt="..."  style="height: 190px; width: 285px;">
                     <div class="card-body">
                         <h5 class="card-title">Código de Ética (Feb 2018)</h5>
                         <p class="card-text"> </p>

@@ -21,7 +21,7 @@
 
             <div class="d-flex">
                 <div class="me-3">
-                    <h4>Estudiantes por carrera</h4>
+                    <h4>Estudiantes</h4>
 
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="checkHombres" name="checkHombres">
@@ -36,47 +36,26 @@
                             Mujeres
                         </label>
                     </div>
+                    <br>
 
+                    <select class="form-control" id="estatus" name="estatus">
 
-                    {{-- <select class="form-control" id="semestre" name="semestre">
-                    <option selected value="">Semestre</option>
-                    <option value="1">Ene-Jul</option>
-                    <option value="2">Ago-Dic</option>
-
-                </select> --}}
-
-                    {{-- <select class="form-control" id="anio" name="anio">
-                    <option selected>Año</option>
-                    @foreach ($collection as $item)
-                        <option value="anio">{{anio}}</option>
-                    @endforeach
-                </select> --}}
-
-
-                    <select class="form-control" id="carrera" name="carrera">
-                        <option selected value="carrera">Carrera</option>
-                        <option value="NILITS">Abogado</option>
-                        <option value="NILITS1">Licenciatura en Antropología</option>
-                        <option value="NILITS2">Licenciatura en Criminología</option>
                     </select>
+
+                    <select class="form-control" id="ciclo" name="ciclo">
+
+                    </select>
+
+                    <select class="form-control" id="dictamen" name="dictamen">
+
+                    </select>
+                    <br>
 
                     <h4>Modalidades de titulación</h4>
                     <select class="form-control" id="tipoTitulacion" name="tipoTitulacion">
-                        <option selected>Tipo deTitulacion</option>
-                        <option value="tesis">Tesis</option>
-                        <option value="prac">Practicas Profesionales</option>
-                        <option value="exce">Excelencia Académica</option>
-                        <option value="prom">Promedio</option>
+
                     </select>
 
-
-                    {{-- <h4>Materia más reprobada</h4>
-                    <select class="form-control" id="materia" name="materia">
-                        <option selected value="materia">Materia</option>
-                        <option value="Ética jurídica">Ética jurídica</option>
-                        <option value="Derecho constitucional">Derecho constitucional</option>
-                        <option value="materia">Three</option>
-                    </select> --}}
 
                 </div>
 
@@ -94,10 +73,90 @@
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
             <script>
+                $(document).ready(function() {
+
+
+                    
+                    $.ajax({
+                        url: '{{ route('grafica-combo') }}',
+                        method: 'GET',
+                        success: function(response) {
+
+                            
+                            $('#tipoTitulacion').append(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al obtener los datos:', error);
+                        }
+                    });
+
+
+                    console.log('s2332');
+                    $.ajax({
+                        url: '{{ route('grafica-dictamen') }}',
+                        method: 'GET',
+                        success: function(response) {
+
+                            // console.log("datos data update:" + data.dictamen)
+                            // console.log($dictamen)
+                            $('#dictamen').append(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al obtener los datos:', error);
+                        }
+                    });
+
+                    $.ajax({
+                        url: '{{ route('grafica-ciclo') }}',
+                        method: 'GET',
+                        success: function(response) {
+
+                            $('#ciclo').append(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al obtener los datos:', error);
+                        }
+                    });
+
+                    $.ajax({
+                        url: '{{ route('grafica-estatus') }}',
+                        method: 'GET',
+                        success: function(response) {
+
+                            
+                            $('#estatus').append(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al obtener los datos:', error);
+                        }
+                    });
+
+                    
+                });
+
+
+
+
+
                 const ctx = document.getElementById('myChart').getContext('2d');
                 let chart;
 
                 function updateChart(data) {
+
+                    // console.log("datos data update:" + data.dictamen)
+
+
+                    if (data.hombres !== undefined) {
+                        labels.push('Hombres');
+                        datasetData.push(data.hombres);
+                    }
+
+                    if (data.mujeres !== undefined) {
+                        labels.push('Mujeres');
+                        datasetData.push(data.mujeres);
+                    }
+
+
                     if (chart) {
                         chart.destroy();
                     }
@@ -122,39 +181,32 @@
                     });
                 }
 
-                // function fetchData(endpoint) {
-                //     $.ajax({
-                //         url: endpoint,
-                //         method: 'GET',
-                //         success: function(response) {
-                //             updateChart(response);
-                //         }
-                //     });
-                // }
             </script>
-
+    
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const checkHombres = document.getElementById('checkHombres');
                     const checkMujeres = document.getElementById('checkMujeres');
-                    // const inputSemestre = document.getElementById('semestre');
-                    const inputCarrera = document.getElementById('carrera');
                     const inputTipoTitulacion = document.getElementById('tipoTitulacion');
-                    // const inputMateria = document.getElementById('materia');
+                    const inputDictamen = document.getElementById('dictamen');
+                    const inputEstatus = document.getElementById('estatus');
+                    const inputCiclo = document.getElementById('ciclo');
 
 
                     // Función para manejar el cambio de valor
                     function handleChange(event) {
                         const hombres = checkHombres.checked ? 'true' : 'false';
                         const mujeres = checkMujeres.checked ? 'true' : 'false';
-                        // const semestreValue = inputSemestre.value;
-                        const carreraValue = inputCarrera.value;
+                        const dictamenValue = inputDictamen.value;
                         const tipoTitulacionValue = inputTipoTitulacion.value;
-                        // const materiaValue = inputMateria.value;
+                        const estatusValue = inputEstatus.value;
+                        const cicloValue = inputCiclo.value;
 
+                        // alert(tipoTitulacionValue)
                         const queryParams =
-                            `hombres=${hombres}&mujeres=${mujeres}&carrera=${carreraValue}&tipoTitulacion=${tipoTitulacionValue}`;
-                            //se borro para después agregar : &materia=${materiaValue}
+                            `hombres=${hombres}&mujeres=${mujeres}&dictamen=${dictamenValue}&ciclo=${cicloValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
+
+                        console.log('queryParams:', queryParams);
 
                         // Obtener el protocolo y el dominio
                         const protocolo = window.location.protocol;
@@ -169,7 +221,7 @@
                         // Realizar la solicitud AJAX
                         axios.get(endpoint)
                             .then(function(response) {
-                                console.log(response.data)
+                                console.log(response);
                                 updateChart(response.data);
                             })
                             .catch(function(error) {
@@ -177,6 +229,7 @@
                             });
                     }
 
+                    
                     // Función para actualizar la gráfica
                     function updateChart(data) {
                         const labels = [];
@@ -191,6 +244,28 @@
                             labels.push('Mujeres');
                             datasetData.push(data.mujeres);
                         }
+
+                        if (data.dictamen !== undefined) {
+                            labels.push('dictamen');
+                            datasetData.push(data.dictamen);
+                        }
+
+                        if (data.ciclo !== undefined) {
+                            labels.push('ciclo');
+                            datasetData.push(data.ciclo);
+                        }
+
+                        if (data.estatus !== undefined) {
+                            labels.push('estatus');
+                            datasetData.push(data.estatus);
+                        }
+
+                        if (data.tipoTitulacion !== undefined) {
+                            labels.push('tipoTitulacion');
+                            datasetData.push(data.tipoTitulacion);
+                        }
+
+
 
                         if (chart) {
                             chart.destroy();
@@ -219,34 +294,15 @@
                     // Agregar event listeners a los elementos
                     checkHombres.addEventListener('change', handleChange);
                     checkMujeres.addEventListener('change', handleChange);
-                    // inputSemestre.addEventListener('change', handleChange);
-                    inputCarrera.addEventListener('change', handleChange);
                     inputTipoTitulacion.addEventListener('change', handleChange);
-                    // inputMateria.addEventListener('change', handleChange);
+                    inputDictamen.addEventListener('change', handleChange);
+                    inputEstatus.addEventListener('change', handleChange);
+                    inputCiclo.addEventListener('change', handleChange);
 
-
-                    function identifyTitulacion() {
-                        const tipoTitulacion = inputTipoTitulacion.value;
-                        switch (tipoTitulacion) {
-                            case 'tesis':
-                                console.log('Seleccionado: TESIS');
-                                break;
-                            case 'prac':
-                                console.log('Seleccionado: Practicas Profesionales');
-                                break;
-                            case 'exce':
-                                console.log('Seleccionado: Excelencia Académica');
-                                break;
-                            case 'prom':
-                                console.log('Seleccionado: Promedio');
-                                break;
-                            default:
-                                console.log('Seleccionado: Tipo de Titulacion');
-                        }
-                    }
                 });
             </script>
 
+            <br>
             <div class="text-center">
                 <a href="{{ route('/home') }}" class="btn btn-secondary">Volver al menú</a>
             </div>

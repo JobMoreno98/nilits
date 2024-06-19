@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\alumno_tutorModel;
 use App\Models\alumnos_model;
 use App\Models\maestrosModel;
+use App\Models\LLenadoComboBox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -201,7 +202,7 @@ class alumnosContorller extends Controller
         // Asigna el resto de los campos
         $tutor_alumno->save();
         $alumno->save();
-        
+
 
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
@@ -364,49 +365,115 @@ class alumnosContorller extends Controller
     // }
 
     //solicitud para las gráficas
-    public function obtenerDatosGrafica(Request $request)
 
 
+
+
+
+    public function LlenadoComboBox()
     {
+        $opciones = alumnos_model::distinct('tipoTitulacion')->pluck('tipoTitulacion');
+        $opcionesHtml = "";
 
-        // Recibir los parámetros de la solicitud
+        $opcion = 'Tipo Titulación';
+        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+
+        foreach ($opciones as $opcion) {
+            $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+        }
+
+        return response($opcionesHtml);
+    }
+
+
+    public function LlenadoComboBoxDictamen()
+    {
+        $opciones = alumnos_model::distinct('dictamen')->pluck('dictamen');
+        $opcionesHtml = "";
+
+        $opcion = 'Dictamen';
+        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+
+        foreach ($opciones as $opcion) {
+            $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+        }
+
+        return response($opcionesHtml);
+    }
+
+    public function LlenadoComboBoxCiclo()
+{
+    $opciones = alumnos_model::distinct('ciclo')->pluck('ciclo');
+    $opcionesHtml = "";
+
+    $opcion = 'Ciclo';
+    $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+
+    foreach ($opciones as $opcion) {
+        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+    }
+
+    return response($opcionesHtml);
+}
+
+
+
+    public function LlenadoComboBoxEstatus()
+    {
+        $opciones = alumnos_model::distinct('estatus')->pluck('estatus');
+        $opcionesHtml = "";
+
+        $opcion = 'Estatus';
+        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+
+        foreach ($opciones as $opcion) {
+            $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+        }
+
+        return response($opcionesHtml);
+    }
+
+
+
+    public function obtenerDatosGrafica(Request $request)
+    {
         $showHombres = $request->query('hombres') === 'true';
         $showMujeres = $request->query('mujeres') === 'true';
         $tipoTitulacion = $request->query('tipoTitulacion');
-        $tipoMateria = $request->query('materia');
+        $dictamen = $request->query('dictamen');
+        $estatus = $request->query('estatus');
+        $ciclo = $request->query('ciclo');
 
-        // Inicializar la consulta
-        $query = DB::table('alumnos')
-            ->select('sexo', DB::raw('COUNT(*) as count'))
+        // dd([$showHombres,$showMujeres, $dictamen]);
+
+        $query = alumnos_model::select('sexo', DB::raw('COUNT(*) as count'))
             ->groupBy('sexo');
 
-        // Filtrar por carrera si se proporciona en la solicitud
-        if ($request->query('carrera') !== 'carrera') {
-            $query->where('carrera', $request->query('carrera'));
+        if ($estatus && $estatus !== 'Estatus') {
+            $query->where('estatus', $estatus);
         }
 
-        if ($tipoTitulacion && $tipoTitulacion !== 'Tipo deTitulacion') {
-            error_log($tipoTitulacion);
+        if ($ciclo && $ciclo !== 'Ciclo') {
+            $query->where('ciclo', $ciclo);
+        }
+
+        if ($dictamen && $dictamen !== 'Dictamen') {
+            $query->where('dictamen', $dictamen);
+        }
+
+        if ($tipoTitulacion && $tipoTitulacion !==  'Tipo Titulación') {
             $query->where('tipoTitulacion', $tipoTitulacion);
         }
 
-        if ($tipoMateria && $tipoMateria !== 'materia') {
-            error_log($tipoMateria);
-            $query->where('materia', $tipoMateria);
-        }
 
 
-
-        // Ejecutar la consulta
         $counts = $query->get();
 
-        // Inicializar los resultados
         $result = [
             'hombres' => 0,
             'mujeres' => 0,
         ];
 
-        // Iterar sobre los resultados y asignar los conteos php artisan make:export UsersExport --model=Usera las variables correspondientes
         foreach ($counts as $count) {
             if ($count->sexo == '0' && $showHombres) {
                 $result['hombres'] = $count->count;
@@ -415,9 +482,6 @@ class alumnosContorller extends Controller
             }
         }
 
-
-
-        // Filtrar el resultado según los checkboxes seleccionados
         $filteredResult = [];
         if ($showHombres) {
             $filteredResult['hombres'] = $result['hombres'];
@@ -426,11 +490,6 @@ class alumnosContorller extends Controller
             $filteredResult['mujeres'] = $result['mujeres'];
         }
 
-        // Log::info('Consulta ejecutada: ' . $query->toSql());
-        // Log::info('Parámetros: ', $query->getBindings());
-        // Log::info('Resultados: ', $result);
-
-        // Devolver la respuesta en formato JSON
         return response()->json($filteredResult);
     }
 }

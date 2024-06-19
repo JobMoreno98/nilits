@@ -103,7 +103,13 @@ Route::get('numeralia', [numeraliaController::class,'index'])->name('numeralia')
 
 Route::get('grafica', [alumnosContorller::class, 'obtenerDatosGrafica'])->name('grafica');
 
-Route::get('/grafica', [alumnosContorller::class, 'obtenerDatosGrafica']);
+Route::get('grafica-combo', [alumnosContorller::class, 'LlenadoComboBox'])->name('grafica-combo');
+
+Route::get('grafica-dictamen', [alumnosContorller::class, 'LlenadoComboBoxDictamen'])->name('grafica-dictamen');
+
+Route::get('grafica-estatus', [alumnosContorller::class, 'LlenadoComboBoxEstatus'])->name('grafica-estatus');
+
+Route::get('grafica-ciclo', [alumnosContorller::class, 'LlenadoComboBoxCiclo'])->name('grafica-ciclo');
 
 // Route::get('/export', [alumnosContorller::class, 'export'])->name('export');
 
