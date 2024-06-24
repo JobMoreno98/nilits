@@ -11,7 +11,7 @@ use App\Models\maestrosModel;
 use Illuminate\Support\Facades\DB;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\RegistroAspiranteMailable;
+
 
 
 
@@ -64,7 +64,7 @@ class aspirantesController extends Controller
             'procedencia' => 'required',
             'correo' => 'required',
             'fechaNac' => 'required',
-            // 'estatus' => 'required',
+            'dictamen' => 'required',
         ]);
         
        
@@ -78,9 +78,9 @@ class aspirantesController extends Controller
         $alumno->sexo = $validatedData['sexo'];
         $alumno->procedencia = $validatedData['procedencia'];
         $alumno->fechaNac = $validatedData['fechaNac'];
+        $alumno->dictamen = $validatedData['dictamen'];
         $alumno->estatus = 1;
-        
-        $alumno->dictamen = ' ';
+       
         $alumno->edad = ' ';
         $alumno->tipo = 'N/A';
         $alumno->modalidad = 'N/A';
@@ -95,6 +95,7 @@ class aspirantesController extends Controller
         $alumno->revisado = 0;
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
+        $alumno->ciclo = '';
         
         $alumno->save();
 

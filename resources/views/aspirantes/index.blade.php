@@ -126,6 +126,13 @@
                                     <label for="fechaNac">Fecha de Nacimiento</label>
                                     <input type="date" name="fechaNac" class="form-control" id="fechaNac">
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="dictamen">Dictamen</label>
+                                    <input type="text" class="form-control" id="dictamen" name="dictamen"
+                                        placeholder="Añadir dictamen">
+                                </div>
+                                
                             <button type="submit" class="btn btn-primary">Crear registro</button>
                             </form>
 
