@@ -40,8 +40,12 @@ class alumnosContorller extends Controller
         // Listar a los maestros para poder asignarlos al crear un registro
         $tutores = maestrosModel::all();
 
-        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechaTitulacion'));
+
+
+
+        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechaTitulacion', 'result'));
     }
+
 
 
     //funcion para solo poder ver a los alumnos
@@ -71,6 +75,7 @@ class alumnosContorller extends Controller
 
         // Listar a los maestros para poder asignarlos al crear un registro
         $tutores = maestrosModel::all();
+
 
         return view('almunado.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos'));
     }
@@ -391,28 +396,11 @@ class alumnosContorller extends Controller
     }
 
     public function LlenadoComboBoxCiclo()
-{
-    $opciones = alumnos_model::distinct('ciclo')->pluck('ciclo');
-    $opcionesHtml = "";
-
-    $opcion = 'Ciclo';
-    $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
-
-    foreach ($opciones as $opcion) {
-        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
-    }
-
-    return response($opcionesHtml);
-}
-
-
-
-    public function LlenadoComboBoxEstatus()
     {
-        $opciones = alumnos_model::distinct('estatus')->pluck('estatus');
+        $opciones = alumnos_model::distinct('ciclo')->pluck('ciclo');
         $opcionesHtml = "";
 
-        $opcion = 'Estatus';
+        $opcion = 'Ciclo';
         $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
 
         foreach ($opciones as $opcion) {
@@ -422,7 +410,32 @@ class alumnosContorller extends Controller
         return response($opcionesHtml);
     }
 
-    
+
+
+    public function LlenadoComboBoxEstatus()
+    {
+        $opciones = alumnos_model::distinct('estatus')->pluck('estatus');
+        $opcionesHtml = "";
+
+        $opcionesMap = [
+            1 => 'Activo',
+            3 => 'Egresado',
+            4 => 'Baja'
+        ];
+
+        $opcionesHtml .= "<option value=''>Estatus</option>";
+
+        foreach ($opciones as $opcion) {
+            if (isset($opcionesMap[$opcion])) {
+                $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcionesMap[$opcion] . "</option>";
+            }
+        }
+
+        return response($opcionesHtml);
+    }
+
+
+
 
 
 
@@ -436,6 +449,8 @@ class alumnosContorller extends Controller
         $ciclo = $request->query('ciclo');
 
         // dd([$showHombres,$showMujeres, $dictamen]);
+
+
 
         $query = alumnos_model::select('sexo', DB::raw('COUNT(*) as count'))
             ->groupBy('sexo');
@@ -472,6 +487,9 @@ class alumnosContorller extends Controller
                 $result['mujeres'] = $count->count;
             }
         }
+
+
+
 
         $filteredResult = [];
         if ($showHombres) {

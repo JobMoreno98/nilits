@@ -23,6 +23,7 @@
                 <div class="me-3">
                     <h4>Estudiantes</h4>
 
+
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="checkHombres" name="checkHombres">
                         <label class="form-check-label" for="checkHombres">
@@ -47,6 +48,7 @@
                     </select>
 
                     <select class="form-control" id="dictamen" name="dictamen">
+
 
                     </select>
                     <br>
@@ -78,13 +80,13 @@
                 $(document).ready(function() {
 
 
-                    
+
                     $.ajax({
                         url: '{{ route('grafica-combo') }}',
                         method: 'GET',
                         success: function(response) {
 
-                            
+
                             $('#tipoTitulacion').append(response);
                         },
                         error: function(xhr, status, error) {
@@ -124,8 +126,6 @@
                         url: '{{ route('grafica-estatus') }}',
                         method: 'GET',
                         success: function(response) {
-
-                            
                             $('#estatus').append(response);
                         },
                         error: function(xhr, status, error) {
@@ -133,7 +133,7 @@
                         }
                     });
 
-                    
+
                 });
 
 
@@ -182,9 +182,8 @@
                         }
                     });
                 }
-
             </script>
-    
+
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const checkHombres = document.getElementById('checkHombres');
@@ -231,7 +230,7 @@
                             });
                     }
 
-                    
+
                     // Función para actualizar la gráfica
                     function updateChart(data) {
                         const labels = [];
