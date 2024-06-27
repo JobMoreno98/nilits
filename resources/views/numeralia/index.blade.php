@@ -75,6 +75,8 @@
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
 
             <script>
                 $(document).ready(function() {
@@ -300,6 +302,27 @@
                     inputEstatus.addEventListener('change', handleChange);
                     inputCiclo.addEventListener('change', handleChange);
 
+                });
+            </script>
+
+            <script>
+                document.getElementById('exportExcel').addEventListener('click', function() {
+                    const labels = chart.data.labels;
+                    const data = chart.data.datasets[0].data;
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "Label,Value\n";
+
+                    labels.forEach((label, index) => {
+                        csvContent += `${label},${data[index]}\n`;
+                    });
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "numeralia.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                 });
             </script>
 
