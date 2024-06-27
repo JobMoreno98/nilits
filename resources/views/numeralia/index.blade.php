@@ -69,7 +69,34 @@
 
             </div>
 
-            <button id="exportExcel" class="btn btn-primary mt-4">Exportar a Excel</button>
+            <div class="export-container">
+                <button id="exportExcel" class="btn btn-primary mt-4">Exportar a Excel</button>
+                <p class="note">Nota: Antes de oprimir el botón de Exportar excel, seleccione algún campo anterior.</p>
+            </div>
+
+            <style>
+                .export-container {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 20px;
+                }
+
+                .note {
+                    background-color: #f8d7da;
+                    color: #721c24;
+                    padding: 5px;
+                    margin-left: 10px;
+                    border: 1px solid #f5c6cb;
+                    border-radius: 5px;
+                    font-size: 12px;
+                    max-width: 150px;
+                    /* Ancho máximo para que parezca un cuadro */
+                    text-align: center;
+                    /* Centrar el texto */
+                    display: inline-block;
+                    /* Asegurar que el tamaño se ajuste al contenido */
+                }
+            </style>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -323,6 +350,7 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+
                 });
             </script>
 
