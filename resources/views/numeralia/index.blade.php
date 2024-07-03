@@ -47,6 +47,10 @@
 
                     </select>
 
+                    <select class="form-control" id="ingreso" name="ingreso">
+
+                    </select>
+
                     <select class="form-control" id="dictamen" name="dictamen">
 
 
@@ -71,7 +75,7 @@
 
             <div class="export-container">
                 <button id="exportExcel" class="btn btn-primary mt-4">Exportar a Excel</button>
-                <p class="note">Nota: Antes de oprimir el botón de Exportar excel, seleccione algún campo anterior.</p>
+                <p class="note">Nota: Antes de oprimir el botón de exportar Excel, seleccione algún campo anterior.</p>
             </div>
 
             <style>
@@ -152,6 +156,18 @@
                     });
 
                     $.ajax({
+                        url: '{{ route('grafica-ingreso') }}',
+                        method: 'GET',
+                        success: function(response) {
+
+                            $('#ingreso').append(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al obtener los datos:', error);
+                        }
+                    });
+
+                    $.ajax({
                         url: '{{ route('grafica-estatus') }}',
                         method: 'GET',
                         success: function(response) {
@@ -221,6 +237,7 @@
                     const inputDictamen = document.getElementById('dictamen');
                     const inputEstatus = document.getElementById('estatus');
                     const inputCiclo = document.getElementById('ciclo');
+                    const inputIngreso = document.getElementById('ingreso');
 
 
                     // Función para manejar el cambio de valor
@@ -231,10 +248,11 @@
                         const tipoTitulacionValue = inputTipoTitulacion.value;
                         const estatusValue = inputEstatus.value;
                         const cicloValue = inputCiclo.value;
+                        const ingresoValue = inputIngreso.value;
 
                         // alert(tipoTitulacionValue)
                         const queryParams =
-                            `hombres=${hombres}&mujeres=${mujeres}&dictamen=${dictamenValue}&ciclo=${cicloValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
+                            `hombres=${hombres}&mujeres=${mujeres}&dictamen=${dictamenValue}&ciclo=${cicloValue}&ingreso=${ingresoValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
 
                         console.log('queryParams:', queryParams);
 
@@ -285,6 +303,11 @@
                             datasetData.push(data.ciclo);
                         }
 
+                        if (data.ingreso !== undefined) {
+                            labels.push('ingreso');
+                            datasetData.push(data.ingreso);
+                        }
+
                         if (data.estatus !== undefined) {
                             labels.push('estatus');
                             datasetData.push(data.estatus);
@@ -328,6 +351,7 @@
                     inputDictamen.addEventListener('change', handleChange);
                     inputEstatus.addEventListener('change', handleChange);
                     inputCiclo.addEventListener('change', handleChange);
+                    inputIngreso.addEventListener('change', handleChange);
 
                 });
             </script>

@@ -410,6 +410,21 @@ class alumnosContorller extends Controller
         return response($opcionesHtml);
     }
 
+    public function LlenadoComboBoxIngreso()
+    {
+        $opciones = alumnos_model::distinct('ingreso')->pluck('ingreso');
+        $opcionesHtml = "";
+
+        $opcion = 'Ingreso';
+        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+
+        foreach ($opciones as $opcion) {
+            $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+        }
+
+        return response($opcionesHtml);
+    }
+
 
 
     public function LlenadoComboBoxEstatus()
@@ -447,6 +462,7 @@ class alumnosContorller extends Controller
         $dictamen = $request->query('dictamen');
         $estatus = $request->query('estatus');
         $ciclo = $request->query('ciclo');
+        $ingreso = $request->query('ingreso');
 
         // dd([$showHombres,$showMujeres, $dictamen]);
 
@@ -462,6 +478,11 @@ class alumnosContorller extends Controller
         if ($ciclo && $ciclo !== 'Ciclo') {
             $query->where('ciclo', $ciclo);
         }
+
+        if ($ingreso && $ingreso !== 'Ingreso') {
+            $query->where('ingreso', $ingreso);
+        }
+
 
         if ($dictamen && $dictamen !== 'Dictamen') {
             $query->where('dictamen', $dictamen);
