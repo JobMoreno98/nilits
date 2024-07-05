@@ -196,7 +196,7 @@ class alumnosContorller extends Controller
         $alumno->fechaTitulacion = $request->fechaTitulacion ?? '2000-01-01';
         $alumno->calendarioTitulacion = ' ';
         $alumno->libro = ' ';
-        $alumno->ingreso = ' ';
+        $alumno->ingreso = $validatedData['ingreso'];
         $alumno->acta = ' ';
         $alumno->libro = ' ';
         $alumno->revisado = 0;
@@ -438,7 +438,7 @@ class alumnosContorller extends Controller
             4 => 'Baja'
         ];
 
-        $opcionesHtml .= "<option value=''>Estatus</option>";
+        $opcionesHtml .= "<option value='estatus'>Estatus</option>";
 
         foreach ($opciones as $opcion) {
             if (isset($opcionesMap[$opcion])) {
@@ -458,20 +458,19 @@ class alumnosContorller extends Controller
     {
         $showHombres = $request->query('hombres') === 'true';
         $showMujeres = $request->query('mujeres') === 'true';
-        $tipoTitulacion = $request->query('tipoTitulacion');
-        $dictamen = $request->query('dictamen');
-        $estatus = $request->query('estatus');
-        $ciclo = $request->query('ciclo');
-        $ingreso = $request->query('ingreso');
-
-        // dd([$showHombres,$showMujeres, $dictamen]);
+        $tipoTitulacion = urldecode($request->query('tipoTitulacion'));
+        $dictamen = urldecode($request->query('dictamen'));
+        $estatus = urldecode($request->query('estatus'));
+        $ciclo = urldecode($request->query('ciclo'));
+        $ingreso = urldecode($request->query('ingreso'));
 
 
+        // dd([$showHombres,$showMujeres, $dictamen, $tipoTitulacion, $estatus, $ciclo, $ingreso]);
 
         $query = alumnos_model::select('sexo', DB::raw('COUNT(*) as count'))
             ->groupBy('sexo');
 
-        if ($estatus && $estatus !== 'Estatus') {
+        if ($estatus && $estatus !== 'estatus') {
             $query->where('estatus', $estatus);
         }
 
@@ -480,7 +479,7 @@ class alumnosContorller extends Controller
         }
 
         if ($ingreso && $ingreso !== 'Ingreso') {
-            $query->where('ingreso', $ingreso);
+            $query->where('ingreso', "like" , "%$ingreso%");
         }
 
 

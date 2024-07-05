@@ -190,8 +190,6 @@
 
                 function updateChart(data) {
 
-                    // console.log("datos data update:" + data.dictamen)
-
 
                     if (data.hombres !== undefined) {
                         labels.push('Hombres');
@@ -244,15 +242,18 @@
                     function handleChange(event) {
                         const hombres = checkHombres.checked ? 'true' : 'false';
                         const mujeres = checkMujeres.checked ? 'true' : 'false';
-                        const dictamenValue = inputDictamen.value;
-                        const tipoTitulacionValue = inputTipoTitulacion.value;
-                        const estatusValue = inputEstatus.value;
-                        const cicloValue = inputCiclo.value;
-                        const ingresoValue = inputIngreso.value;
+                        const dictamenValue = encodeURIComponent(inputDictamen.value.trim());
+                        const tipoTitulacionValue = encodeURIComponent(inputTipoTitulacion.value.trim());
+                        const estatusValue = encodeURIComponent(inputEstatus.value.trim());
+                        const cicloValue = encodeURIComponent(inputCiclo.value.trim());
+                        const ingresoValue = encodeURIComponent(inputIngreso.value.trim());
+
+                        // console.log(dictamenValue)
+
 
                         // alert(tipoTitulacionValue)
                         const queryParams =
-                            `hombres=${hombres}&mujeres=${mujeres}&dictamen=${dictamenValue}&ciclo=${cicloValue}&ingreso=${ingresoValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
+                            `hombres=${encodeURIComponent(hombres)}&mujeres=${encodeURIComponent(mujeres)}&dictamen=${dictamenValue}&ciclo=${cicloValue}&ingreso=${ingresoValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
 
                         console.log('queryParams:', queryParams);
 
