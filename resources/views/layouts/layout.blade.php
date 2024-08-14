@@ -26,8 +26,8 @@
         <nav class="navbar navbar-expand-md bg-light navbar-light shadow-sm">
             <div class="container">
                 <span class="me-2 pe-2 border-end border-dark">
-                    <a href="{{ route('/home') }}" ><img
-                            src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="" width="75px"></a>
+                    <a href="{{ route('/home') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
+                            width="75px"></a>
                 </span>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -39,23 +39,40 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <a class="text-decoration-none text-dark text-uppercase btn btn-border"
-                            href="{{ route('alumnos') }}">Alumnos</a>
+                        @can('Alumnos#ver')
+                            <a class="text-decoration-none text-dark text-uppercase btn btn-border"
+                                href="{{ route('alumnos') }}">Alumnos</a>
+                        @endcan
+                        @can('Asesores#ver')
+                            <a href="{{ route('asesores') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">Asesores</a>
+                        @endcan
+                        @can('Tutores#ver')
+                            <a href="{{ route('gestionar-tutores') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">Tutores</a>
+                        @endcan
+                        @can('Numeralia#ver')
+                            <a href="{{ route('numeralia') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
+                        @endcan
+                        @can('Aspirantes#ver')
+                            <a href="{{ route('aspirante') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">Aspirantes</a>
+                        @endcan
+                        @can('Normatividad#ver')
+                            <a href="{{ route('normatividad') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">normatividad</a>
+                        @endcan
+                        @can('Usuarios#ver')
+                            <a href="{{ route('usuarios.index') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">Usuarios</a>
+                        @endcan
 
-                        <a href="{{ route('asesores') }}"
-                            class="text-decoration-none text-dark text-uppercase btn btn-border">Asesores</a>
 
-                        <a href="{{ route('gestionar-tutores') }}"
-                            class="text-decoration-none text-dark text-uppercase btn btn-border">Tutores</a>
-
-                        <a href="{{ route('numeralia') }}"
-                            class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
-
-                        <a href="{{ route('aspirante') }}"
-                            class="text-decoration-none text-dark text-uppercase btn btn-border">Aspirantes</a>
-
-                        <a href="{{ route('normatividad') }}"
-                            class="text-decoration-none text-dark text-uppercase btn btn-border">normatividad</a>
+                        @can('Tutorados#ver')
+                            <a href="{{ route('tutor') }}"
+                                class="text-decoration-none text-dark text-uppercase btn btn-border">tutorados</a>
+                        @endcan
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -127,6 +144,9 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
     </script>
 
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.3/af-2.7.0/datatables.min.css" rel="stylesheet">
+
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.3/af-2.7.0/datatables.min.js"></script>
     @yield('scripts')
 </body>
 

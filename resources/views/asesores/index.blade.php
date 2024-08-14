@@ -33,8 +33,8 @@
     </div>
 
     <div class="text-center">
-        <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-toggle="modal"
-            data-target="#agregar">AGREGAR
+        <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-bs-toggle="modal"
+            data-bs-target="#agregar">AGREGAR
             PROFESOR</button>
 
         {{-- Modal para añadir maestro --}}

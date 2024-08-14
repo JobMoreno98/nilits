@@ -8,8 +8,11 @@ use App\Http\Controllers\loginController;
 use App\Http\Controllers\normatividadController;
 use App\Http\Controllers\numeraliaController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\PermisosController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\tutorController;
 use App\Http\Controllers\usuarioController;
+use App\Http\Middleware\isAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use illuminate\Support\Facades\Mail;
@@ -26,6 +29,23 @@ use illuminate\Support\Facades\Mail;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::resource('usuarios', usuarioController::class)->middleware(['auth', isAdmin::class]);
+
+Route::resource('permisos', PermisosController::class)->middleware(['auth', isAdmin::class]);
+
+Route::resource("roles", RolesController::class)->middleware(['auth', isAdmin::class]);
+
+Route::get("asignar-permisos/{id}", [
+    "as" => "asignar_permisos",
+    "uses" => "App\Http\Controllers\RolesController@relacionar",
+])->middleware(['auth', isAdmin::class]);
+
+Route::post("guardar-relacion-permisos", [
+    "as" => "guardar_relacion_permisos",
+    "uses" => "App\Http\Controllers\RolesController@guardarRelacion",
+])->middleware(['auth', isAdmin::class]);;
+
 
 //Rutas de iniciao
 Route::get('/', function () {
@@ -44,30 +64,30 @@ Route::post('logout', [loginController::class, 'logout'])->name('logout');
 
 Route::get('/home', function () {
     return view('home.index');
-})->name('/home');
+})->name('/home')->middleware(['auth']);
 
 
-Route::get('alumnado', [alumnosContorller::class, 'alumnado_restringido'])->name('alumnado');
+Route::get('alumnado', [alumnosContorller::class, 'alumnado_restringido'])->name('alumnado')->middleware(['auth']);
 
-Route::get('alumnos', [alumnosContorller::class, 'index'])->name('alumnos');
+Route::get('alumnos', [alumnosContorller::class, 'index'])->name('alumnos')->middleware(['auth']);
 
-Route::delete('/elminarAsignado/{codigo}', [asesoresController::class, 'desasignar'])->name('elminarAsignado');
+Route::delete('/elminarAsignado/{codigo}', [asesoresController::class, 'desasignar'])->name('elminarAsignado')->middleware(['auth']);
 
 
-Route::get('alumnos/detalles/all/{codigo}', [alumnosContorller::class, 'detalles'])->name('alumnos/detalles/all');
+Route::get('alumnos/detalles/all/{codigo}', [alumnosContorller::class, 'detalles'])->name('alumnos/detalles/all')->middleware(['auth']);
 
-Route::post('/alumnos/crear', [alumnosContorller::class, 'store'])->name('/alumnos/crear');
+Route::post('/alumnos/crear', [alumnosContorller::class, 'store'])->name('/alumnos/crear')->middleware(['auth']);
 
-Route::post('registro', [usuarioController::class, 'registro'])->name('registro');
+Route::post('registro', [usuarioController::class, 'registro'])->name('registro')->middleware(['auth']);
 
-Route::post('/aplicaras', [alumnosContorller::class, 'asignacion'])->name('aplicaras');
+Route::post('/aplicaras', [alumnosContorller::class, 'asignacion'])->name('aplicaras')->middleware(['auth']);
 
 //ruta para mostrar alumnos sin tutor
-Route::get('/alumnos/sintutor', [alumnosContorller::class, 'alumno_sin_tutor'])->name('/alumnos/sintutor');
+Route::get('/alumnos/sintutor', [alumnosContorller::class, 'alumno_sin_tutor'])->name('/alumnos/sintutor')->middleware(['auth']);
 
-Route::post('/alumnos/asingnar/', [alumnosContorller::class, 'asignar_tutor'])->name('/alumnos/asingnar/');
+Route::post('/alumnos/asingnar/', [alumnosContorller::class, 'asignar_tutor'])->name('/alumnos/asingnar/')->middleware(['auth']);
 
-Route::get('/buscar-alumno', [alumnosContorller::class, 'buscar'])->name('buscarAlumno');
+Route::get('/buscar-alumno', [alumnosContorller::class, 'buscar'])->name('buscarAlumno')->middleware(['auth']);
 
 //Route::get('/buscar-alumno', [alumnosContorller::class,'buscar'])->name('buscarAlumno');
 
@@ -75,22 +95,22 @@ Route::get('/buscar-alumno', [alumnosContorller::class, 'buscar'])->name('buscar
 
 //Busqueda
 
-Route::get('/buscar-alumno/restricted', [alumnosContorller::class, 'buscarAllRestricted'])->name('/buscar-alumno/restricted');
+Route::get('/buscar-alumno/restricted', [alumnosContorller::class, 'buscarAllRestricted'])->name('/buscar-alumno/restricted')->middleware(['auth']);
 
-Route::get('buscar-alumno/all', [alumnosContorller::class, 'buscarAll'])->name('buscarAlumno/all');
+Route::get('buscar-alumno/all', [alumnosContorller::class, 'buscarAll'])->name('buscarAlumno/all')->middleware(['auth']);
 
-Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'editar'])->name('/alumnos/update/');
+Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'editar'])->name('/alumnos/update/')->middleware(['auth']);
 
 
 //Ruta para el manejo de los maestros
 
-Route::get('asesores', [asesoresController::class, 'index'])->name('asesores');
+Route::get('asesores', [asesoresController::class, 'index'])->name('asesores')->middleware(['auth']);
 
-Route::get('tutor', [tutorController::class, 'index'])->name('tutor');
+Route::get('tutor', [tutorController::class, 'index'])->name('tutor')->middleware(['auth']);
 
-Route::get('gestionar-tutores', [asesoresController::class, 'getionarT'])->name('gestionar-tutores');
+Route::get('gestionar-tutores', [asesoresController::class, 'getionarT'])->name('gestionar-tutores')->middleware(['auth']);
 
-Route::get('/maestros/tutorados/{maestroId}', [asesoresController::class, 'getTutorados'])->name('/maestros/tutorados/');
+Route::get('/maestros/tutorados/{maestroId}', [asesoresController::class, 'getTutorados'])->name('/maestros/tutorados/')->middleware(['auth']);
 
 Route::put('/maestros/update/{codigo}', [asesoresController::class, 'actualizarMaestro'])->name('/maestros/update/');
 
