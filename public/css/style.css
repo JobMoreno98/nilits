@@ -1,0 +1,6 @@
+.btn-border{
+    transition: all .3s ease-out;
+}
+.btn-border:hover{
+    border-bottom: 2px solid #b13124;
+}

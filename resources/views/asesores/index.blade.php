@@ -3,16 +3,6 @@
 @section('title', 'Gestionar profesores')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="mb-0"> <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;"></h1>
-        <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-            @csrf
-            <button class="btn text-light" type="submit">
-                Cerrar Sesión
-            </button>
-        </form>
-    </div>
-
     <h2 class="mb-4  text-light" style="background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
 
     <!-- Barra de búsqueda -->
@@ -34,19 +24,17 @@
                         <td>{{ $maestro->codigo }}</td>
                         <td>{{ $maestro->Nombre }} {{ $maestro->Apellido }}</td>
                         <td>{{ $maestro->correo }}</td>
-                        <td><i class="fas fa-edit" role="button" data-toggle="modal"
-                                data-target="#editAlumnoModal{{ $maestro->codigo }}"></i></td>
+                        <td><a href="{{ route('asesor.show', $maestro->id) }}"> <i class="fas fa-edit"
+                                    role="button"></i></a></td>
                     </tr>
-
-
-    </div>
-    @endforeach
-    </tbody>
-    </table>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
     <div class="text-center">
-        <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-toggle="modal" data-target="#agregar">AGREGAR
+        <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-toggle="modal"
+            data-target="#agregar">AGREGAR
             PROFESOR</button>
 
         {{-- Modal para añadir maestro --}}
@@ -138,11 +126,9 @@
             </div>
         </div>
 
-
-
         {{-- Modal para editar maestro --}}
-        <div class="modal fade" id="editAlumnoModal{{ $maestro->codigo }}" tabindex="-1" role="dialog"
-            aria-labelledby="editAlumnoModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editAsesor" tabindex="-1" role="dialog" aria-labelledby="editAlumnoModalLabel"
+            aria-hidden="true">
 
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -153,9 +139,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST"
-                        action="{{ route('/maestros/update/', ['codigo' => $maestro->codigo]) }}">
-                        {!! csrf_field() !!}
+                    <form method="POST" action="{{ route('/maestros/update/', ['codigo' => $maestro->codigo]) }}">
+                        @csrf
                         {{ method_field('PUT') }}
                         <div class="modal-body">
                             <!-- Campos del formulario -->
@@ -167,13 +152,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" id="Nombre" name="Nombre"
-                                    required value="{{ $maestro->Nombre }}">
+                                <input type="text" class="form-control" id="Nombre" name="Nombre" required
+                                    value="{{ $maestro->Nombre }}">
                             </div>
                             <div class="form-group">
                                 <label for="Apellido">Apellidos</label>
-                                <input type="text" class="form-control" id="Apellido" name="Apellido"
-                                    required value="{{ $maestro->Apellido }}">
+                                <input type="text" class="form-control" id="Apellido" name="Apellido" required
+                                    value="{{ $maestro->Apellido }}">
                             </div>
                             <div class="form-group">
                                 <label for="correo">Correo</label>
@@ -209,8 +194,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="correo">Adscripcion</label>
-                                <input type="text" class="form-control" id="adscripcion"
-                                    name="adscripcion" value="{{ $maestro->adscripcion }}">
+                                <input type="text" class="form-control" id="adscripcion" name="adscripcion"
+                                    value="{{ $maestro->adscripcion }}">
                             </div>
                             <div class="form-group">
                                 <label for="correo">Grado</label>
@@ -219,21 +204,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="correo">Observaciones</label>
-                                <input type="text" class="form-control" id="observaciones"
-                                    name="observaciones" value="{{ $maestro->observaciones }}">
+                                <input type="text" class="form-control" id="observaciones" name="observaciones"
+                                    value="{{ $maestro->observaciones }}">
                             </div>
-
-
-
-
-
-
-
-
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary">Guardar
                                 Cambios</button>
                         </div>
@@ -251,7 +227,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var searchInput = document.getElementById('searchInput');
-
             searchInput.addEventListener('keyup', function() {
                 var filter = searchInput.value.toUpperCase();
                 var table = document.querySelector('table.table');

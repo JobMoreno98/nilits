@@ -17,33 +17,26 @@
 
 @section('content')
     <div class="container mt-4">
-        <!-- Encabezado -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h1 class="mb-0"> <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;"></h1>
-            <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-                @csrf
-                <button class="btn text-light" type="submit">
-                    Cerrar Sesión
-                </button>
-            </form>
-        </div>
-        <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)"  >Gestionar Alumnos</h2>
+        <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Gestionar Alumnos</h2>
 
         <form action="{{ route('buscarAlumno/all') }}" method="GET">
             <div class="input-group mb-3">
                 <input type="text" class="form-control mr-5" placeholder="Buscar alumno por nombre o codigo" name="query">
                 <div class="input-group-append">
-                    <button class="btn text-light mr-3" style="background-color: rgb(0, 0, 169)"  type="submit">Buscar</button>
+                    <button class="btn text-light mr-3" style="background-color: rgb(0, 0, 169)"
+                        type="submit">Buscar</button>
                 </div>
                 <div class="input-group-append ms-2">
-                    <a class="btn btn-md btn-secondary btn-block text-light" href="{{ route('alumnos') }}">Limpiar busqueda</a>
+                    <a class="btn btn-md btn-secondary btn-block text-light" href="{{ route('alumnos') }}">Limpiar
+                        busqueda</a>
                 </div>
             </div>
         </form>
 
 
         <div class="row mb-3">
-            <a href="{{ route('/alumnos/sintutor') }}" class="btn text-light col-md-2 mr-5" style="background-color: rgb(0, 0, 169)">Ver alumnos sin
+            <a href="{{ route('/alumnos/sintutor') }}" class="btn text-light col-md-2 mr-5"
+                style="background-color: rgb(0, 0, 169)">Ver alumnos sin
                 tutor</a>
 
             <!-- Estadísticas rápidas -->
@@ -100,12 +93,11 @@
                                 @endphp
                                 {{ $dictamenActual }}
                             </td>
-                            <td>{{ $alumno->tutor_nombre }} {{$alumno->tutor_apellido}}</td>
+                            <td>{{ $alumno->tutor_nombre }} {{ $alumno->tutor_apellido }}</td>
                             <!-- Botón para activar el modal -->
                             <td>
                                 <i class="fas fa-edit edit-alumno-btn" role="button" data-toggle="modal"
-                                    data-target="#editAlumnoModal"
-                                    data-codigo="{{ $alumno->codigo }}"
+                                    data-target="#editAlumnoModal" data-codigo="{{ $alumno->codigo }}"
                                     data-Nombre="{{ $alumno->Nombre }}"></i>
                                 <!-- Modal para editar alumno -->
                             </td>
@@ -123,9 +115,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editAlumnoModalLabel">Editar Alumno</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="{{ route('/alumnos/update/', $alumno->codigo) }}">
                         @csrf
@@ -135,25 +125,23 @@
                             <input type="hidden" id="editCodigo" name="codigo">
                             <div class="form-group">
                                 <label for="codigo">Código</label>
-                                <input type="text" class="form-control" id="codigo" name="codigo"
-                                    value="" required>
+                                <input type="text" class="form-control" id="codigo" name="codigo" value=""
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre"
-                                    value="" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value=""
+                                    required>
                             </div>
 
                             <div class="form-group">
                                 <label for="correo">Correo</label>
-                                <input type="email" class="form-control" id="correo" value=""
-                                    name="correo">
+                                <input type="email" class="form-control" id="correo" value="" name="correo">
                             </div>
 
                             <div class="form-group">
                                 <label for="telefono">Telefono</label>
-                                <input type="text" class="form-control" id="telefono" value=""
-                                    name="telefono">
+                                <input type="text" class="form-control" id="telefono" value="" name="telefono">
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Calendario de ingreso</label>
@@ -282,7 +270,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </div>
                     </form>
@@ -293,10 +281,10 @@
 
 
         <div class="mb-5">
-            {{ $alumnos->appends(request()->query())->links() }}
+            {{ $alumnos->links() }}
         </div>
 
-{{--  Aqui empieza el modal del agregar alumno --}}
+        {{--  Aqui empieza el modal del agregar alumno --}}
         <div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -414,7 +402,8 @@
                                 <label for="genero">tutor</label>
                                 <select class="form-control" name="tutor" id="tutor">
                                     @foreach ($tutores as $tutor)
-                                        <option value="{{ $tutor->codigo }}">{{ $tutor->Nombre }} {{$alumno->tutor_apellido}}</option>
+                                        <option value="{{ $tutor->codigo }}">{{ $tutor->Nombre }}
+                                            {{ $alumno->tutor_apellido }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -433,7 +422,8 @@
 
         <!-- Botones de acción -->
         <div class="text-center">
-            <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-toggle="modal" data-target="#agregar">Agregar
+            <button class="btn text-light" style="background-color: rgb(0, 0, 169)" type="button" data-toggle="modal"
+                data-target="#agregar">Agregar
                 Alumno</button>
             <a href="{{ route('/home') }}" class="btn btn-secondary">Volver al menu</a>
         </div>
@@ -443,38 +433,34 @@
 @section('scripts')
 
 
-<!---->
-<script>
-    $(document).ready(function() {
-    $(document).on('click', '.edit-alumno-btn', function() {
-        var codigo = $(this).data('codigo');
-        console.log('success');
-        $.ajax({
-            url: '{{ url('alumnos/detalles/all/') }}/' + codigo,
-            type: 'GET',
-            success: function(data) {
+    <!---->
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.edit-alumno-btn', function() {
+                var codigo = $(this).data('codigo');
                 console.log('success');
-                $('#editAlumnoModalLabel').text('Editar Alumno ' + data.Nombre);
-                $('#editAlumnoModal #codigo').val(data.codigo);
-                $('#editAlumnoModal #nombre').val(data.Nombre);
-                $('#editAlumnoModal #correo').val(data.correo);
-                $('#editAlumnoModal #telefono').val(data.telefono);
-                $('#editAlumnoModal #opcionTitulacion').val(data.opcionTitulacion);
-                $('#editAlumnoModal #acta').val(data.acta);
-                $('#editAlumnoModal #acta').val(data.libro);
-
-                $('#editAlumnoModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+                $.ajax({
+                    url: '{{ url('alumnos/detalles/all/') }}/' + codigo,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log('success');
+                        $('#editAlumnoModalLabel').text('Editar Alumno ' + data.Nombre);
+                        $('#editAlumnoModal #codigo').val(data.codigo);
+                        $('#editAlumnoModal #nombre').val(data.Nombre);
+                        $('#editAlumnoModal #correo').val(data.correo);
+                        $('#editAlumnoModal #telefono').val(data.telefono);
+                        $('#editAlumnoModal #opcionTitulacion').val(data.opcionTitulacion);
+                        $('#editAlumnoModal #acta').val(data.acta);
+                        $('#editAlumnoModal #acta').val(data.libro);
+                        $('#editAlumnoModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
         });
-    });
-});
-
-
-
-</script>
+    </script>
 
 
 @endsection

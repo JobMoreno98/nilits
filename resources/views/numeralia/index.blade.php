@@ -5,18 +5,6 @@
 
     @section('content')
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1 class="mb-0">
-                    <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;">
-                </h1>
-                <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn text-light" type="submit">
-                        Cerrar Sesión
-                    </button>
-                </form>
-            </div>
-
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Numeralia</h2>
 
             <div class="d-flex">
@@ -255,22 +243,22 @@
                         const queryParams =
                             `hombres=${encodeURIComponent(hombres)}&mujeres=${encodeURIComponent(mujeres)}&dictamen=${dictamenValue}&ciclo=${cicloValue}&ingreso=${ingresoValue}&tipoTitulacion=${tipoTitulacionValue}&estatus=${estatusValue}`;
 
-                        console.log('queryParams:', queryParams);
+                        //console.log('queryParams:', queryParams);
 
                         // Obtener el protocolo y el dominio
                         const protocolo = window.location.protocol;
                         const dominio = window.location.hostname;
 
                         // Construir el endpoint
-                        const endpoint = `${protocolo}//${dominio}:8000/grafica?${queryParams}`;
+                        const endpoint = `${protocolo}//${dominio}/grafica?${queryParams}`;
 
 
-                        console.log(`Endpoint: ${endpoint}`);
+                        //console.log(`Endpoint: ${endpoint}`);
 
                         // Realizar la solicitud AJAX
                         axios.get(endpoint)
                             .then(function(response) {
-                                console.log(response);
+                                //console.log(response);
                                 updateChart(response.data);
                             })
                             .catch(function(error) {

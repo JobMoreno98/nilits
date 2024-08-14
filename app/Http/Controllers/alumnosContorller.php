@@ -43,7 +43,7 @@ class alumnosContorller extends Controller
 
 
 
-        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechaTitulacion', 'result'));
+        return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechasTitulacion'));
     }
 
 
@@ -126,7 +126,7 @@ class alumnosContorller extends Controller
 
     public function asignar_tutor(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             //'codigo' => 'required',
             //'nombre' => 'required',
             //'telefono' => 'required',
@@ -142,15 +142,6 @@ class alumnosContorller extends Controller
 
 
         $tutor_alumno = new alumno_tutorModel();
-        //$alumno->codigo = $validatedData['codigo'];
-        //$alumno->Nombre = $validatedData['nombre'];
-        //$alumno->telefono = $validatedData['telefono'];
-        //$alumno->correo = $validatedData['correo'];
-        //$alumno->sexo = $validatedData['sexo'];
-        //$alumno->procedencia = $validatedData['procedencia'];
-        //$alumno->fechaNac = $validatedData['fechaNac'];
-        //$alumno->dictamen = $validatedData['dictamen'];
-        //$alumno->estatus = $validatedData['estatus'];
         $tutor_alumno->codigo = $request->codigo;
         $tutor_alumno->id_tutor = $request->tutor;
         $tutor_alumno->activo = 1;
@@ -218,8 +209,14 @@ class alumnosContorller extends Controller
     //update function
     public function editar(Request $request, $codigo)
     {
+        $request->validate([
+            'nombre' => 'required',
+            'correo' => 'required',
+            'calendarioTitulacion' => 'required',
+            'ingreso' => 'required'
+        ]);
         // Obtener el alumno a actualizar
-        $alumno = alumnos_model::where('codigo', '=', $request->codigo)->first();
+        $alumno = alumnos_model::where('codigo', '=', $codigo)->first();
 
         // Actualizar los datos del alumno
         $alumno->Nombre = $request->nombre;

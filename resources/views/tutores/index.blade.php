@@ -1,23 +1,11 @@
 @if (Auth::check())
 
-    @extends('layouts/layout')
+    @extends('layouts.layout')
 
     @section('title', 'Gestión de Tutores')
 
     @section('content')
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1 class="mb-0"> <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;">
-                </h1>
-                <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn text-light" type="submit">
-                        Cerrar Sesión
-                    </button>
-                </form>
-            </div>
-
-
+        <div class="container-fluid mt-5">
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
 
             <!-- Selector de Tutores -->
@@ -27,7 +15,7 @@
                         <select name="maestro" class="form-control" id="selectTutor">
                             <option value="">Selecciona un tutor</option>
                             @foreach ($maestros as $maestro)
-                                <option  value="{{ $maestro->codigo }}" data-nombre="{{ $maestro->Nombre }}"
+                                <option value="{{ $maestro->codigo }}" data-nombre="{{ $maestro->Nombre }}"
                                     data-carga-horaria="{{ $maestro->cargaHoraria }}"
                                     data-numero-tutorados="{{ $maestro->NumeroTutorados }}"
                                     data-grado="{{ $maestro->grado }}" data-nombramiento="{{ $maestro->nombramiento }}">
@@ -40,50 +28,59 @@
 
                     <div id="infoMaestro">
                         <h3>Información del Maestro</h3>
-                        <p id="cargaHoraria">Carga Horaria: </p>
-                        <p id="numeroTutorados">Número de Tutorados: </p>
-                        <p id="grado">Grado: </p>
-                        <p id="nombramiento">Nombramiento: </p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Carga Horaria:</th>
+                                    <th>Número de Tutorados</th>
+                                    <th>Grado</th>
+                                    <th>Nombramiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="cargaHoraria"></td>
+                                    <td id="numeroTutorados"></td>
+                                    <td id="grado"></td>
+                                    <td id="nombramiento"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <!-- Botones o links para generar documentos -->
 
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Ver Tutorados
+                    </button>
+                    <button id="asignarTutorBtn" class="btn btn-primary">Asignar Tutor</button>
 
+                    <button id="btnOficioAsignacion" class="btn text-light " style="background-color: rgb(0, 0, 169)">Oficio
+                        de Asignación</button>
+                    <button id="btnConstanciaTutoria" class="btn text-light"
+                        style="background-color: rgb(0, 0, 169)">Constancia de Tutoría</button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Tutorados</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Los datos de los tutorados se cargarán aquí dinámicamente -->
-                                        Por favor, seleccione un maestro para ver sus tutorados.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cerrar</button>
-                                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Tutorados</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Los datos de los tutorados se cargarán aquí dinámicamente -->
+                                    Por favor, seleccione un maestro para ver sus tutorados.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         </div>
-
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Ver Tutorados
-                        </button>
-                        <button id="asignarTutorBtn" class="btn btn-primary">Asignar Tutor</button>
-
-                        <button id="btnOficioAsignacion" class="btn text-light "
-                            style="background-color: rgb(0, 0, 169)">Oficio de Asignación</button>
-                        <button id="btnConstanciaTutoria" class="btn text-light"
-                            style="background-color: rgb(0, 0, 169)">Constancia de Tutoría</button>
-
-                        <button class="btn btn-secondary" onclick="location.href='{{ url('/home') }}'">Volver al
-                            Menú</button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -108,20 +105,12 @@
                 </tbody>
             </table>
             <div class="mb-5">
-                {{ $alumnos->appends(request()->query())->links() }}
+                {{ $alumnos->links() }}
             </div>
         </div>
 
-
-
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-
-        <!-- Bootstrap JS -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+    @endsection
+    @section('scripts')
         <script>
             $(document).ready(function() {
                 $('#selectTutor').change(function() {
@@ -132,10 +121,10 @@
                     var nombramiento = selected.data('nombramiento') || 'No especificado';
 
                     // Actualizar la información del maestro
-                    $('#cargaHoraria').text("Carga Horaria: " + cargaHoraria);
-                    $('#numeroTutorados').text("Número de Tutorados: " + numeroTutorados);
-                    $('#grado').text("Grado: " + grado);
-                    $('#nombramiento').text("Nombramiento: " + nombramiento);
+                    $('#cargaHoraria').text(cargaHoraria);
+                    $('#numeroTutorados').text(numeroTutorados);
+                    $('#grado').text(grado);
+                    $('#nombramiento').text(nombramiento);
 
                     // Aquí puedes añadir lógica para mostrar u ocultar los botones basado en la información disponible
                 });
@@ -172,7 +161,7 @@
                                 // No necesitas mostrar el modal aquí; se mostrará a través del botón ya configurado para ello
                             },
                             error: function(error) {
-                                console.log(error);
+                                //console.log(error);
                                 tutoradosData = '<p>Error al cargar los tutorados.</p>';
                             }
                         });
@@ -231,39 +220,39 @@
         </script>
 
 
-<script>
-    document.getElementById('asignarTutorBtn').addEventListener('click', function() {
-    var maestroSeleccionado = document.getElementById('selectTutor').value;
-    var alumnosSeleccionados = [];
-    document.querySelectorAll('input[name="alumno"]:checked').forEach(function(checkbox) {
-        alumnosSeleccionados.push(checkbox.closest('td').textContent.trim()); // O alguna otra forma de obtener el código del alumno
-    });
+        <script>
+            document.getElementById('asignarTutorBtn').addEventListener('click', function() {
+                var maestroSeleccionado = document.getElementById('selectTutor').value;
+                var alumnosSeleccionados = [];
+                document.querySelectorAll('input[name="alumno"]:checked').forEach(function(checkbox) {
+                    alumnosSeleccionados.push(checkbox.closest('td').textContent
+                        .trim()); // O alguna otra forma de obtener el código del alumno
+                });
 
-    if (maestroSeleccionado && alumnosSeleccionados.length > 0) {
-        $.ajax({
-            url: 'aplicaras',
-            type: 'POST',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "maestro": maestroSeleccionado,
-                "alumno": alumnosSeleccionados
-            },
-            success: function(response) {
-                alert('Tutorado asignado');
-                location.reload();
-                // Opcionalmente, resetear el formulario o actualizar la interfaz
-            },
-            error: function(xhr) {
-                // Manejar errores (por ejemplo, mostrar mensajes)
-                console.log(xhr.responseText);
-            }
-        });
-    } else {
-        alert('Por favor, seleccione un tutor y al menos un alumno.');
-    }
-});
-
-</script>
+                if (maestroSeleccionado && alumnosSeleccionados.length > 0) {
+                    $.ajax({
+                        url: 'aplicaras',
+                        type: 'POST',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "maestro": maestroSeleccionado,
+                            "alumno": alumnosSeleccionados
+                        },
+                        success: function(response) {
+                            alert('Tutorado asignado');
+                            location.reload();
+                            // Opcionalmente, resetear el formulario o actualizar la interfaz
+                        },
+                        error: function(xhr) {
+                            // Manejar errores (por ejemplo, mostrar mensajes)
+                            //console.log(xhr.responseText);
+                        }
+                    });
+                } else {
+                    alert('Por favor, seleccione un tutor y al menos un alumno.');
+                }
+            });
+        </script>
 
 
         <script>
@@ -281,7 +270,6 @@
                 });
             });
         </script>
-
     @endsection
 @else
     <script>

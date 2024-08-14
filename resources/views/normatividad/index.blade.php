@@ -5,18 +5,6 @@
 
     @section('content')
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1 class="mb-0"> <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;">
-                </h1>
-                <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn text-light" type="submit">
-                        Cerrar Sesión
-                    </button>
-                </form>
-            </div>
-
-            
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Normatividad</h2>
 
             <div class="d-flex justify-content-center">
@@ -52,8 +40,8 @@
                 </div>
             </div>
 
-            
-            
+
+
 
             <br>
             <div>
@@ -100,8 +88,8 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
 
             <br>
             <div>
@@ -133,14 +121,14 @@
                     </div>
                 </div>
 
-                
+
 
             </div>
 
             <br>
 
             <div class="text-center">
-            
+
                 <a href="{{ route('/home') }}" class="btn btn-secondary">Volver al menu</a>
             </div>
 
