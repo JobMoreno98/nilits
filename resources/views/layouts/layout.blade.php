@@ -16,106 +16,136 @@
     <!-- Incluir estilos CSS adicionales si los tienes -->
     @yield('styles')
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link
+        href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-colvis-3.1.2/b-html5-3.1.2/datatables.min.css"
+        rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #footer {
+            margin-top: auto;
+        }
+    </style>
 
 </head>
 
 <body>
+    <div id="preloader"></div>
+    @include('sweetalert::alert')
+    <nav class="navbar navbar-expand-md bg-light navbar-dark">
+        <div class="container">
+            <span class="me-2 pe-2 border-end border-dark">
+                <a href="{{ route('/') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
+                        width="75px"></a>
+            </span>
 
-    <div class="container mt-4">
-        <nav class="navbar navbar-expand-md bg-light navbar-light shadow-sm">
-            <div class="container">
-                <span class="me-2 pe-2 border-end border-dark">
-                    <a href="{{ route('/') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
-                            width="75px"></a>
-                </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-                        @can('Alumnos#ver')
-                            <a class="text-decoration-none text-dark text-uppercase btn btn-border"
-                                href="{{ route('alumnos') }}">Alumnos</a>
-                        @endcan
-                        @can('Asesores#ver')
-                            <a href="{{ route('asesores') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">Asesores</a>
-                        @endcan
-                        @can('Tutores#ver')
-                            <a href="{{ route('gestionar-tutores') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">Tutores</a>
-                        @endcan
-                        @can('Numeralia#ver')
-                            <a href="{{ route('numeralia') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
-                        @endcan
-                        @can('Aspirantes#ver')
-                            <a href="{{ route('aspirante') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">Aspirantes</a>
-                        @endcan
-                        @can('Normatividad#ver')
-                            <a href="{{ route('normatividad') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">normatividad</a>
-                        @endcan
-                        @can('Usuarios#ver')
-                            <a href="{{ route('usuarios.index') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">Usuarios</a>
-                        @endcan
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav me-auto">
+                    @can('Alumnos#ver')
+                        <a class="text-decoration-none text-dark text-uppercase btn btn-border"
+                            href="{{ route('alumnos') }}">Alumnos</a>
+                    @endcan
+                    @can('Asesores#ver')
+                        <a href="{{ route('asesores') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">Asesores</a>
+                    @endcan
+                    @can('Tutores#ver')
+                        <a href="{{ route('gestionar-tutores') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">Tutores</a>
+                    @endcan
+                    @can('Numeralia#ver')
+                        <a href="{{ route('numeralia') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
+                    @endcan
+                    @can('Aspirantes#ver')
+                        <a href="{{ route('aspirante') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">Aspirantes</a>
+                    @endcan
+                    @can('Normatividad#ver')
+                        <a href="{{ route('normatividad') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">normatividad</a>
+                    @endcan
+                    @can('Usuarios#ver')
+                        <a href="{{ route('usuarios.index') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">Usuarios</a>
+                    @endcan
 
 
-                        @can('Tutorados#ver')
-                            <a href="{{ route('tutor') }}"
-                                class="text-decoration-none text-dark text-uppercase btn btn-border">tutorados</a>
-                        @endcan
-                    </ul>
+                    @can('Tutorados#ver')
+                        <a href="{{ route('tutor') }}"
+                            class="text-decoration-none text-dark text-uppercase btn btn-border">tutorados</a>
+                    @endcan
+                </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- Authentication Links -->
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle btn" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->nombre }}
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="text-dark nav-link dropdown-toggle btn" href="#"
+                                role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->nombre }}
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end text-dark" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
+    <div>
         @yield('content')
     </div>
+    <div id="footer">
+
+        <div class="col-sm-12 p-3 mt-4" style="background: #072d45">
+            <p class="text-center text-white m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES | Nivelación a
+                la Licenciatura en Trabajo Social </p>
+        </div>
+
+    </div>
+
 
     <!-- Incluir Bootstrap JS y sus dependencias -->
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
@@ -134,7 +164,7 @@
     <!-- Incluir jQuery -->
     <!-- Luego, incluir otros scripts que dependen de jQuery -->
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -144,10 +174,14 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
     </script>
 
-    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.3/af-2.7.0/datatables.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script
+        src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-colvis-3.1.2/b-html5-3.1.2/datatables.min.js">
+    </script>
 
-    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.1.3/af-2.7.0/datatables.min.js"></script>
     @yield('scripts')
+    <script src="{{ asset('js/main.js') }}"></script>
 </body>
 
 </html>

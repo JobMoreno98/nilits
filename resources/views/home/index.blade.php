@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-5">
         <!-- Subtítulo -->
-        <p class="text-secondary text-center">Nivelación a la Licenciatura en Trabajo Social - CUCSH</p>
+        <h2 class="text-secondary text-center">Nivelación a la Licenciatura en Trabajo Social - CUCSH</h2>
 
         <!-- Tarjetas de Opciones -->
         <div class="d-flex flex-wrap text-center justify-content-center">
@@ -79,8 +79,10 @@
                             <p class="card-text">Documentación CUCSH</p>
                         </div>
                     </div>
+                </a>
             </div>
 
         </div>
+
     </div>
 @endsection

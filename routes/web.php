@@ -13,6 +13,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\tutorController;
 use App\Http\Controllers\usuarioController;
 use App\Http\Middleware\isAdmin;
+use App\Models\alumnos_model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use illuminate\Support\Facades\Mail;
@@ -70,6 +71,7 @@ Route::get('/home', function () {
 Route::get('alumnado', [alumnosContorller::class, 'alumnado_restringido'])->name('alumnado')->middleware(['auth']);
 
 Route::get('alumnos', [alumnosContorller::class, 'index'])->name('alumnos')->middleware(['auth']);
+Route::get('alumnos/{alumno}', [alumnosContorller::class, 'show'])->name('alumnos.show')->middleware(['auth']);
 
 Route::delete('/elminarAsignado/{codigo}', [asesoresController::class, 'desasignar'])->name('elminarAsignado')->middleware(['auth']);
 
@@ -83,7 +85,7 @@ Route::post('registro', [usuarioController::class, 'registro'])->name('registro'
 Route::post('/aplicaras', [alumnosContorller::class, 'asignacion'])->name('aplicaras')->middleware(['auth']);
 
 //ruta para mostrar alumnos sin tutor
-Route::get('/alumnos/sintutor', [alumnosContorller::class, 'alumno_sin_tutor'])->name('/alumnos/sintutor')->middleware(['auth']);
+Route::get('/alumnos/sin-tutor', [alumnosContorller::class, 'alumnos_sin_tutor'])->name('/alumnos/sintutor')->middleware(['auth']);
 
 Route::post('/alumnos/asingnar/', [alumnosContorller::class, 'asignar_tutor'])->name('/alumnos/asingnar/')->middleware(['auth']);
 
@@ -164,6 +166,10 @@ Route::get('contactanos', function () {
 Route::get('normatividad', [normatividadController::class, 'indexNo'])->name('normatividad');
 
 
-// Asesor show
+// Asesores
 
 Route::get('asesor/{asesor}', [asesoresController::class, 'show'])->middleware('auth')->name('asesor.show');
+
+Route::put('/asesor/{id}/delete', [asesoresController::class, 'delete'])->name('asesor.delete')->middleware(['auth', isAdmin::class]);
+
+Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name('alumnos.sin-tutor');

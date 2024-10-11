@@ -19,8 +19,6 @@ class alumnosContorller extends Controller
     public function index()
     {
 
-
-
         $totalRegistros = alumnos_model::count();
         $totalEgresados = alumnos_model::where('estatus', 3)->count();
         $totalActivos = alumnos_model::where('estatus', 1)->count();
@@ -34,7 +32,7 @@ class alumnosContorller extends Controller
             ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
             ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->paginate(10);
+            ->get();
 
 
         // Listar a los maestros para poder asignarlos al crear un registro
@@ -47,6 +45,12 @@ class alumnosContorller extends Controller
     }
 
 
+
+    public function show(alumnos_model $alumno)
+    {
+
+        return view('alumnos.show', compact('alumno'));
+    }
 
     //funcion para solo poder ver a los alumnos
     public function alumnado_restringido()
@@ -126,7 +130,7 @@ class alumnosContorller extends Controller
 
     //Mostrar alumnos sin tutor
 
-    public function alumno_sin_tutor()
+    public function alumnos_sin_tutor()
     {
         $alumnos = DB::table('alumnos')
             ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
@@ -134,7 +138,9 @@ class alumnosContorller extends Controller
             ->whereNull('maestros.codigo')
             ->where('alumnos.estatus', '=', 1) // Filtrar por estatus igual a 1
             ->select('alumnos.*')
-            ->paginate(10);
+            ->toSql();
+
+        dd($alumnos);
 
         $tutores = maestrosModel::all();
 
@@ -236,10 +242,11 @@ class alumnosContorller extends Controller
             'nombre' => 'required',
             'correo' => 'required',
             'calendarioTitulacion' => 'required',
-            'ingreso' => 'required'
+            'ingreso' => 'required',
+            'dictamen' => 'required',
         ]);
         // Obtener el alumno a actualizar
-        $alumno = alumnos_model::where('codigo', '=', $codigo)->first();
+        $alumno = alumnos_model::where('codigo', 'like', "%" . $codigo)->first();
 
         // Actualizar los datos del alumno
         $alumno->Nombre = $request->nombre;
@@ -304,31 +311,6 @@ class alumnosContorller extends Controller
         // Devolver la vista con los resultados de la búsqueda
         return view('alumnos.alumnos_sin_tutor', ['alumnos' => $alumnos, 'tutores' => $tutores]);
     }
-
-    public function buscarAll(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Realizar la consulta para buscar alumnos por nombre
-        $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->where('alumnos.Nombre', 'like', '%' . $query . '%')
-            ->orWhere('alumnos.codigo', 'like', '%' . $query . '%')
-            ->paginate(10);
-
-
-        $totalRegistros = alumnos_model::count();
-        $totalEgresados = alumnos_model::where('estatus', 'Egresado')->count();
-        $totalActivos = alumnos_model::where('estatus', 'Activo')->count();
-        $totalBajas = alumnos_model::where('estatus', 'baja')->count();
-        $tutores = maestrosModel::all();
-
-        // Devolver la vista con los resultados de la búsqueda
-        return view('alumnos.index', ['alumnos' => $alumnos, 'tutores' => $tutores, 'totalRegistros' => $totalRegistros, 'totalEgresados' => $totalEgresados, 'totalActivos' => $totalActivos, 'totalBajas' => $totalBajas]);
-    }
-
 
     //busqueda en la seccion de ver alunado
     public function buscarAllRestricted(Request $request)
@@ -469,10 +451,6 @@ class alumnosContorller extends Controller
     }
 
 
-
-
-
-
     public function obtenerDatosGrafica(Request $request)
     {
         $showHombres = $request->query('hombres') === 'true';
@@ -540,5 +518,16 @@ class alumnosContorller extends Controller
 
         return response()->json($filteredResult);
         return Excel::download(new GraficaExport($filteredResult), 'grafica.xlsx');
+    }
+
+    public function sin_tutor()
+    {
+        $alumnos = alumnos_model::leftjoin('alumno_tutor', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
+            ->select('alumnos.Nombre as nombre', 'alumnos.codigo', 'alumno_tutor.id_tutor as tutor_actual')
+            ->where('alumno_tutor.id_tutor', null)
+            ->where('alumnos.estatus',1)->groupBy('alumnos.codigo')
+            ->toSql();
+
+        return $alumnos;
     }
 }

@@ -10,22 +10,10 @@ class alumnos_model extends Model
     use HasFactory;
     protected $table = 'alumnos';
     protected $primaryKey = 'codigo';
+    protected $estatusPosibles = ['1' => 'Activo', '3' => 'Egresado', '4' => 'Baja'];
 
-    // convertir los valores de estatus
-    
-    // public function getEstatusAttribute($value)
-    // {
-    //     switch ($value) {
-    //         case 1:
-    //             return 'Activo';
-    //         case 3:
-    //             return 'Egresado';
-    //         case 4:
-    //             return 'Baja';
-    //         default:
-    //             return 'otro';
-    //     }
-    // }
+    public function getStatusAttribute()
+    {
+        return $this->estatusPosibles[$this->estatus];
+    }
 }
-
-
