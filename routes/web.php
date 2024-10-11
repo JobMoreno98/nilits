@@ -32,7 +32,7 @@ use illuminate\Support\Facades\Mail;
 
 Route::resource('usuarios', usuarioController::class)->middleware(['auth', isAdmin::class]);
 
-Route::resource('permisos', PermisosController::class)->middleware(['auth', isAdmin::class]);
+Route::resource('permisos', PermisosController::class)->middleware(['auth', isAdmin::class])->except(['create']);
 
 Route::resource("roles", RolesController::class)->middleware(['auth', isAdmin::class]);
 
@@ -64,7 +64,7 @@ Route::post('logout', [loginController::class, 'logout'])->name('logout');
 
 Route::get('/home', function () {
     return view('home.index');
-})->name('/home')->middleware(['auth']);
+})->name('/home')->middleware(['auth', isAdmin::class]);
 
 
 Route::get('alumnado', [alumnosContorller::class, 'alumnado_restringido'])->name('alumnado')->middleware(['auth']);

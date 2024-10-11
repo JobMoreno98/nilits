@@ -16,23 +16,13 @@
     </style>
 @endsection
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="mb-0"> <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;"></h1>
-        <form method="POST" class="btn btn-danger mt-3" action="{{ route('logout') }}">
-            @csrf
-            <button class="btn text-light" type="submit">
-                Cerrar Sesión
-            </button>
-        </form>
-    </div>
-    <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Gestionar Alumnos sin tutor</h2>
+    <h2 class="my-4 text-light" style="background-color: rgb(82, 82, 255)">Gestionar Alumnos sin tutor</h2>
 
     <form action="{{ route('buscarAlumno') }}" method="GET">
         <div class="input-group mb-3 ">
             <input type="text" class="form-control mr-5" placeholder="Buscar alumno por nombre" name="query">
             <div class="input-group-append mr-3">
                 <button class="btn btn-outline-primary" type="submit">Buscar</button>
-
             </div>
             <div class="input-group-append ms-2">
             <a class="btn btn-md btn-warning btn-block text-light" href="{{ route('/alumnos/sintutor') }}">Limpiar busqueda</a>

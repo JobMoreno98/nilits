@@ -5,13 +5,13 @@
     @section('title', 'Gestión de Tutores')
 
     @section('content')
-        <div class="container-fluid mt-5">
-            <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
+        <div class="container-fluid mt-5  p-0">
+            <h2 class="mb-4 text-light px-2" style="background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
 
             <!-- Selector de Tutores -->
             <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="mb-5">
+                <div class="col-md-12 ">
+                    <div class="mb-5 ">
                         <select name="maestro" class="form-control" id="selectTutor">
                             <option value="">Selecciona un tutor</option>
                             @foreach ($maestros as $maestro)

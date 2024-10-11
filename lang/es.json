@@ -74,5 +74,7 @@
     "URI Too Long": "URI demasiado largo",
     "Use Proxy": "Usa proxy",
     "Variant Also Negotiates": "Variante También Negocia",
-    "Web Server is Down": "El servidor web está caído"
+    "Web Server is Down": "El servidor web está caído",
+    "Login": "Inicio de Sesión",
+    "Logout": "Cerrar Sesión"
 }

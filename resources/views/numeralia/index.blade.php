@@ -4,7 +4,7 @@
     @section('title', 'Gestión de Tutores')
 
     @section('content')
-        <div class="container">
+        <div class="container mt-5 p-0">
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Numeralia</h2>
 
             <div class="d-flex">

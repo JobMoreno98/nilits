@@ -2,7 +2,7 @@
     @extends('layouts/layout')
     @section('title', 'Gestionar Alumnos')
     @section('content')
-        <div class="container">
+        <div class="container mt-5 p-0">
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Aspirantes</h2>
             <div>
                 <img src="{{ asset('imgs/aspirante.jpg') }}" alt="" style="border: 5px ;height: 200px; width: 1080px;">

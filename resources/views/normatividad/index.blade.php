@@ -4,7 +4,7 @@
     @section('title', 'Gestión de Tutores')
 
     @section('content')
-        <div class="container">
+        <div class="container mt-5 p-0">
             <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Normatividad</h2>
 
             <div class="d-flex justify-content-center">
@@ -39,11 +39,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-            <br>
             <div>
                 <h4 class="mb-4 text-light" style="background-color: rgba(82, 82, 255, 0.396)">Administrativa</h4>
             </div>

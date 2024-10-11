@@ -26,7 +26,7 @@
         <nav class="navbar navbar-expand-md bg-light navbar-light shadow-sm">
             <div class="container">
                 <span class="me-2 pe-2 border-end border-dark">
-                    <a href="{{ route('/home') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
+                    <a href="{{ route('/') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
                             width="75px"></a>
                 </span>
 

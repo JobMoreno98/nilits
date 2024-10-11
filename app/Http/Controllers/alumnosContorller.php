@@ -85,13 +85,38 @@ class alumnosContorller extends Controller
     private function obtenerNombreEstado($procedencia)
     {
         $estados = [
-            0 => 'Aguascalientes', 1 => 'Baja California', 2 => 'Baja California Sur', 3 => 'Campeche',
-            4 => 'Chiapas', 5 => 'Chihuahua', 6 => 'Ciudad de México', 7 => 'Coahuila', 8 => 'Colima',
-            9 => 'Durango', 10 => 'Guanajuato', 11 => 'Guerrero', 12 => 'Hidalgo', 13 => 'Jalisco',
-            14 => 'México', 15 => 'Michoacán', 16 => 'Morelos', 17 => 'Nayarit', 18 => 'Nuevo León',
-            19 => 'Oaxaca', 20 => 'Puebla', 21 => 'Querétaro', 22 => 'Quintana Roo', 23 => 'San Luis Potosí',
-            24 => 'Sinaloa', 25 => 'Sonora', 26 => 'Tabasco', 27 => 'Tamaulipas', 28 => 'Tlaxcala',
-            29 => 'Veracruz', 30 => 'Yucatán', 31 => 'Zacatecas'
+            0 => 'Aguascalientes',
+            1 => 'Baja California',
+            2 => 'Baja California Sur',
+            3 => 'Campeche',
+            4 => 'Chiapas',
+            5 => 'Chihuahua',
+            6 => 'Ciudad de México',
+            7 => 'Coahuila',
+            8 => 'Colima',
+            9 => 'Durango',
+            10 => 'Guanajuato',
+            11 => 'Guerrero',
+            12 => 'Hidalgo',
+            13 => 'Jalisco',
+            14 => 'México',
+            15 => 'Michoacán',
+            16 => 'Morelos',
+            17 => 'Nayarit',
+            18 => 'Nuevo León',
+            19 => 'Oaxaca',
+            20 => 'Puebla',
+            21 => 'Querétaro',
+            22 => 'Quintana Roo',
+            23 => 'San Luis Potosí',
+            24 => 'Sinaloa',
+            25 => 'Sonora',
+            26 => 'Tabasco',
+            27 => 'Tamaulipas',
+            28 => 'Tlaxcala',
+            29 => 'Veracruz',
+            30 => 'Yucatán',
+            31 => 'Zacatecas'
         ];
 
         return $estados[$procedencia] ?? 'Desconocido';
@@ -204,8 +229,6 @@ class alumnosContorller extends Controller
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
 
-
-
     //update function
     public function editar(Request $request, $codigo)
     {
@@ -242,7 +265,7 @@ class alumnosContorller extends Controller
 
         // Verificar si el campo de dictamen está presente en la solicitud y asignarlo al modelo
         if ($request->filled('dictamen')) {
-            $alumno->dictamen = $request->dictamen;
+            $alumno->dictamen = implode(".", array_filter($request->dictamen));
         }
 
         // Verificar si el campo de estatus está presente en la solicitud y asignarlo al modelo
@@ -300,7 +323,6 @@ class alumnosContorller extends Controller
         $totalEgresados = alumnos_model::where('estatus', 'Egresado')->count();
         $totalActivos = alumnos_model::where('estatus', 'Activo')->count();
         $totalBajas = alumnos_model::where('estatus', 'baja')->count();
-
         $tutores = maestrosModel::all();
 
         // Devolver la vista con los resultados de la búsqueda
@@ -476,7 +498,7 @@ class alumnosContorller extends Controller
         }
 
         if ($ingreso && $ingreso !== 'Ingreso') {
-            $query->where('ingreso', "like" , "%$ingreso%");
+            $query->where('ingreso', "like", "%$ingreso%");
         }
 
 
