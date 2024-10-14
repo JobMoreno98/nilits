@@ -231,7 +231,7 @@ class alumnosContorller extends Controller
         $tutor_alumno->save();
         $alumno->save();
 
-
+        alert()->success('Exito', 'Se regsitro de forma correcta al alumno');
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
 
@@ -290,7 +290,7 @@ class alumnosContorller extends Controller
 
 
         //return $alumno;
-
+        alert()->success('Exito', 'Se edito de forma correcta al alumno');
         // Redireccionar o devolver una respuesta JSON según tu necesidad
         return redirect()->route('alumnos');
     }
@@ -525,7 +525,7 @@ class alumnosContorller extends Controller
         $alumnos = alumnos_model::leftjoin('alumno_tutor', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
             ->select('alumnos.Nombre as nombre', 'alumnos.codigo', 'alumno_tutor.id_tutor as tutor_actual')
             ->where('alumno_tutor.id_tutor', null)
-            ->where('alumnos.estatus',1)->groupBy('alumnos.codigo')
+            ->where('alumnos.estatus', 1)->groupBy('alumnos.codigo')
             ->toSql();
 
         return $alumnos;

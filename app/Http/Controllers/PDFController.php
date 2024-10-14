@@ -15,101 +15,106 @@ class PDFController extends Controller
 {
     //
 
-    public function oficioAsignacion(Request $request)
-{
+    public function oficioAsignacion($codigoMaestro)
+    {
+
+        $maestro = DB::table('maestros')
+            ->where('codigo', $codigoMaestro)
+            ->first();
+
+        // Luego, obtén la lista de tutorados asociados a este maestro
+        $tutorados = DB::table('alumno_tutor')
+            ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
+            ->where('alumno_tutor.id_tutor', $codigoMaestro)
+            ->select('alumnos.Nombre', 'alumnos.codigo', 'alumnos.dictamen', 'alumnos.dictamen','alumnos.correo')
+            ->get();
+
+        $half = $tutorados->count();
+
+        Carbon::setLocale(LC_ALL, 'es_MX.UTF-8'); // Establece el idioma de Carbon
 
 
-    $codigoMaestro = $request->input('codigo');
-    $maestro = DB::table('maestros')
-                 ->where('codigo', $codigoMaestro)
-                 ->first();
+        // Traducción de los nombres de los meses al español
+        $meses = [
+            'January' => 'enero',
+            'February' => 'febrero',
+            'March' => 'marzo',
+            'April' => 'abril',
+            'May' => 'mayo',
+            'June' => 'junio',
+            'July' => 'julio',
+            'August' => 'agosto',
+            'September' => 'septiembre',
+            'October' => 'octubre',
+            'November' => 'noviembre',
+            'December' => 'diciembre',
+        ];
 
-    // Luego, obtén la lista de tutorados asociados a este maestro
-    $tutorados = DB::table('alumno_tutor')
-                   ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
-                   ->where('alumno_tutor.id_tutor', $codigoMaestro)
-                   ->select('alumnos.*')
-                   ->get();
+        // Formatea la fecha manualmente con los nombres de los meses en español
+        $fechaActual = Carbon::now()->format('d \d\e F \d\e Y');
 
-    $half = ceil($tutorados->count() / 2);
+        foreach ($meses as $mesIngles => $mesEspanol) {
+            $fechaActual = str_replace($mesIngles, $mesEspanol, $fechaActual);
+        }
 
-    Carbon::setLocale(LC_ALL,'es_MX.UTF-8'); // Establece el idioma de Carbon
+        $pdf = PDF::loadView('pdf.oficio_asignacion', [
+            'maestro' => $maestro,
+            'tutorados' => $tutorados,
+            'half' => $half,
+            'fechaActual' => $fechaActual
+        ]);
 
+        return $pdf->stream('oficio_asignacion.pdf');
+    }
 
-     // Traducción de los nombres de los meses al español
-     $meses = [
-         'January' => 'enero',
-         'February' => 'febrero',
-         'March' => 'marzo',
-         'April' => 'abril',
-         'May' => 'mayo',
-         'June' => 'junio',
-         'July' => 'julio',
-         'August' => 'agosto',
-         'September' => 'septiembre',
-         'October' => 'octubre',
-         'November' => 'noviembre',
-         'December' => 'diciembre',
-     ];
+    public function constanciaTutoria($codigoMaestro)
+    {
 
-     // Formatea la fecha manualmente con los nombres de los meses en español
-     $fechaActual = Carbon::now()->format('d \d\e F \d\e Y');
+        $maestro = DB::table('maestros')
+            ->where('codigo', $codigoMaestro)
+            ->first();
 
-     foreach ($meses as $mesIngles => $mesEspanol) {
-         $fechaActual = str_replace($mesIngles, $mesEspanol, $fechaActual);
-     }
+        // Luego, obtén la lista de tutorados asociados a este maestro
+        $tutorados = DB::table('alumno_tutor')
+            ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
+            ->where('alumno_tutor.id_tutor', $codigoMaestro)
+            ->select('alumnos.*')
+            ->get();
 
-    $pdf = PDF::loadView('pdf.oficio_asignacion',['maestro' => $maestro,
-    'tutorados' => $tutorados, 'half'=>$half, 'fechaActual'=>$fechaActual]);
+        $half = ceil($tutorados->count() / 2);
+        // Tus datos aquí
 
-    return $pdf->download('oficio_asignacion.pdf');
-}
-
-public function constanciaTutoria(Request $request)
-{
-    $codigoMaestro = $request->input('codigo');
-    $maestro = DB::table('maestros')
-                 ->where('codigo', $codigoMaestro)
-                 ->first();
-
-    // Luego, obtén la lista de tutorados asociados a este maestro
-    $tutorados = DB::table('alumno_tutor')
-                   ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
-                   ->where('alumno_tutor.id_tutor', $codigoMaestro)
-                   ->select('alumnos.*')
-                   ->get();
-
-    $half = ceil($tutorados->count() / 2);
-     // Tus datos aquí
-
-     Carbon::setLocale(LC_ALL,'es_MX.UTF-8'); // Establece el idioma de Carbon
+        Carbon::setLocale(LC_ALL, 'es_MX.UTF-8'); // Establece el idioma de Carbon
 
 
-     // Traducción de los nombres de los meses al español
-     $meses = [
-         'January' => 'enero',
-         'February' => 'febrero',
-         'March' => 'marzo',
-         'April' => 'abril',
-         'May' => 'mayo',
-         'June' => 'junio',
-         'July' => 'julio',
-         'August' => 'agosto',
-         'September' => 'septiembre',
-         'October' => 'octubre',
-         'November' => 'noviembre',
-         'December' => 'diciembre',
-     ];
+        // Traducción de los nombres de los meses al español
+        $meses = [
+            'January' => 'enero',
+            'February' => 'febrero',
+            'March' => 'marzo',
+            'April' => 'abril',
+            'May' => 'mayo',
+            'June' => 'junio',
+            'July' => 'julio',
+            'August' => 'agosto',
+            'September' => 'septiembre',
+            'October' => 'octubre',
+            'November' => 'noviembre',
+            'December' => 'diciembre',
+        ];
 
-     // Formatea la fecha manualmente con los nombres de los meses en español
-     $fechaActual = Carbon::now()->format('d \d\e F \d\e Y');
+        // Formatea la fecha manualmente con los nombres de los meses en español
+        $fechaActual = Carbon::now()->format('d \d\e F \d\e Y');
 
-     foreach ($meses as $mesIngles => $mesEspanol) {
-         $fechaActual = str_replace($mesIngles, $mesEspanol, $fechaActual);
-     }
+        foreach ($meses as $mesIngles => $mesEspanol) {
+            $fechaActual = str_replace($mesIngles, $mesEspanol, $fechaActual);
+        }
 
-    $pdf = PDF::loadView('pdf.constancia_tutoria',['maestro' => $maestro,
-    'tutorados' => $tutorados, 'fechaActual'=>$fechaActual]);
-    return $pdf->download('constancia_tutoria.pdf');
-}
+        $pdf = PDF::loadView('pdf.constancia_tutoria', [
+            'maestro' => $maestro,
+            'tutorados' => $tutorados,
+            'fechaActual' => $fechaActual
+        ]);
+        return $pdf->stream('constancia_tutoria.pdf');
+    }
 }

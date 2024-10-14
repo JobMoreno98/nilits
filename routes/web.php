@@ -13,7 +13,6 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\tutorController;
 use App\Http\Controllers\usuarioController;
 use App\Http\Middleware\isAdmin;
-use App\Models\alumnos_model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use illuminate\Support\Facades\Mail;
@@ -120,8 +119,8 @@ Route::post('/maestros/store', [asesoresController::class, 'store'])->name('/mae
 
 //PDF controller
 
-Route::get('/generar-oficio-asignacion', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion');
-Route::get('/generar-constancia-tutoria', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria');
+Route::get('/generar-oficio-asignacion/{codigo}', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion');
+Route::get('/generar-constancia-tutoria/{codigo}', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria')->middleware(['auth',isAdmin::class]);
 
 
 //Ruta numeralia

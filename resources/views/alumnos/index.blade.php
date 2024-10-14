@@ -63,9 +63,7 @@
                             </td>
                             <td>
                                 @php
-                                    $dictamenes = explode('.', $alumno->dictamen);
-                                    natsort($dictamenes);
-                                    $dictamenActual = end($dictamenes);
+                                    $dictamenActual = explode('.', $alumno->dictamen)[0];
                                 @endphp
                                 {{ $dictamenActual }}
                             </td>

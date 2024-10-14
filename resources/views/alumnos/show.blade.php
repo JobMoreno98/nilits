@@ -154,23 +154,22 @@
                 </div>
 
                 <div class="col-sm-12">
-                    <div class="form-group mx-1">
+                    <div class="form-group mx-1 d-flex flex-column">
                         <h4><label for="dictamen">Dictámenes</label></h4>
 
-                        <div>
+                        <div class="col-md-3 mx-1">
                             <p>Listado de dictamenes</p>
-                            <input type="text" class="form-control" id="dictamenInput" name="dictamen[]"
+                            <input type="text" class="form-control " id="dictamenInput" name="dictamen[]"
                                 placeholder="Añadir dictamen">
                         </div>
-                        <div id="formulario">
+                        <div id="formulario" class="col-md-3">
 
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mx-1">Guardar Cambios</button>
             </div>
         </form>
     </div>
@@ -178,6 +177,10 @@
 @endsection
 @section('scripts')
     <script>
+        function eliminar(eliminar) {
+            let elemento = document.getElementById(eliminar);
+            elemento.parentNode.removeChild(elemento);
+        }
         $(document).ready(function() {
             let elemento = document.getElementById('formulario');
             elemento.innerHTML = '';
@@ -188,6 +191,7 @@
                 return letter !== '';
             });
 
+
             let form = document.getElementById('formulario');
             let arreglo = ['dictamen[]'];
 
@@ -196,6 +200,7 @@
                     var div = document.createElement("div");
                     div.setAttribute('id', cont);
                     div.className = 'input-group d-flex flex-wrap';
+
                     var span = document.createElement("span");
                     span.className = "btn btn-danger";
                     span.className = "btn btn-danger m-1";
@@ -217,6 +222,7 @@
                     form.appendChild(div);
                 }
             });
+
         });
     </script>
 @endsection

@@ -4,7 +4,8 @@
 
 @section('content')
     <div class="container mt-5 p-0">
-        <h2 class="mb-4 text-light p-1 px-3" style="border-radius: 0px 10px;background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
+        <h2 class="mb-4 text-light p-1 px-3" style="border-radius: 0px 10px;background-color: rgb(82, 82, 255)">Gestionar
+            profesores</h2>
 
         <div class="table-responsive">
             <table class="table table-striped" id="example">
@@ -22,8 +23,19 @@
                             <td>{{ $maestro->codigo }}</td>
                             <td>{{ $maestro->Nombre }} {{ $maestro->Apellido }}</td>
                             <td>{{ $maestro->correo }}</td>
-                            <td><a href="{{ route('asesor.show', $maestro->id) }}"> <i class="fas fa-edit"
-                                        role="button"></i></a></td>
+                            <td>
+                                <a href="{{ route('asesor.show', $maestro->id) }}" class="btn"> 
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                
+                                <a target="_blank" href="{{ route('generar-constancia-tutoria', $maestro->codigo) }}" class="btn">
+                                    <i class="fa-regular fa-file"></i>
+                                </a>
+
+                                <a target="_blank"  class="btn" href="{{route('oficio.asignacion',$maestro->codigo)}}">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
