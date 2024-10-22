@@ -248,9 +248,10 @@
                         // Obtener el protocolo y el dominio
                         const protocolo = window.location.protocol;
                         const dominio = window.location.hostname;
+                        console.log(window.location);
 
                         // Construir el endpoint
-                        const endpoint = `${protocolo}//${dominio}/grafica?${queryParams}`;
+                        const endpoint = `/grafica?${queryParams}`;
 
 
                         //console.log(`Endpoint: ${endpoint}`);
