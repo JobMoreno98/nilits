@@ -5,7 +5,7 @@
     @section('title', 'Gestión de Tutores')
 
     @section('content')
-        <div class="container-fluid mt-5  p-0">
+        <div class="container mt-5  p-0">
             <h2 class="mb-4 text-light px-2" style="background-color: rgb(82, 82, 255)">Gestionar profesores</h2>
 
             <!-- Selector de Tutores -->
@@ -83,31 +83,32 @@
 
                 </div>
             </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Código</th>
-                        <th>Nombre</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($alumnos as $alumno)
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-light">
                         <tr>
-                            <td> <input name="alumno" type="checkbox"> {{ $alumno->codigo }}</td>
-                            <td>{{ $alumno->Nombre }}</td>
+                            <th>Código</th>
+                            <th>Nombre</th>
 
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="mb-5">
-                {{ $alumnos->links() }}
+                    </thead>
+                    <tbody>
+                        @foreach ($alumnos as $alumno)
+                            <tr>
+                                <td> <input name="alumno" type="checkbox"> {{ $alumno->codigo }}</td>
+                                <td>{{ $alumno->Nombre }}</td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="mb-5">
+                    {{ $alumnos->links() }}
+                </div>
             </div>
         </div>
+
+
 
     @endsection
     @section('scripts')
