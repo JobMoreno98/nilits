@@ -251,7 +251,7 @@
                         console.log(window.location);
 
                         // Construir el endpoint
-                        const endpoint = `/grafica?${queryParams}`;
+                        const endpoint = `./grafica?${queryParams}`;
 
 
                         //console.log(`Endpoint: ${endpoint}`);
