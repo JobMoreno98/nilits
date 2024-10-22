@@ -139,8 +139,8 @@
     </div>
     <div id="footer">
 
-        <div class="col-sm-12 p-3 mt-4" style="background: #072d45">
-            <p class="text-center text-white m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES | Nivelación a
+        <div class="col-sm-12 p-3 mt-4 bg-light" >
+            <p class="text-center  m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES | Nivelación a
                 la Licenciatura en Trabajo Social </p>
         </div>
 
