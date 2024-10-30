@@ -113,7 +113,7 @@
                         <option value="{{ $alumno->calendarioTitulacion }}" selected>{{ $alumno->calendarioTitulacion }}
                         </option>
                         @php
-                            $startYear = is_null($alumno->ingreso) ? 1990 : explode(' ', $alumno->ingreso)[0];
+                            $startYear = isset($alumno->ingreso) ? 1990 : explode(' ', $alumno->ingreso)[0];
                             $endYear = date('Y');
                         @endphp
                         @for ($year = $startYear; $year <= $endYear; $year++)
