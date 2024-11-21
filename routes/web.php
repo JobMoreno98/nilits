@@ -32,7 +32,7 @@ use illuminate\Support\Facades\Mail;
 
 Route::resource('usuarios', usuarioController::class)->middleware(['auth', isAdmin::class]);
 
-Route::resource('permisos', PermisosController::class)->middleware(['auth', isAdmin::class])->except(['create']);
+Route::resource('permisos', PermisosController::class)->middleware(['auth', isAdmin::class])->except('create');
 
 Route::resource("roles", RolesController::class)->middleware(['auth', isAdmin::class]);
 
@@ -79,7 +79,7 @@ Route::get('alumnos/detalles/all/{codigo}', [alumnosContorller::class, 'detalles
 
 Route::post('/alumnos/crear', [alumnosContorller::class, 'store'])->name('/alumnos/crear')->middleware(['auth']);
 
-Route::post('registro', [usuarioController::class, 'registro'])->name('registro')->middleware(['auth']);
+Route::post('registro', [usuarioController::class, 'registro'])->name('registro');
 
 Route::post('/aplicaras', [alumnosContorller::class, 'asignacion'])->name('aplicaras')->middleware(['auth']);
 
@@ -120,7 +120,7 @@ Route::post('/maestros/store', [asesoresController::class, 'store'])->name('/mae
 //PDF controller
 
 Route::get('/generar-oficio-asignacion/{codigo}', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion');
-Route::get('/generar-constancia-tutoria/{codigo}', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria')->middleware(['auth',isAdmin::class]);
+Route::get('/generar-constancia-tutoria/{codigo}', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria')->middleware(['auth', isAdmin::class]);
 
 
 //Ruta numeralia
@@ -153,7 +153,6 @@ Route::get('aspirante', [aspirantesController::class, 'index'])->name('aspirante
 Route::post('/aspirante/crear', [aspirantesController::class, 'store'])->name('aspirantes.store');
 
 Route::get('contactanos', function () {
-
     Mail::to('ezequielmora.chk@gmail.com')->send(new \App\Mail\ContactanosMailable);
     return "Mensaje enviado";
 })->name('contactanos');
@@ -172,3 +171,6 @@ Route::get('asesor/{asesor}', [asesoresController::class, 'show'])->middleware('
 Route::put('/asesor/{id}/delete', [asesoresController::class, 'delete'])->name('asesor.delete')->middleware(['auth', isAdmin::class]);
 
 Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name('alumnos.sin-tutor');
+
+
+Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');

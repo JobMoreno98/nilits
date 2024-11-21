@@ -69,6 +69,7 @@
                             </td>
                             <td>{{ $alumno->tutor_nombre }} {{ $alumno->tutor_apellido }}</td>
                             <!-- Botón para activar el modal -->
+                            
                             <td>
                                 <a href="{{ route('alumnos.show', $alumno->codigo) }}"><i
                                         class="fas fa-edit edit-alumno-btn" role="button"></i></a>

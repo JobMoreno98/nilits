@@ -14,4 +14,5 @@ class ususario extends Authenticatable
     use HasFactory;
     use HasRoles;
     protected $table = 'usuario';
+    protected $guarded = [];
 }

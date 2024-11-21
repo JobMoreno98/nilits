@@ -168,9 +168,12 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary mx-1">Guardar Cambios</button>
-            </div>
+            @can('Alumnos#editar')
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mx-1">Guardar Cambios</button>
+                </div>
+            @endcan
+
         </form>
     </div>
 
