@@ -3,6 +3,15 @@
 @section('title', 'Editar Usuario')
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <h3 class="text-uppercase text-center mt-2">Usuario {{ $usuario->nombre }}</h3>
     <form action="{{ route('usuarios.update', $usuario->id) }}" method="post" class="d-flex flex-column align-items-center">
         @csrf

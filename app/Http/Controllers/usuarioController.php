@@ -29,7 +29,7 @@ class usuarioController extends Controller
         $usuario = ususario::create([
             'nombre' => $request->nombre,
             'pass' =>  sha1($request->password),
-            'nivel' => 2
+            'nivel' => 0
         ]);
 
         return $usuario;
@@ -51,11 +51,16 @@ class usuarioController extends Controller
 
     public function update(Request $request, ususario $usuario)
     {
+
         $request->validate([
-            'role' => 'required',
-            'nombre' => 'required'
+            'role' =>  'required',
+            'nombre' => ['required', Rule::unique('usuario')->ignore($usuario->id)],
         ]);
+
+        $roles = ['admin' => 1, 'editor' => 3, 'maestro' => 2];
         $usuario->assignRole($request->role);
+        $usuario->nivel = $roles[$request->role];
+        $usuario->update();
 
         return redirect()->route('usuarios.index');
     }
