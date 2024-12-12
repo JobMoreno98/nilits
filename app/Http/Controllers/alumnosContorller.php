@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\alumno_tutorModel;
+use App\Models\alumnos_maestrosModel;
 use App\Models\alumnos_model;
 use App\Models\maestrosModel;
 use App\Models\LLenadoComboBox;
@@ -29,8 +29,8 @@ class alumnosContorller extends Controller
 
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
+            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
             ->get();
 
@@ -61,15 +61,15 @@ class alumnosContorller extends Controller
         $totalBajas = alumnos_model::where('estatus', 4)->count();
 
         $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
+            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
             ->orderBy('alumnos.codigo', 'desc')
             ->paginate(10);
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         /* $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
+            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor')
             ->paginate(10); */ // Aquí especificas cuántos alumnos por página quieres
 
@@ -133,8 +133,8 @@ class alumnosContorller extends Controller
     public function alumnos_sin_tutor()
     {
         $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
+            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->whereNull('maestros.codigo')
             ->where('alumnos.estatus', '=', 1) // Filtrar por estatus igual a 1
             ->select('alumnos.*')
@@ -172,7 +172,7 @@ class alumnosContorller extends Controller
         ]);
 
 
-        $tutor_alumno = new alumno_tutorModel();
+        $tutor_alumno = new alumnos_maestrosModel();
         $tutor_alumno->codigo = $request->codigo;
         $tutor_alumno->id_tutor = $request->tutor;
         $tutor_alumno->activo = 1;
@@ -200,7 +200,7 @@ class alumnosContorller extends Controller
         ]);
 
         $alumno = new alumnos_model();
-        $tutor_alumno = new alumno_tutorModel();
+        $tutor_alumno = new alumnos_maestrosModel();
         $alumno->codigo = $validatedData['codigo'];
         $alumno->Nombre = $validatedData['nombre'];
         $alumno->telefono = $validatedData['telefono'];
@@ -319,8 +319,8 @@ class alumnosContorller extends Controller
 
 
         $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
+            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
             ->where('alumnos.Nombre', 'like', '%' . $query . '%')
             ->orWhere('alumnos.codigo', 'like', '%' . $query . '%')
@@ -350,7 +350,7 @@ class alumnosContorller extends Controller
         ]);
 
         foreach ($request->alumno as $codigoAlumno) {
-            alumno_tutorModel::create([
+            alumnos_maestrosModel::create([
                 'id_tutor' => $request->maestro,
                 'codigo' => $codigoAlumno,
 
@@ -522,9 +522,9 @@ class alumnosContorller extends Controller
 
     public function sin_tutor()
     {
-        $alumnos = alumnos_model::leftjoin('alumno_tutor', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
-            ->select('alumnos.Nombre as nombre', 'alumnos.codigo', 'alumno_tutor.id_tutor as tutor_actual')
-            ->where('alumno_tutor.id_tutor', null)
+        $alumnos = alumnos_model::leftjoin('alumnos_maestros', 'alumnos_maestros.id_alumno', '=', 'alumnos.codigo')
+            ->select('alumnos.Nombre as nombre', 'alumnos.codigo', 'alumnos_maestros.id_maestro as tutor_actual')
+            ->where('alumnos_maestros.id_maestro', null)
             ->where('alumnos.estatus', 1)->groupBy('alumnos.codigo')
             ->toSql();
 

@@ -5,7 +5,9 @@
 @section('content')
 
     <div class="container">
-        <form method="POST" action="{{ route('/alumnos/update/', $alumno->codigo) }}" id="formularioData">
+        <form method="POST"
+            action="{{ Auth::user()->can('Alumnos#editar') ? route('/alumnos/update/', $alumno->codigo) : '' }}"
+            id="formularioData">
             @csrf
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -159,8 +161,10 @@
 
                         <div class="col-md-3 mx-1">
                             <p>Listado de dictamenes</p>
-                            <input type="text" class="form-control " id="dictamenInput" name="dictamen[]"
-                                placeholder="Añadir dictamen">
+                            @can('Alumnos#editar')
+                                <input type="text" class="form-control " id="dictamenInput" name="dictamen[]"
+                                    placeholder="Añadir dictamen">
+                            @endcan
                         </div>
                         <div id="formulario" class="col-md-3">
 
@@ -173,10 +177,8 @@
                     <button type="submit" class="btn btn-primary mx-1">Guardar Cambios</button>
                 </div>
             @endcan
-
         </form>
     </div>
-
 @endsection
 @section('scripts')
     <script>

@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 
 class RolesController extends Controller
@@ -19,6 +20,7 @@ class RolesController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', Role::class);
         $roles = Role::all();
         return view('roles.index')->with('roles', $roles);
     }
@@ -48,7 +50,7 @@ class RolesController extends Controller
             'rol.unique' => 'El rol ya existe'
         ];
 
-        $validator = Validator::make($request->all(),$rules,$message);
+        $validator = Validator::make($request->all(), $rules, $message);
         if ($validator->fails()) {
             return view('roles.create')->withErrors($validator);
         }
@@ -110,33 +112,17 @@ class RolesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'rol' => 'unique:roles,name'
-        ];
-        $message = [
-            'rol.unique' => 'El rol ya existe'
-        ];
-
-        $validator = Validator::make($request->all(),$rules,$message);
-        if ($validator->fails()) {
-            return view('roles.create')->withErrors($validator);
+        $request->validate([
+            'name' => ['required', Rule::unique('roles')->ignore($id)],
+        ]);
+        $rol = Role::find($id);
+        if(!isset($rol->name)){
+            abort(403);
         }
-
-        DB::beginTransaction();
-        try {
-            $role = new Role();
-            $role->fill($request->all());
-            $role->save();
-            $roles = Role::all();
-            DB::commit();
-            return view('roles.index')
-                ->withSuccess("Rol guardado con éxito.")
-                ->with('roles', $roles);
-        } catch (Exception $e) {
-            Log::error($e);
-            DB::rollBack();
-            return view('roles.create')->withErrors("Error al guardar el Rol.");
-        }
+        
+        $rol->name = $request->name;
+        $rol->update();
+        return redirect()->route('roles.edit', $id);
     }
 
     /**
@@ -163,9 +149,6 @@ class RolesController extends Controller
                 ->withErrors("Error al eliminar el Rol.")
                 ->with('roles', $roles);
         }
-
-
-
     }
 
     public function relacionar($id)
@@ -186,29 +169,29 @@ class RolesController extends Controller
         foreach ($permisos as $permiso) {
             $tmp = explode("#", strtolower($permiso->name));
             $push['id'] = $permiso->id;
-            $push['modulo'] = str_replace("_"," ",$tmp[0]);
+            $push['modulo'] = str_replace("_", " ", $tmp[0]);
             $push['modulo'] = Str::title($tmp[0]);
-            $push['permiso'] = str_replace("_"," ",$tmp[1]);
+            $push['permiso'] = str_replace("_", " ", $tmp[1]);
             $push['permiso'] = Str::ucfirst($tmp[1]);
             $push['valor'] = $permiso->name;
             $push['checked'] = in_array($permiso->id, $soloIdAsignados) ? 'true' : 'false';
             $checked = in_array($permiso->id, $soloIdAsignados) ? 'checked' : '';
-            $push['input'] = "<input type='checkbox' value='".$permiso->id."' ".$checked." onclick='setPermiso(this)'>";
+            $push['input'] = "<input type='checkbox' value='" . $permiso->id . "' " . $checked . " onclick='setPermiso(this)'>";
             $dataReturn[] = $push;
         }
-    
+
         return view('roles.relacionar')
             ->with('permisos', $dataReturn)
-            ->with('rol',$rol);
+            ->with('rol', $rol);
     }
 
     public function guardarRelacion(Request $request)
     {
         $permisos = base64_decode($request->get('permisos_seleccionados'));
-        $array_permisos = explode(",",$permisos);
+        $array_permisos = explode(",", $permisos);
         $role = Role::findOrFail($request->get('role_id'));
         //$role->givePermissionTo($permisos);
-        $role->syncPermissions(collect($array_permisos)->map(fn($val)=>(int)$val));
+        $role->syncPermissions(collect($array_permisos)->map(fn($val) => (int)$val));
 
         $roles = Role::all();
         return view('roles.index')->with('roles', $roles)->with('success', 'Permisos asignados correctamente.');

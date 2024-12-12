@@ -20,7 +20,7 @@
             <div class="row justify-content-end">
                 <div class="col-auto mb-1">
                     <a href="{{ route('roles.create') }}" class="btn btn-primary">
-                        {{ __('Nuevo Rol') }}
+                        Nuevo Rol
                     </a>
                 </div>
             </div>
@@ -30,7 +30,6 @@
                         <thead>
                             <tr>
                                 <th>Rol</th>
-                                <th>Descripción</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -38,7 +37,6 @@
                             @foreach ($roles as $role)
                                 <tr>
                                     <td>{{ $role->name }}</td>
-                                    <td>{{ $role->description }}</td>
                                     <td>
                                         <form method="GET" action="{{ route('roles.edit', $role->id) }}">
                                             <button type="submit" class="btn btn-info">

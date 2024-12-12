@@ -128,14 +128,12 @@ class asesoresController extends Controller
 
         return response()->json($tutorados);
     }
-
-    public function desasignar($codigo)
+    //Desasigna tutorados de su tutor
+    public function desasignar(Request $record, $codigo)
     {
+
         $record = alumno_tutorModel::where('codigo', '=', $codigo)->first();
-
         $record->delete();
-
-
         return $record;
         return redirect()->route('asesores');
     }
@@ -143,11 +141,14 @@ class asesoresController extends Controller
 
     public function show($id)
     {
-        $asesor = maestrosModel::find($id);
+        $asesor = maestrosModel::with('tutorados')->first();
+
         if (!isset($asesor)) {
             alert()->error('Error', 'Asesor no encontrado');
             return redirect()->route('asesores');
         }
+
+        return $asesor;
 
         $alumnos = alumno_tutorModel::join('alumnos', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
             ->select('alumno_tutor.*', 'alumnos.Nombre as nombre_alumno', 'alumnos.ingreso as ingreso')
@@ -167,5 +168,4 @@ class asesoresController extends Controller
         alert()->success('Exito', 'se elimino de forma correcta al maestro');
         return redirect()->route('asesores');
     }
-    
 }

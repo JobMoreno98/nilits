@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Préstamos edit')
+@section('title', 'Editar rol')
 
 @section('content')
     <div class="container">
@@ -39,11 +39,6 @@
                         <label class="font-weight-bold" for="name">Rol</label>
                         <input type="text" class="form-control" id="name" name="name"
                             value="{{ $rol->name }}">
-                    </div>
-                    <div class="col-md-7">
-                        <label class="font-weight-bold" for="description">Descripción</label>
-                        <input type="text" class="form-control" id="description" name="description"
-                            value="{{ $rol->description }}">
                     </div>
                 </div>
                 <br>

@@ -103,19 +103,21 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
-                    type="button" role="tab" aria-controls="profile-tab-pane"
-                    aria-selected="false">Asignar Tutorados</button>
+                    type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Asignar
+                    Tutorados</button>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show " id="tutorados-tab-pane" role="tabpanel" aria-labelledby="tutorados-tab"
                 tabindex="0">
-                <form action="">
+                <form action="" method="POST">
+                    @csrf
+                    @method('POST')
                     <div class="d-flex flex-wrap align-items-center justify-content-around">
                         @foreach ($alumnos as $item)
                             <div class="form-check m-1 col-sm-12 col-md-2  p-2 form-check-inline">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                    checked>
+                                <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
+                                    name="alumnos[]" id="flexCheckDefault" checked>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     {{ $item->nombre_alumno }}
                                 </label>

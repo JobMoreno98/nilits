@@ -67,10 +67,11 @@
                         <a href="{{ route('asesores') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">Asesores</a>
                     @endcan
+                    {{--
                     @can('Tutores#ver')
                         <a href="{{ route('gestionar-tutores') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">Tutores</a>
-                    @endcan
+                    @endcan --}}
                     @can('Numeralia#ver')
                         <a href="{{ route('numeralia') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
@@ -87,8 +88,6 @@
                         <a href="{{ route('usuarios.index') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">Usuarios</a>
                     @endcan
-
-
                     @can('Tutorados#ver')
                         <a href="{{ route('tutor') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">tutorados</a>
@@ -139,8 +138,9 @@
     </div>
     <div id="footer">
 
-        <div class="col-sm-12 p-3 mt-4 bg-light" >
-            <p class="text-center  m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES | Nivelación a
+        <div class="col-sm-12 p-3 mt-4 bg-light">
+            <p class="text-center  m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES |
+                Nivelación a
                 la Licenciatura en Trabajo Social </p>
         </div>
 
