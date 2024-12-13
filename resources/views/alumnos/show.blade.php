@@ -186,6 +186,7 @@
             let elemento = document.getElementById(eliminar);
             elemento.parentNode.removeChild(elemento);
         }
+        
         $(document).ready(function() {
             let elemento = document.getElementById('formulario');
             elemento.innerHTML = '';

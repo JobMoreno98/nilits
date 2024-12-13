@@ -15,14 +15,13 @@ return new class extends Migration
     {
         Schema::create('alumno_maestro', function (Blueprint $table) {
             $table->id();
-            $table->string('id_alumno');
-
-            $table->foreign('id_alumno')->references('codigo')->on('alumnos');
-
-            $table->unsignedBigInteger('id_tutor');
-
-            $table->foreign('id_tutor')->references('codigo')->on('maestros');
-            $table
+            $table->unsignedBigInteger('alumno_id');
+            $table->foreign('alumno_id')->references('id')->on('alumnos');
+            $table->unsignedBigInteger('maestro_id');
+            $table->foreign('maestro_id')->references('id')->on('maestros');
+            $table->boolean('activo')->default(1);
+            $table->string('codigo_alumno');
+            $table->string('codigo_maestro');
             $table->timestamps();
         });
     }

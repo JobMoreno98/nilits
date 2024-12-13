@@ -110,16 +110,16 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show " id="tutorados-tab-pane" role="tabpanel" aria-labelledby="tutorados-tab"
                 tabindex="0">
-                <form action="" method="POST">
+                <form action="{{ route('asignar-alumnos', $asesor->id) }}" method="POST">
                     @csrf
                     @method('POST')
                     <div class="d-flex flex-wrap align-items-center justify-content-around">
-                        @foreach ($alumnos as $item)
+                        @foreach ($asesor->tutorados as $item)
                             <div class="form-check m-1 col-sm-12 col-md-2  p-2 form-check-inline">
                                 <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
                                     name="alumnos[]" id="flexCheckDefault" checked>
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    {{ $item->nombre_alumno }}
+                                    {{ $item->Nombre . $item->id }}
                                 </label>
                             </div>
                         @endforeach

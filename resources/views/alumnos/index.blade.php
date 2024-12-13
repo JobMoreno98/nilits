@@ -62,12 +62,16 @@
                                 @endif
                             </td>
                             <td>
-                                @php
-                                    $dictamenActual = explode('.', $alumno->dictamen)[0];
-                                @endphp
-                                {{ $dictamenActual }}
+                                {{$alumno->dictamen_actual}}
                             </td>
-                            <td>{{ $alumno->tutor_nombre }} {{ $alumno->tutor_apellido }}</td>
+                            <td>
+                                @if (isset($alumno->tutores[0]))
+                                    {{ $alumno->tutores[0]->nombre }} {{ $alumno->tutores[0]->apellido }}
+                                @else
+                                    Sin tutor
+                                @endif
+
+                            </td>
                             <td>
                                 <a href="{{ route('alumnos.show', $alumno->codigo) }}"><i
                                         class="fas fa-edit edit-alumno-btn" role="button"></i></a>

@@ -28,11 +28,13 @@ class alumnosContorller extends Controller
         $fechasTitulacion = alumnos_model::select('fechaTitulacion')->distinct()->get();
 
         // Solo mostrar a los alumnos con tutor y aplicar paginación
-        $alumnos = DB::table('alumnos')
+        /*$alumnos = DB::table('alumnos')
             ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
             ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
             ->get();
+            */
+        $alumnos = alumnos_model::with('tutores')->get();
 
 
         // Listar a los maestros para poder asignarlos al crear un registro
@@ -66,6 +68,7 @@ class alumnosContorller extends Controller
             ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
             ->orderBy('alumnos.codigo', 'desc')
             ->paginate(10);
+
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         /* $alumnos = DB::table('alumnos')
             ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')

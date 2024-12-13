@@ -24,15 +24,16 @@
                             <td>{{ $maestro->Nombre }} {{ $maestro->Apellido }}</td>
                             <td>{{ $maestro->correo }}</td>
                             <td>
-                                <a href="{{ route('asesor.show', $maestro->id) }}" class="btn"> 
+                                <a href="{{ route('asesor.show', $maestro->codigo) }}" class="btn">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                
-                                <a target="_blank" href="{{ route('generar-constancia-tutoria', $maestro->codigo) }}" class="btn">
+
+                                <a target="_blank" href="{{ route('generar-constancia-tutoria', $maestro->codigo) }}"
+                                    class="btn">
                                     <i class="fa-regular fa-file"></i>
                                 </a>
 
-                                <a target="_blank"  class="btn" href="{{route('oficio.asignacion',$maestro->codigo)}}">
+                                <a target="_blank" class="btn" href="{{ route('oficio.asignacion', $maestro->codigo) }}">
                                     <i class="fa-solid fa-file-lines"></i>
                                 </a>
                             </td>

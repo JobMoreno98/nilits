@@ -139,16 +139,16 @@ class asesoresController extends Controller
     }
 
 
-    public function show($id)
+    public function show($codigo)
     {
-        $asesor = maestrosModel::with('tutorados')->first();
+        $asesor = maestrosModel::with('tutorados')->where('codigo', $codigo)->first();
 
         if (!isset($asesor)) {
             alert()->error('Error', 'Asesor no encontrado');
             return redirect()->route('asesores');
         }
 
-        return $asesor;
+        return view('asesores.edit', compact('asesor'));
 
         $alumnos = alumno_tutorModel::join('alumnos', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
             ->select('alumno_tutor.*', 'alumnos.Nombre as nombre_alumno', 'alumnos.ingreso as ingreso')
@@ -167,5 +167,21 @@ class asesoresController extends Controller
         $asesor->update();
         alert()->success('Exito', 'se elimino de forma correcta al maestro');
         return redirect()->route('asesores');
+    }
+    public function asignar_alumnos(Request $request,  $id)
+    {
+        $asesor = maestrosModel::find($id);
+        if (!isset($asesor)) {
+            return redirect()->route('asesores');
+        }
+
+        $alumnos_elimonados = $asesor->tutorados->whereNotIn('id',$request->alumnos);
+        foreach ($alumnos_elimonados as $key => $value) {
+            echo $value->id;
+            $asesor->tutorados()->updateExistingPivot($value->id, [
+                'activo' => false,
+            ]);
+        }
+        return redirect()->route('asesor.show', $asesor->codigo);
     }
 }
