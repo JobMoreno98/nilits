@@ -156,7 +156,9 @@
             </div>
 
 
-            <p style="text-align: justify;">Por haber impartido tutoría académica y permanente de 18 alumnos del
+            <p style="text-align: justify;">Por haber impartido tutoría académica y permanente de
+                <b>{{ count($maestro->tutorados) }} alumnos</b>
+                del
                 Programa de
                 Noviciado en la Licenciatura en Trabajo Social:</p>
 
@@ -170,7 +172,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($tutorados as $tutorado)
+                        @foreach ($maestro->tutorados as $tutorado)
                             <tr>
                                 <td>{{ $tutorado->codigo }}</td>
                                 <td>{{ $tutorado->Nombre }}</td>
@@ -183,20 +185,29 @@
 
             </div>
 
-            <p style="text-align: center;">Durante el ciclo escolar 2023 B, periodo comprendido del 16 julio de 2023 al
-                15
-                de enero de 2024, según consta en informe presentado en tiempo y forma.
+            <p style="text-align: jusitfy;">
+                Favor de ponerse en contacto con los alumnos lo antes posible e iniciar las actividades
+                correspondientes, de
+                acuerdo con los lineamientos establecidos para la actividad tutorial señalados en el Reglamento del
+                Programa
+            </p>
             <p style="text-align: center;">
-                “Piensa y Trabaja” <br>“30 años de la Autonomía de la <br>
-                Universidad de Guadalajara y de su organización en Red” <br>Guadalajara, Jal., a {{ $fechaActual }}</p>
-
-
-
+                Atentamente <br>
+                <b>“Piensa y Trabaja” <br>“30 años de la Autonomía de la <br>
+                    Universidad de Guadalajara y de su organización en Red”</b> <br>Zapopan, Jalisco,
+                {{ $fechaActual }}
+            </p>
         </div>
         <div class="signatures">
-            <p>Dr. Ricardo Fletes Corona<br>Jefe del Departamento de Desarrollo Social</p>
-            <p>Mtra. María Rosas Moreno<br>Coordinadora de Carrera de la NiLiTS</p>
-            <p>Dra. Narali Esquivel Bautista<br>Coordinadora de Tutorías de la NiLiTS</p>
+            <p style="text-align: center;font-size: 10pt margin-top: 150px;">Dr. Ricardo Fletes Corona<br>Jefe del
+                Departamento de
+                Desarrollo Social</p>
+            <p style="text-align: center;font-size: 10pt margin-top: 150px;">Mtra. María Rosas Moreno<br>Coordinadora de
+                Carrera de la
+                NiLiTS</p>
+            <p style="text-align: center;font-size: 10pt;margin-top:70px;">Dra. Narali Esquivel Bautista<br>Responsable
+                de Tutorías de la
+                NiLiTS</p>
         </div>
 
     </div>

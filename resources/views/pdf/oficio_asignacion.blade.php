@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -73,7 +73,7 @@
         .signatures {
             text-align: center;
             /* Centra el contenido de '.signatures' */
-            margin-top: 40px;
+            margin-top: 60px;
             /* Espacio por encima de las firmas */
         }
 
@@ -88,7 +88,9 @@
 
         @page {
             margin-top: 15px;
-            margin-bottom: 0px;
+            margin-bottom: 20px;
+            margin-left: 15px;
+            margin-right: 15px;
         }
 
         .page-break {
@@ -103,11 +105,12 @@
 
 <body>
     <footer class="footer"
-        style="position: fixed; bottom: 0; width: 100%; text-align: center; margin-top: auto; font-size: 10px">
-
+        style="position: fixed; bottom: 0; width: 100%; text-align: center; margin-top: auto; font-size: 10px;">
+        <hr>
         <p>Av. Los Belenes. Av. José Parres Arias #150, San José del Bajío, Zapopan, Jalisco, México</p>
         <p><span class="page">Página </span></p>
     </footer>
+
     <div class="header">
         <img src="{{ public_path('imgs/logo.png') }}" alt="Logo" style="height: 130px; width:100%">
     </div>
@@ -127,11 +130,11 @@
         <p>Tutor(a) del Programa Nivelación a la Licenciatura en Trabajo Social</p>
         <p>Presente</p>
 
-        <p style="text-align: justify;">Por este medio, se hace constar la asignación oficial de <b>
-                {{ count($tutorados) }}
+        <p style="text-align: justify;">Por este medio, se hace constar la asignación oficial de
+            <b>{{ count($maestro->tutorados) }}
                 alumnos </b>que estarán bajo su tutoría en la modalidad no convencional a distancia a partir del ciclo
-            2024 A, para ser atendidos durante
-            toda la trayectoria escolar dentro del programa académico de la Nivelación a la Licenciatura en
+            2024 A, para ser atendidos durante toda la trayectoria escolar dentro del programa académico de la
+            Nivelación a la Licenciatura en
             Trabajo Social (NiLiTS).</p>
 
 
@@ -146,11 +149,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tutorados as $tutorado)
+                @foreach ($maestro->tutorados as $tutorado)
                     <tr style="font-size: 8pt;">
                         <td>{{ $tutorado->codigo }}</td>
                         <td style="text-transform:uppercase;">{{ $tutorado->Nombre }}</td>
-                        <td>{{ explode(".",$tutorado->dictamen)[0] }}</td>
+                        <td>{{ explode('.', $tutorado->dictamen)[0] }}</td>
                         <td>No convecnional </td>
                         <td>{{ $tutorado->correo }}</td>
                     </tr>

@@ -27,15 +27,15 @@
                                 <a href="{{ route('asesor.show', $maestro->codigo) }}" class="btn">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-
-                                <a target="_blank" href="{{ route('generar-constancia-tutoria', $maestro->codigo) }}"
+                                <a target="_blank" class="btn" href="{{ route('oficio.asignacion', $maestro->id) }}">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </a>
+                                <a target="_blank" href="{{ route('generar-constancia-tutoria', $maestro->id) }}"
                                     class="btn">
                                     <i class="fa-regular fa-file"></i>
                                 </a>
 
-                                <a target="_blank" class="btn" href="{{ route('oficio.asignacion', $maestro->codigo) }}">
-                                    <i class="fa-solid fa-file-lines"></i>
-                                </a>
+
                             </td>
                         </tr>
                     @endforeach

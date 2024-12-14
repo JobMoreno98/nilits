@@ -119,7 +119,7 @@
                                 <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
                                     name="alumnos[]" id="flexCheckDefault" checked>
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    {{ $item->Nombre . $item->id }}
+                                    {{ $item->Nombre }}
                                 </label>
                             </div>
                         @empty
@@ -137,14 +137,21 @@
                     @csrf
                     @method('POST')
                     <div class="d-flex flex-wrap align-items-center justify-content-around">
+                        @php
+                            $estatusPosibles = [
+                                '1' => '<b class="text-success">Activo</b>',
+                                '3' => '<b class="text-warning">Egresado</b>',
+                                '4' => '<b class="text-danger">Baja</b>',
+                            ];
+                        @endphp
                         @forelse  ($alumnos_sin_asesor as $item)
                             <div class="form-check m-1 col-sm-12 col-md-2  p-2 form-check-inline">
                                 <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
                                     name="alumnos[]" id="{{ $item->id }}">
 
-
                                 <label class="form-check-label" for="{{ $item->id }}">
-                                    {{ $item->Nombre . $item->id }}
+                                    <b>Nombre:</b> {{ $item->Nombre }} <br>
+                                    <b>Estatus:</b> {!! $estatusPosibles[$item->estatus] !!}
                                 </label>
                             </div>
                         @empty

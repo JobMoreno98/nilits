@@ -6,7 +6,9 @@ use App\Models\alumno_tutorModel;
 use App\Models\alumnos_model;
 use App\Models\maestrosModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class asesoresController extends Controller
 {
@@ -148,7 +150,7 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->get();
+        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('Nombre')->where('estatus',1)->get();
 
         return view('asesores.edit', compact('asesor', 'alumnos_sin_asesor'));
     }
@@ -159,8 +161,16 @@ class asesoresController extends Controller
         if (!isset($asesor)) {
             return redirect()->route('asesores');
         }
+        foreach ($asesor->tutorados  as $key => $value) {
+            $asesor->tutorados()->updateExistingPivot($value->id, [
+                'activo' => false,
+                'updated_at' => now()
+            ]);
+        }
         $asesor->activo = 0;
+        Hash::make();
         $asesor->update();
+
         alert()->success('Exito', 'se elimino de forma correcta al maestro');
         return redirect()->route('asesores');
     }
@@ -172,18 +182,21 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        
-        $alumnos_elimonados = $asesor->tutorados->whereNotIn('id', $request->alumnos);
+        $alumnos_eliminados = $asesor->tutorados->whereNotIn('id', $request->alumnos);
 
-
-        foreach ($alumnos_elimonados as $key => $value) {
+        foreach ($alumnos_eliminados as $key => $value) {
             $asesor->tutorados()->updateExistingPivot($value->id, [
                 'activo' => false,
                 'updated_at' => now()
             ]);
         }
+
+        //toast('Se actualizarón los alumnos del asesor','success')->position('top-end')->autoClose(5000)->timerProgressBar();
+        //alert('Title','Lorem Lorem Lorem', 'success')->position('top-end');
+        toast('<b style="color:#fff;">Se actualizarón los alumnos del asesor</b>', 'success', 'top-right')->autoClose(5000)->timerProgressBar()->position('bottom-end')->background(' #198754')->toHtml();
         return redirect()->route('asesor.show', $asesor->codigo);
     }
+
     public function asignar_alumnos(Request $request,  $id)
     {
         $asesor = maestrosModel::find($id);
@@ -192,10 +205,13 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        for ($i = 0; $i < count($request->alumnos); $i++) {
-            
+        $new_array = array();
+        foreach ($request->alumnos as $value) {
+            $new_array[$value] = ['created_at' => now()];
         }
 
-        return $request;
+        $asesor->tutorados()->attach($new_array);
+        toast('Se actualizarón los alumnos del asesor', 'success', 'top-right')->autoClose(5000)->timerProgressBar()->position('bottom-end')->background(' #198754')->toHtml()->buttonsStyling(false);
+        return redirect()->route('asesor.show', $asesor->codigo);
     }
 }

@@ -6,12 +6,12 @@
     <div class="container mt-3 p-0">
         <h2 class="mb-4 text-light p-1 px-3" style="border-radius: 0px 10px;background-color: rgb(82, 82, 255)">Gestionar
             Alumnos</h2>
-        <div class="d-flex mb-3 align-items-center">
+        <div class="d-flex flex-wrap mb-3 align-items-center justify-content-evenly">
             <a href="{{ route('/alumnos/sintutor') }}"
-                class="btn text-light col-md-2 me-1"style="background-color: rgb(0, 0, 169)">Ver alumnos sin
+                class="btn text-light col-md-2 me-1 btn-sm" style="background-color: rgb(0, 0, 169)">Ver alumnos sin
                 tutor</a>
 
-            <button class="btn text-light me-1" style="background-color: rgb(0, 0, 169)" type="button" data-bs-toggle="modal"
+            <button class="btn text-light me-1 btn-sm" style="background-color: rgb(0, 0, 169)" type="button" data-bs-toggle="modal"
                 data-bs-target="#agregar">Agregar
                 Alumno</button>
 
@@ -51,18 +51,10 @@
                             <td>{{ $alumno->Nombre }}</td>
                             <td>{{ $alumno->correo }}</td>
                             <td>
-                                @if ($alumno->estatus == 1)
-                                    Activo
-                                @elseif ($alumno->estatus == 3)
-                                    Egresado
-                                @elseif ($alumno->estatus == 4)
-                                    Baja
-                                @else
-                                    Otro
-                                @endif
+                                {!! $alumno->status !!}
                             </td>
                             <td>
-                                {{$alumno->dictamen_actual}}
+                                {{ $alumno->dictamen_actual }}
                             </td>
                             <td>
                                 @if (isset($alumno->tutores[0]))
@@ -73,8 +65,8 @@
 
                             </td>
                             <td>
-                                <a href="{{ route('alumnos.show', $alumno->codigo) }}"><i
-                                        class="fas fa-edit edit-alumno-btn" role="button"></i></a>
+                                <a href="{{ route('alumnos.show', $alumno->id) }}"><i class="fas fa-edit edit-alumno-btn"
+                                        role="button"></i></a>
                             </td>
                         </tr>
                     @endforeach
@@ -251,6 +243,8 @@
                 {
                     extend: 'pdfHtml5',
                     title: 'Alumnos con tutor',
+                    orientation: 'landscape',
+                    pageSize: 'LETTER',
                     exportOptions: {
                         columns: [1, 2, 3, 4, 5]
                     }

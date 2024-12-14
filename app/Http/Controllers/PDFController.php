@@ -15,21 +15,10 @@ class PDFController extends Controller
 {
     //
 
-    public function oficioAsignacion($codigoMaestro)
+    public function oficioAsignacion($id)
     {
 
-        $maestro = DB::table('maestros')
-            ->where('codigo', $codigoMaestro)
-            ->first();
-
-        // Luego, obtén la lista de tutorados asociados a este maestro
-        $tutorados = DB::table('alumno_tutor')
-            ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
-            ->where('alumno_tutor.id_tutor', $codigoMaestro)
-            ->select('alumnos.Nombre', 'alumnos.codigo', 'alumnos.dictamen', 'alumnos.dictamen','alumnos.correo')
-            ->get();
-
-        $half = $tutorados->count();
+        $maestro = maestrosModel::with('tutorados')->where('id',$id)->first();
 
         Carbon::setLocale(LC_ALL, 'es_MX.UTF-8'); // Establece el idioma de Carbon
 
@@ -59,30 +48,16 @@ class PDFController extends Controller
 
         $pdf = PDF::loadView('pdf.oficio_asignacion', [
             'maestro' => $maestro,
-            'tutorados' => $tutorados,
-            'half' => $half,
             'fechaActual' => $fechaActual
         ]);
 
         return $pdf->stream('oficio_asignacion.pdf');
     }
 
-    public function constanciaTutoria($codigoMaestro)
+    public function constanciaTutoria($id)
     {
 
-        $maestro = DB::table('maestros')
-            ->where('codigo', $codigoMaestro)
-            ->first();
-
-        // Luego, obtén la lista de tutorados asociados a este maestro
-        $tutorados = DB::table('alumno_tutor')
-            ->join('alumnos', 'alumno_tutor.codigo', '=', 'alumnos.codigo')
-            ->where('alumno_tutor.id_tutor', $codigoMaestro)
-            ->select('alumnos.*')
-            ->get();
-
-        $half = ceil($tutorados->count() / 2);
-        // Tus datos aquí
+        $maestro = maestrosModel::with('tutorados')->where('id',$id)->first();
 
         Carbon::setLocale(LC_ALL, 'es_MX.UTF-8'); // Establece el idioma de Carbon
 
@@ -112,7 +87,6 @@ class PDFController extends Controller
 
         $pdf = PDF::loadView('pdf.constancia_tutoria', [
             'maestro' => $maestro,
-            'tutorados' => $tutorados,
             'fechaActual' => $fechaActual
         ]);
         return $pdf->stream('constancia_tutoria.pdf');
