@@ -110,11 +110,11 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show " id="tutorados-tab-pane" role="tabpanel" aria-labelledby="tutorados-tab"
                 tabindex="0">
-                <form action="{{ route('asignar-alumnos', $asesor->id) }}" method="POST">
+                <form action="{{ route('asigandos-alumnos', $asesor->id) }}" method="POST">
                     @csrf
                     @method('POST')
                     <div class="d-flex flex-wrap align-items-center justify-content-around">
-                        @foreach ($asesor->tutorados as $item)
+                        @forelse  ($asesor->tutorados as $item)
                             <div class="form-check m-1 col-sm-12 col-md-2  p-2 form-check-inline">
                                 <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
                                     name="alumnos[]" id="flexCheckDefault" checked>
@@ -122,7 +122,9 @@
                                     {{ $item->Nombre . $item->id }}
                                 </label>
                             </div>
-                        @endforeach
+                        @empty
+                            <p class="mt-2">Sin alumnos asigandos</p>
+                        @endforelse
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
@@ -130,7 +132,30 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                tabindex="0">...</div>
+                tabindex="0">
+                <form action="{{ route('asignar-alumnos', $asesor->id) }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="d-flex flex-wrap align-items-center justify-content-around">
+                        @forelse  ($alumnos_sin_asesor as $item)
+                            <div class="form-check m-1 col-sm-12 col-md-2  p-2 form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="{{ $item->id }}"
+                                    name="alumnos[]" id="{{ $item->id }}">
+
+
+                                <label class="form-check-label" for="{{ $item->id }}">
+                                    {{ $item->Nombre . $item->id }}
+                                </label>
+                            </div>
+                        @empty
+                            <p class="mt-2">Sin alumnos asigandos</p>
+                        @endforelse
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>

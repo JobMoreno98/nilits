@@ -176,4 +176,6 @@ Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name(
 Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');
 
 
+Route::post('/alumnos-asigandos/{id}', [asesoresController::class, 'alumnos_asigandos'])->name('asigandos-alumnos')->middleware(['auth', isAdmin::class]);
+
 Route::post('/asignar-alumnos/{id}', [asesoresController::class, 'asignar_alumnos'])->name('asignar-alumnos')->middleware(['auth', isAdmin::class]);

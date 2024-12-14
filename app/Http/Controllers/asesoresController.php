@@ -148,13 +148,9 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        return view('asesores.edit', compact('asesor'));
+        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->get();
 
-        $alumnos = alumno_tutorModel::join('alumnos', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->select('alumno_tutor.*', 'alumnos.Nombre as nombre_alumno', 'alumnos.ingreso as ingreso')
-            ->where('id_tutor', $asesor->codigo)->where('activo', 1)->orderBy('nombre_alumno')->get();
-
-        return view('asesores.edit', compact('asesor', 'alumnos'));
+        return view('asesores.edit', compact('asesor', 'alumnos_sin_asesor'));
     }
 
     public function delete($id)
@@ -168,20 +164,38 @@ class asesoresController extends Controller
         alert()->success('Exito', 'se elimino de forma correcta al maestro');
         return redirect()->route('asesores');
     }
+    public function alumnos_asigandos(Request $request,  $id)
+    {
+        $asesor = maestrosModel::find($id);
+        if (!isset($asesor)) {
+            alert()->error('Error', 'Asesor no encontrado');
+            return redirect()->route('asesores');
+        }
+
+        
+        $alumnos_elimonados = $asesor->tutorados->whereNotIn('id', $request->alumnos);
+
+
+        foreach ($alumnos_elimonados as $key => $value) {
+            $asesor->tutorados()->updateExistingPivot($value->id, [
+                'activo' => false,
+                'updated_at' => now()
+            ]);
+        }
+        return redirect()->route('asesor.show', $asesor->codigo);
+    }
     public function asignar_alumnos(Request $request,  $id)
     {
         $asesor = maestrosModel::find($id);
         if (!isset($asesor)) {
+            alert()->error('Error', 'Asesor no encontrado');
             return redirect()->route('asesores');
         }
 
-        $alumnos_elimonados = $asesor->tutorados->whereNotIn('id',$request->alumnos);
-        foreach ($alumnos_elimonados as $key => $value) {
-            echo $value->id;
-            $asesor->tutorados()->updateExistingPivot($value->id, [
-                'activo' => false,
-            ]);
+        for ($i = 0; $i < count($request->alumnos); $i++) {
+            
         }
-        return redirect()->route('asesor.show', $asesor->codigo);
+
+        return $request;
     }
 }
