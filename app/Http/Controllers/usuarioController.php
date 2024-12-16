@@ -33,10 +33,6 @@ class usuarioController extends Controller
         ]);
 
         return redirect()->route('/');
-        return $usuario;
-        // Si las contraseñas no coinciden, redirigir con un mensaje de error
-
-
     }
 
     public function index()
@@ -58,7 +54,7 @@ class usuarioController extends Controller
             'nombre' => ['required', Rule::unique('usuario')->ignore($usuario->id)],
         ]);
 
-        $roles = ['admin' => 1, 'editor' => 3, 'maestro' => 2, 'Apoyo tutorias' => 4];
+        $roles = ['admin' => 1, 'maestro' => 2, 'apoyo tutorias' => 3, 'administrativo' => 4];
         $usuario->syncRoles(); # Se borran todos los anteriores
         $usuario->syncRoles([$request->role]);
         $usuario->nivel = $roles[$request->role];

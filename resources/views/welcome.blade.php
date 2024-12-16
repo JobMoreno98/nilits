@@ -21,10 +21,12 @@
             Sesión</button>
     </form>
 
-    <a class="btn btn-lg  text-light" style="background-color: rgb(0, 0, 169)" href="{{ route('registro-usuario') }}">Darme de
+    <a class="btn btn-lg  text-light" style="background-color: rgb(0, 0, 169)" href="{{ route('registro-usuario') }}">Darme
+        de
         Alta</a>
 
-
+    {{--
     <a class="btn btn-lg  text-light" style="background-color: rgb(0, 0, 169)" href="{{ route('alumnado') }}">Ver
         Alumnado</a>
+        --}}
 @endsection

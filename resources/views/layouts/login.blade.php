@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <style>
         body {
             display: flex;
@@ -36,8 +37,17 @@
 </head>
 
 <body>
-    <div class="login-container">
-        @yield('content')
+    <div class="d-flex w-100 h-100 align-items-center">
+        <div class="d-none d-xl-block   col-xl-8 me-xl-2 h-100"
+            style="background: url('{{ asset('imgs/prueba.jpg') }}');  background-repeat: no-repeat;  
+  background-position: 0% 0%;
+  background-size: 100% 100%;">
+
+        </div>
+        <div class="login-container m-auto">
+            @yield('content')
+        </div>
+
     </div>
 
     <!-- Bootstrap JS and its dependencies -->

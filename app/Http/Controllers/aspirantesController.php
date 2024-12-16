@@ -12,40 +12,18 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\Mail;
 
-
-
-
-
 class aspirantesController extends Controller
 {
     // public function indexAs(){
 
     //     return view('aspirantes.index');
-    
+
     //     return "hola";
 
-    
-    
 
     public function index()
     {
-        $totalRegistros = alumnos_model::count();
-        $totalEgresados = alumnos_model::where('estatus', 3)->count();
-        $totalActivos = alumnos_model::where('estatus', 1)->count();
-        $totalBajas = alumnos_model::where('estatus', 4)->count();
-
-        // Solo mostrar a los alumnos con tutor y aplicar paginación
-        $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->paginate(10);
-
-
-        // Listar a los maestros para poder asignarlos al crear un registro
-        $tutores = maestrosModel::all();
-
-        return view('aspirantes.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos'));
+        return view('aspirantes.index');
     }
 
 
@@ -54,7 +32,7 @@ class aspirantesController extends Controller
     public function store(Request $request)
     {
 
-        
+
         // dd($request->all());
         $validatedData = $request->validate([
             'codigo' => 'required',
@@ -66,11 +44,11 @@ class aspirantesController extends Controller
             'fechaNac' => 'required',
             'dictamen' => 'required',
         ]);
-        
-       
-        
+
+
+
         $alumno = new alumnos_model();
-        
+
         $alumno->codigo = $validatedData['codigo'];
         $alumno->Nombre = $validatedData['nombre'];
         $alumno->telefono = $validatedData['telefono'];
@@ -80,7 +58,7 @@ class aspirantesController extends Controller
         $alumno->fechaNac = $validatedData['fechaNac'];
         $alumno->dictamen = $validatedData['dictamen'];
         $alumno->estatus = 1;
-       
+
         $alumno->edad = ' ';
         $alumno->tipo = 'N/A';
         $alumno->modalidad = 'N/A';
@@ -96,15 +74,15 @@ class aspirantesController extends Controller
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
         $alumno->ciclo = '';
-        
+
         $alumno->save();
 
-        
+
 
         Mail::to($alumno->correo)->send(new ContactanosMailable($alumno));
 
         return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente y correo de confirmación enviado.');
-    
+
         return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente');
     }
 
@@ -118,11 +96,11 @@ class aspirantesController extends Controller
         $totalBajas = alumnos_model::where('estatus', 4)->count();
 
         $alumnos = DB::table('alumnos')
-        ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-        ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-        ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-        ->orderBy('alumnos.codigo', 'desc')
-        ->paginate(10);
+            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
+            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
+            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
+            ->orderBy('alumnos.codigo', 'desc')
+            ->paginate(10);
         // Solo mostrar a los alumnos con tutor y aplicar paginación
         /* $alumnos = DB::table('alumnos')
         ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
@@ -145,13 +123,38 @@ class aspirantesController extends Controller
     private function obtenerNombreEstado($procedencia)
     {
         $estados = [
-            0 => 'Aguascalientes', 1 => 'Baja California', 2 => 'Baja California Sur', 3 => 'Campeche',
-            4 => 'Chiapas', 5 => 'Chihuahua', 6 => 'Ciudad de México', 7 => 'Coahuila', 8 => 'Colima',
-            9 => 'Durango', 10 => 'Guanajuato', 11 => 'Guerrero', 12 => 'Hidalgo', 13 => 'Jalisco',
-            14 => 'México', 15 => 'Michoacán', 16 => 'Morelos', 17 => 'Nayarit', 18 => 'Nuevo León',
-            19 => 'Oaxaca', 20 => 'Puebla', 21 => 'Querétaro', 22 => 'Quintana Roo', 23 => 'San Luis Potosí',
-            24 => 'Sinaloa', 25 => 'Sonora', 26 => 'Tabasco', 27 => 'Tamaulipas', 28 => 'Tlaxcala',
-            29 => 'Veracruz', 30 => 'Yucatán', 31 => 'Zacatecas'
+            0 => 'Aguascalientes',
+            1 => 'Baja California',
+            2 => 'Baja California Sur',
+            3 => 'Campeche',
+            4 => 'Chiapas',
+            5 => 'Chihuahua',
+            6 => 'Ciudad de México',
+            7 => 'Coahuila',
+            8 => 'Colima',
+            9 => 'Durango',
+            10 => 'Guanajuato',
+            11 => 'Guerrero',
+            12 => 'Hidalgo',
+            13 => 'Jalisco',
+            14 => 'México',
+            15 => 'Michoacán',
+            16 => 'Morelos',
+            17 => 'Nayarit',
+            18 => 'Nuevo León',
+            19 => 'Oaxaca',
+            20 => 'Puebla',
+            21 => 'Querétaro',
+            22 => 'Quintana Roo',
+            23 => 'San Luis Potosí',
+            24 => 'Sinaloa',
+            25 => 'Sonora',
+            26 => 'Tabasco',
+            27 => 'Tamaulipas',
+            28 => 'Tlaxcala',
+            29 => 'Veracruz',
+            30 => 'Yucatán',
+            31 => 'Zacatecas'
         ];
 
         return $estados[$procedencia] ?? 'Desconocido';
@@ -217,10 +220,10 @@ class aspirantesController extends Controller
         // Asigna el resto de los campos
         $tutor_alumno->save();
         //$alumno->update();
-        
+
         return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
-    
+
 
     // Función para crear un nuevo Aspirante
 
@@ -353,23 +356,20 @@ class aspirantesController extends Controller
 
 
     public function asignacion(Request $request)
-{
-    $validated = $request->validate([
-        'maestro' => 'required',
-        'alumno' => 'required|array', // Asumiendo que puedes tener múltiples alumnos seleccionados
-    ]);
-
-    foreach ($request->alumno as $codigoAlumno) {
-        alumno_tutorModel::create([
-            'id_tutor' => $request->maestro,
-            'codigo' => $codigoAlumno,
-
+    {
+        $validated = $request->validate([
+            'maestro' => 'required',
+            'alumno' => 'required|array', // Asumiendo que puedes tener múltiples alumnos seleccionados
         ]);
+
+        foreach ($request->alumno as $codigoAlumno) {
+            alumno_tutorModel::create([
+                'id_tutor' => $request->maestro,
+                'codigo' => $codigoAlumno,
+
+            ]);
+        }
+
+        return redirect()->route('gestionar-tutores');
     }
-
-    return redirect()->route('gestionar-tutores');
 }
-
-}
-
-

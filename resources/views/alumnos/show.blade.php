@@ -5,8 +5,7 @@
 @section('content')
 
     <div class="container">
-        <form method="POST"
-            action="{{ Auth::user()->can('Alumnos#editar') ? route('/alumnos/update/', $alumno->codigo) : '' }}"
+        <form method="POST" action="{{ Auth::user()->can('Alumnos#editar') ? route('/alumnos/update/', $alumno->id) : '' }}"
             id="formularioData">
             @csrf
             @if ($errors->any())
@@ -43,51 +42,25 @@
                         name="telefono">
                 </div>
                 <div class="form-group mx-1 col-sm-12 col-md-2">
-                    <label for="genero">Genero</label>
-                    <select class="form-control" id="genero" name="genero">
-                        <option {{ strcmp($alumno->genero, 'Masculino') == 0 ? 'selected' : '' }} value="Masculino">
+                    <label for="sexo">Género</label>
+                    <select class="form-control" id="sexo" name="sexo">
+                        <option disabled {{ $alumno->sexo == 2 ? 'selected' : '' }}>Elegir..</option>
+                        <option {{ $alumno->sexo == 0 ? 'selected' : '' }} value="0">
                             Masculino
                         </option>
-                        <option {{ strcmp($alumno->genero, 'Femenino') == 0 ? 'selected' : '' }} value="Femenino">Femenino
+                        <option {{ $alumno->sexo == 1 ? 'selected' : '' }} value="1">Femenino
                         </option>
                     </select>
                 </div>
-
                 <div class="form-group mx-1 col-sm-12 col-md-3">
                     <label for="procedencia">Procedencia</label>
                     <select class="form-control" name="procedencia" id="procedencia">
-                        <option value="0">Aguascalientes</option>
-                        <option value="1">Baja California</option>
-                        <option value="2">Baja California Sur</option>
-                        <option value="3">Campeche</option>
-                        <option value="4">Chiapas</option>
-                        <option value="5">Chihuahua</option>
-                        <option value="6">Ciudad de México</option>
-                        <option value="7">Coahuila</option>
-                        <option value="8">Colima</option>
-                        <option value="9">Durango</option>
-                        <option value="10">Guanajuato</option>
-                        <option value="11">Guerrero</option>
-                        <option value="12">Hidalgo</option>
-                        <option value="13">Jalisco</option>
-                        <option value="14">México</option>
-                        <option value="15">Michoacán</option>
-                        <option value="16">Morelos</option>
-                        <option value="17">Nayarit</option>
-                        <option value="18">Nuevo León</option>
-                        <option value="19">Oaxaca</option>
-                        <option value="20">Puebla</option>
-                        <option value="21">Querétaro</option>
-                        <option value="22">Quintana Roo</option>
-                        <option value="23">San Luis Potosí</option>
-                        <option value="24">Sinaloa</option>
-                        <option value="25">Sonora</option>
-                        <option value="26">Tabasco</option>
-                        <option value="27">Tamaulipas</option>
-                        <option value="28">Tlaxcala</option>
-                        <option value="29">Veracruz</option>
-                        <option value="30">Yucatán</option>
-                        <option value="31">Zacatecas</option>
+                        <option disabled {{ !isset($alumno->procedencia) ? 'selected' : '' }}>Elegir..</option>
+                        @foreach ($estados as $key => $value)
+                            <option {{ strcmp($alumno->procedencia, $value) == 0 ? 'selected' : '' }}
+                                value="{{ $value }}">
+                                {{ $key . '-' . $value }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group mx-1 col-sm-12 col-md-3">
@@ -140,14 +113,13 @@
                 </div>
                 <div class="form-group mx-1 col-sm-12 col-md-3">
                     <label for="fechaTitulacion">Fecha de titulacion</label>
-                    <input type="date" class="form-control" id="fechaTitulacion"
-                        value="{{ $alumno->fechaTitulacion }}" name="fechaTitulacion">
+                    <input type="date" class="form-control" id="fechaTitulacion" value="{{ $alumno->fechaTitulacion }}"
+                        name="fechaTitulacion">
                 </div>
 
                 <div class="form-group mx-1 col-sm-12 col-md-3">
                     <label for="acta">Acta</label>
-                    <input type="text" class="form-control" id="acta" value="{{ $alumno->acta }}"
-                        name="acta">
+                    <input type="text" class="form-control" id="acta" value="{{ $alumno->acta }}" name="acta">
                 </div>
                 <div class="form-group mx-1 col-sm-12 col-md-3">
                     <label for="libro">Libro</label>
@@ -178,6 +150,22 @@
                 </div>
             @endcan
         </form>
+        @if (Auth::user()->hasRole('admin'))
+            <div class="text-center mt-2">
+                <a class="btn btn-danger text-uppercase btn-sm" href=""
+                    onclick="event.preventDefault(); document.getElementById('delete-form').submit();">
+                    eliminar
+                </a>
+
+                <form id="delete-form" action="{{ route('alumnos.delete', $alumno->id) }}" method="POST"
+                    class="d-none">
+                    <input type="text" name="id" value="{{ $alumno->id }}">
+                    @csrf
+                    @method('PUT')
+                </form>
+            </div>
+        @endif
+
     </div>
 @endsection
 @section('scripts')
@@ -186,7 +174,7 @@
             let elemento = document.getElementById(eliminar);
             elemento.parentNode.removeChild(elemento);
         }
-        
+
         $(document).ready(function() {
             let elemento = document.getElementById('formulario');
             elemento.innerHTML = '';

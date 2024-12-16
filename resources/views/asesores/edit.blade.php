@@ -17,7 +17,7 @@
             </div>
         @endif
         <form method="POST" class="d-flex flex-wrap justify-content-around"
-            action="{{ route('/maestros/update/', ['codigo' => $asesor->codigo]) }}">
+            action="{{ Auth::user()->hasRole('admin') ? route('/maestros/update/', ['codigo' => $asesor->codigo]) : '' }}">
             @csrf
             @method('PUT')
             <div class="form-group col-md-3 col-sm-12">
@@ -77,24 +77,28 @@
                 <label for="correo">Observaciones</label>
                 <textarea name="observaciones" id="observaciones" class="form-control w-100">{{ $asesor->observaciones }}</textarea>
             </div>
+
             <div class="col-sm-auto text-center my-2">
                 <a href="{{ route('asesores') }}" class="btn btn-secondary text-uppercase btn-sm">cancelar</a>
-                <button type="submit" class="btn btn-primary text-uppercase btn-sm">Guardar Cambios</button>
+                @if (Auth::user()->hasRole('admin'))
+                    <button type="submit" class="btn btn-primary text-uppercase btn-sm">Guardar Cambios</button>
+                @endif
             </div>
+
         </form>
+        @if (Auth::user()->hasRole('admin'))
+            <div class="text-center">
+                <a class="btn btn-danger text-uppercase btn-sm" href="{{ route('asesor.delete', $asesor->id) }}"
+                    onclick="event.preventDefault(); document.getElementById('delete-form').submit();">
+                    eliminar
+                </a>
 
-        <div class="text-center">
-            <a class="btn btn-danger text-uppercase btn-sm" href="{{ route('asesor.delete', $asesor->id) }}"
-                onclick="event.preventDefault(); document.getElementById('delete-form').submit();">
-                eliminar
-            </a>
-
-            <form id="delete-form" action="{{ route('asesor.delete', $asesor->id) }}" method="POST" class="d-none">
-                @csrf
-                @method('PUT')
-            </form>
-        </div>
-
+                <form id="delete-form" action="{{ route('asesor.delete', $asesor->id) }}" method="POST" class="d-none">
+                    @csrf
+                    @method('PUT')
+                </form>
+            </div>
+        @endif
         <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link " id="tutorados-tab" data-bs-toggle="tab" data-bs-target="#tutorados-tab-pane"
@@ -126,9 +130,11 @@
                             <p class="mt-2">Sin alumnos asigandos</p>
                         @endforelse
                     </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
-                    </div>
+                    @if (Auth::user()->hasRole('admin'))
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
+                        </div>
+                    @endif
                 </form>
             </div>
             <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
@@ -158,9 +164,11 @@
                             <p class="mt-2">Sin alumnos asigandos</p>
                         @endforelse
                     </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
-                    </div>
+                    @if (Auth::user()->hasRole('admin'))
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-success">Guardar tutorados</button>
+                        </div>
+                    @endif
                 </form>
             </div>
 

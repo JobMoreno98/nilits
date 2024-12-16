@@ -97,7 +97,9 @@ class asesoresController extends Controller
         $maestro->update();
 
         // Redireccionar o devolver una respuesta JSON según tu necesidad
-        return redirect()->route('asesores');
+        toast('<span style="color:#fff;">Se actualizo el asesor</span>', 'success')
+        ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
+        return redirect()->route('asesor.show', $maestro->codigo);
     }
 
     public function getionarT()
@@ -130,16 +132,6 @@ class asesoresController extends Controller
 
         return response()->json($tutorados);
     }
-    //Desasigna tutorados de su tutor
-    public function desasignar(Request $record, $codigo)
-    {
-
-        $record = alumno_tutorModel::where('codigo', '=', $codigo)->first();
-        $record->delete();
-        return $record;
-        return redirect()->route('asesores');
-    }
-
 
     public function show($codigo)
     {
@@ -150,7 +142,7 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('Nombre')->where('estatus',1)->get();
+        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('Nombre')->where('estatus', 1)->get();
 
         return view('asesores.edit', compact('asesor', 'alumnos_sin_asesor'));
     }
@@ -190,10 +182,8 @@ class asesoresController extends Controller
                 'updated_at' => now()
             ]);
         }
-
-        //toast('Se actualizarón los alumnos del asesor','success')->position('top-end')->autoClose(5000)->timerProgressBar();
-        //alert('Title','Lorem Lorem Lorem', 'success')->position('top-end');
-        toast('<b style="color:#fff;">Se actualizarón los alumnos del asesor</b>', 'success', 'top-right')->autoClose(5000)->timerProgressBar()->position('bottom-end')->background(' #198754')->toHtml();
+        toast('<span style="color:#fff;">Se actualizarón los alumnos del asesor</span>', 'success')
+            ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
         return redirect()->route('asesor.show', $asesor->codigo);
     }
 
@@ -211,7 +201,8 @@ class asesoresController extends Controller
         }
 
         $asesor->tutorados()->attach($new_array);
-        toast('Se actualizarón los alumnos del asesor', 'success', 'top-right')->autoClose(5000)->timerProgressBar()->position('bottom-end')->background(' #198754')->toHtml()->buttonsStyling(false);
+        toast('<span style="color:#fff;">Se actualizarón los alumnos del asesor</span>', 'success')
+            ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
         return redirect()->route('asesor.show', $asesor->codigo);
     }
 }

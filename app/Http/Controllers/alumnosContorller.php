@@ -5,17 +5,52 @@ namespace App\Http\Controllers;
 use App\Models\alumnos_maestrosModel;
 use App\Models\alumnos_model;
 use App\Models\maestrosModel;
-use App\Models\LLenadoComboBox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Symfony\Contracts\Service\Attribute\Required;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GraficaExport;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 
 class alumnosContorller extends Controller
 {
+    public $estados = [
+        0 => 'Aguascalientes',
+        1 => 'Baja California',
+        2 => 'Baja California Sur',
+        3 => 'Campeche',
+        4 => 'Chiapas',
+        5 => 'Chihuahua',
+        6 => 'Ciudad de México',
+        7 => 'Coahuila',
+        8 => 'Colima',
+        9 => 'Durango',
+        10 => 'Guanajuato',
+        11 => 'Guerrero',
+        12 => 'Hidalgo',
+        13 => 'Jalisco',
+        14 => 'México',
+        15 => 'Michoacán',
+        16 => 'Morelos',
+        17 => 'Nayarit',
+        18 => 'Nuevo León',
+        19 => 'Oaxaca',
+        20 => 'Puebla',
+        21 => 'Querétaro',
+        22 => 'Quintana Roo',
+        23 => 'San Luis Potosí',
+        24 => 'Sinaloa',
+        25 => 'Sonora',
+        26 => 'Tabasco',
+        27 => 'Tamaulipas',
+        28 => 'Tlaxcala',
+        29 => 'Veracruz',
+        30 => 'Yucatán',
+        31 => 'Zacatecas',
+        32 => 'Desconocida'
+    ];
+
     public function index()
     {
 
@@ -26,34 +61,22 @@ class alumnosContorller extends Controller
 
         // Obtener las fechas de titulación únicas
         $fechasTitulacion = alumnos_model::select('fechaTitulacion')->distinct()->get();
-
-        // Solo mostrar a los alumnos con tutor y aplicar paginación
-        /*$alumnos = DB::table('alumnos')
-            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
-            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
-            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->get();
-            */
         $alumnos = alumnos_model::with('tutores')->get();
-
 
         // Listar a los maestros para poder asignarlos al crear un registro
         $tutores = maestrosModel::all();
-
-
-
-
         return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechasTitulacion'));
     }
 
-
-
     public function show(alumnos_model $alumno)
     {
+        $estados = $this->estados;
+        //in_array($alumno->procedencia, $estados);
+        $alumno->procedencia = in_array($alumno->procedencia, array_values($estados)) ? $alumno->procedencia : null;
 
-        return view('alumnos.show', compact('alumno'));
+
+        return view('alumnos.show', compact('alumno', 'estados'));
     }
-
     //funcion para solo poder ver a los alumnos
     public function alumnado_restringido()
     {
@@ -87,50 +110,6 @@ class alumnosContorller extends Controller
         return view('almunado.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos'));
     }
 
-
-
-    private function obtenerNombreEstado($procedencia)
-    {
-        $estados = [
-            0 => 'Aguascalientes',
-            1 => 'Baja California',
-            2 => 'Baja California Sur',
-            3 => 'Campeche',
-            4 => 'Chiapas',
-            5 => 'Chihuahua',
-            6 => 'Ciudad de México',
-            7 => 'Coahuila',
-            8 => 'Colima',
-            9 => 'Durango',
-            10 => 'Guanajuato',
-            11 => 'Guerrero',
-            12 => 'Hidalgo',
-            13 => 'Jalisco',
-            14 => 'México',
-            15 => 'Michoacán',
-            16 => 'Morelos',
-            17 => 'Nayarit',
-            18 => 'Nuevo León',
-            19 => 'Oaxaca',
-            20 => 'Puebla',
-            21 => 'Querétaro',
-            22 => 'Quintana Roo',
-            23 => 'San Luis Potosí',
-            24 => 'Sinaloa',
-            25 => 'Sonora',
-            26 => 'Tabasco',
-            27 => 'Tamaulipas',
-            28 => 'Tlaxcala',
-            29 => 'Veracruz',
-            30 => 'Yucatán',
-            31 => 'Zacatecas'
-        ];
-
-        return $estados[$procedencia] ?? 'Desconocido';
-    }
-
-
-
     //Mostrar alumnos sin tutor
 
     public function alumnos_sin_tutor()
@@ -155,35 +134,6 @@ class alumnosContorller extends Controller
         $alumno = alumnos_model::where('codigo', $codigo)->first(); // Obtener los detalles del alumno según su código
 
         return response()->json($alumno); // Devolver la vista parcial con los detalles del alumno
-    }
-
-
-    public function asignar_tutor(Request $request)
-    {
-        $request->validate([
-            //'codigo' => 'required',
-            //'nombre' => 'required',
-            //'telefono' => 'required',
-            //'sexo' => 'required',
-            //'procedencia' => 'required',
-            //'correo' => 'required',
-            //'fechaNac' => 'required',
-            //'dictamen' => 'required',
-            //'estatus' => 'required',
-            //'tutor' => 'required'
-            // Agrega aquí el resto de las validaciones necesarias
-        ]);
-
-
-        $tutor_alumno = new alumnos_maestrosModel();
-        $tutor_alumno->codigo = $request->codigo;
-        $tutor_alumno->id_tutor = $request->tutor;
-        $tutor_alumno->activo = 1;
-        // Asigna el resto de los campos
-        $tutor_alumno->save();
-        //$alumno->update();
-
-        return redirect()->back()->with('success', 'Alumno creado exitosamente');
     }
 
     public function store(Request $request)
@@ -239,40 +189,33 @@ class alumnosContorller extends Controller
     }
 
     //update function
-    public function editar(Request $request, $codigo)
+    public function update(Request $request, $id)
     {
+        $alumno = alumnos_model::where('id', $id)->first();
+        if (!isset($alumno)) {
+            alert()->error('Error', 'Alumno no encontrado');
+            return redirect()->route('alumnos');
+        }
         $request->validate([
-            'nombre' => 'required',
-            'correo' => 'required',
+            'nombre' => ['required', Rule::unique('alumnos')->ignore($alumno->id)->where(fn(Builder $query) => $query->where('deleted_at', null))],
+            'correo' => 'required|email',
             'calendarioTitulacion' => 'required',
             'ingreso' => 'required',
             'dictamen' => 'required',
+            'fechaNac' => 'date'
         ]);
         // Obtener el alumno a actualizar
-        $alumno = alumnos_model::where('codigo', 'like', "%" . $codigo)->first();
 
-        // Actualizar los datos del alumno
-        $alumno->Nombre = $request->nombre;
-        $alumno->correo = $request->correo;
-        $alumno->calendarioTitulacion = $request->calendarioTitulacion;
-        $alumno->ingreso = $request->ingreso;
 
-        $alumno->update();
-        // Verificar si el campo de sexo está presente en la solicitud y asignarlo al modelo
-        if ($request->filled('sexo')) {
-            $alumno->sexo = $request->sexo;
-        }
-
-        // Verificar si el campo de procedencia está presente en la solicitud y asignarlo al modelo
-        if ($request->filled('procedencia')) {
-            $alumno->procedencia = $request->procedencia;
-        }
-
-        // Verificar si el campo de fecha de nacimiento está presente en la solicitud y asignarlo al modelo
-        if ($request->filled('fechaNac')) {
-            $alumno->fechaNac = $request->fechaNac;
-        }
-
+        $alumno->update([
+            'Nombre' => $request->nombre,
+            'correo' => $request->correo,
+            'ingreso' => $request->ingreso,
+            'calendarioTitulacion' =>  $request->calendarioTitulacion,
+            'sexo' => isset($request->sexo) ? $request->sexo : 2,
+            'procedencia' => $request->procedencia,
+            'fechaNac' => isset($request->fechaNac) ? $request->fechaNac : null,
+        ]);
         // Verificar si el campo de dictamen está presente en la solicitud y asignarlo al modelo
         if ($request->filled('dictamen')) {
             $alumno->dictamen = implode(".", array_filter($request->dictamen));
@@ -293,9 +236,10 @@ class alumnosContorller extends Controller
 
 
         //return $alumno;
-        alert()->success('Exito', 'Se edito de forma correcta al alumno');
+        toast('<span style="color:#fff;">Se actualizo el alumno</span>', 'success')
+            ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
         // Redireccionar o devolver una respuesta JSON según tu necesidad
-        return redirect()->route('alumnos');
+        return redirect()->route('alumnos.show', $alumno->id);
     }
 
 
@@ -356,17 +300,13 @@ class alumnosContorller extends Controller
             alumnos_maestrosModel::create([
                 'id_tutor' => $request->maestro,
                 'codigo' => $codigoAlumno,
-
             ]);
         }
 
         return redirect()->route('gestionar-tutores');
     }
 
-
-
     //solicitud para las gráficas
-
 
     public function LlenadoComboBox()
     {
@@ -523,14 +463,16 @@ class alumnosContorller extends Controller
         return Excel::download(new GraficaExport($filteredResult), 'grafica.xlsx');
     }
 
-    public function sin_tutor()
+    public function delete(Request $request)
     {
-        $alumnos = alumnos_model::leftjoin('alumnos_maestros', 'alumnos_maestros.id_alumno', '=', 'alumnos.codigo')
-            ->select('alumnos.Nombre as nombre', 'alumnos.codigo', 'alumnos_maestros.id_maestro as tutor_actual')
-            ->where('alumnos_maestros.id_maestro', null)
-            ->where('alumnos.estatus', 1)->groupBy('alumnos.codigo')
-            ->toSql();
+        $alumno = alumnos_model::find($request->id);
+        if (!isset($alumno)) {
+            alert()->error('Error', 'Alumno no encontrado');
+            return redirect()->route('alumnos');
+        }
+        $alumno->delete();
 
-        return $alumnos;
+        alert()->success('Exito', 'El alumno se elimino de forma correcta');
+        return redirect()->route('alumnos');
     }
 }

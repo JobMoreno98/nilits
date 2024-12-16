@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class alumnos_model extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'alumnos';
     protected $primaryKey = 'id';
     protected $append = ['status'];
+
+    protected $guarded = [];
 
     protected $estatusPosibles = [
         '1' => '<b class="text-success">Activo</b>',

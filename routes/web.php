@@ -100,7 +100,7 @@ Route::get('/buscar-alumno/restricted', [alumnosContorller::class, 'buscarAllRes
 
 Route::get('buscar-alumno/all', [alumnosContorller::class, 'buscarAll'])->name('buscarAlumno/all')->middleware(['auth']);
 
-Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'editar'])->name('/alumnos/update/')->middleware(['auth']);
+Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'update'])->name('/alumnos/update/')->middleware(['auth']);
 
 
 //Ruta para el manejo de los maestros
@@ -179,3 +179,5 @@ Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios']
 Route::post('/alumnos-asigandos/{id}', [asesoresController::class, 'alumnos_asigandos'])->name('asigandos-alumnos')->middleware(['auth', isAdmin::class]);
 
 Route::post('/asignar-alumnos/{id}', [asesoresController::class, 'asignar_alumnos'])->name('asignar-alumnos')->middleware(['auth', isAdmin::class]);
+
+Route::put('/eliminar-alumno/{id}', [alumnosContorller::class, 'delete'])->name('alumnos.delete')->middleware(['auth', isAdmin::class]);
