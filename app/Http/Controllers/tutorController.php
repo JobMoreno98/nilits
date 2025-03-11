@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\alumnos_model;
+use App\Models\maestrosModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,18 +15,12 @@ class tutorController extends Controller
     $user = Auth::user();
 
     // Obtener los alumnos asociados al tutor actual y ordenarlos por 'dictamen' de manera descendente
-    $alumnos = DB::table('alumnos')
-                ->join('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-                ->where('alumno_tutor.id_tutor', '=', $user->nombre)
-                ->select('alumnos.*')
-                ->orderBy('alumnos.dictamen', 'desc') // Ordenar por 'dictamen' de manera descendente
-                ->get();
-
+    $alumnos = maestrosModel::with('tutorados')->where('id',$user->id)->first();
+    $alumnos = $alumnos->tutorados;
     // Mapear los resultados para incluir el nombre del estado
     foreach ($alumnos as $alumno) {
         $alumno->nombre_estado = $this->obtenerNombreEstado($alumno->procedencia);
     }
-
     return view('tutor.index')->with('alumnos', $alumnos);
 }
 
