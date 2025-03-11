@@ -26,7 +26,7 @@ class usuarioController extends Controller
         ]);
         // Si no existe y las contraseñas coinciden, crear el usuario
 
-        $usuario = ususario::create([
+        ususario::create([
             'nombre' => $request->nombre,
             'pass' =>  sha1($request->password),
             'nivel' => 0
