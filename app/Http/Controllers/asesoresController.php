@@ -142,7 +142,7 @@ class asesoresController extends Controller
             return redirect()->route('asesores');
         }
 
-        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('Nombre')->where('estatus', 1)->get();
+        $alumnos_sin_asesor = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('nombre_alumno')->where('estatus', 1)->get();
 
         return view('asesores.edit', compact('asesor', 'alumnos_sin_asesor'));
     }
@@ -189,6 +189,7 @@ class asesoresController extends Controller
 
     public function asignar_alumnos(Request $request,  $id)
     {
+       
         $asesor = maestrosModel::find($id);
         if (!isset($asesor)) {
             alert()->error('Error', 'Asesor no encontrado');
@@ -199,7 +200,6 @@ class asesoresController extends Controller
         foreach ($request->alumnos as $value) {
             $new_array[$value] = ['created_at' => now()];
         }
-
         $asesor->tutorados()->attach($new_array);
         toast('<span style="color:#fff;">Se actualizarón los alumnos del asesor</span>', 'success')
             ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();

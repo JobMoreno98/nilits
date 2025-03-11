@@ -28,12 +28,12 @@
             <div class="form-group  col-md-4 col-sm-12">
                 <label for="nombre">Nombre</label>
                 <input type="text" class="form-control" id="Nombre" name="Nombre" required
-                    value="{{ $asesor->Nombre }}">
+                    value="{{ $asesor->nombre }}">
             </div>
             <div class="form-group  col-md-4 col-sm-12">
                 <label for="Apellido">Apellidos</label>
                 <input type="text" class="form-control" id="Apellido" name="Apellido" required
-                    value="{{ $asesor->Apellido }}">
+                    value="{{ $asesor->apellido }}">
             </div>
             <div class="form-group  col-md-3 col-sm-12">
                 <label for="correo">Correo</label>
@@ -156,7 +156,7 @@
                                     name="alumnos[]" id="{{ $item->id }}">
 
                                 <label class="form-check-label" for="{{ $item->id }}">
-                                    <b>Nombre:</b> {{ $item->Nombre }} <br>
+                                    <b>Nombre:</b> {{ $item->nombre_alumno }} <br>
                                     <b>Estatus:</b> {!! $estatusPosibles[$item->estatus] !!}
                                 </label>
                             </div>

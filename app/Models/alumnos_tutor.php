@@ -12,22 +12,6 @@ class alumnos_tutor extends Model
     use Searchable;
     protected $table = 'alumnos_tutor';
 
-
-    public function searchableAs()
-    {
-        return 'codigo';
-    }
-
-    public function getScoutKey()
-    {
-        return $this->codigo;
-    }
-
-    public function getScoutKeyName()
-    {
-        return 'codigo';
-    }
-
     public function toSearchableArray()
     {
         return [

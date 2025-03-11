@@ -12,6 +12,7 @@ class maestrosModel extends Model
 
     public function tutorados()
     {
-        return $this->belongsToMany(alumnos_model::class, 'alumno_maestro', 'maestro_id',  'alumno_id')->withPivot('activo')->wherePivot('activo', 1);
+        return $this->belongsToMany(alumnos_model::class, 'alumno_maestro', 'maestro_id',  'alumno_id')
+        ->withPivot('activo')->wherePivot('activo', 1);
     }
 }

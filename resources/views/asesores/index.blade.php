@@ -21,7 +21,7 @@
                     @foreach ($maestros as $maestro)
                         <tr>
                             <td>{{ $maestro->codigo }}</td>
-                            <td>{{ $maestro->Nombre }} {{ $maestro->Apellido }}</td>
+                            <td>{{ $maestro->nombre }} {{ $maestro->apellido }}</td>
                             <td>{{ $maestro->correo }}</td>
                             <td>
                                 <a href="{{ route('asesor.show', $maestro->codigo) }}" class="btn">
@@ -133,98 +133,6 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Modal para editar maestro --}}
-            <div class="modal fade" id="editAsesor" tabindex="-1" role="dialog"
-                aria-labelledby="editAlumnoModalLabel" aria-hidden="true">
-
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editAlumnoModalLabel">Editar Maestro
-                                {{ $maestro->Nombre }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form method="POST" action="{{ route('/maestros/update/', ['codigo' => $maestro->codigo]) }}">
-                            @csrf
-                            {{ method_field('PUT') }}
-                            <div class="modal-body">
-                                <!-- Campos del formulario -->
-
-                                <div class="form-group">
-                                    <label for="codigo">Código</label>
-                                    <input type="text" class="form-control" id="codigo" name="codigo"
-                                        value="{{ $maestro->codigo }}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nombre">Nombre</label>
-                                    <input type="text" class="form-control" id="Nombre" name="Nombre" required
-                                        value="{{ $maestro->Nombre }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="Apellido">Apellidos</label>
-                                    <input type="text" class="form-control" id="Apellido" name="Apellido" required
-                                        value="{{ $maestro->Apellido }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Correo</label>
-                                    <input type="email" class="form-control" id="correo" name="correo"
-                                        value="{{ $maestro->correo }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Telefono fijo</label>
-                                    <input type="text" class="form-control" id="telefonoFijo" name="telefonoFijo"
-                                        value="{{ $maestro->telefonoFijo }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Telefono celular</label>
-                                    <input type="text" class="form-control" id="telCel" name="telCel"
-                                        value="{{ $maestro->telCel }}">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="correo">Extencion</label>
-                                    <input type="number" class="form-control" id="telExt" name="telExt"
-                                        value="{{ $maestro->telExt }}">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="nombramiento">Nombramiento</label>
-                                    <input type="text" class="form-control" id="nombramiento" name="nombramiento"
-                                        value="{{ $maestro->nombramiento }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cargaHoraria">Carga horaria</label>
-                                    <input type="text" class="form-control" id="cargaHoraria" name="cargaHoraria"
-                                        value="{{ $maestro->cargaHoraria }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Adscripcion</label>
-                                    <input type="text" class="form-control" id="adscripcion" name="adscripcion"
-                                        value="{{ $maestro->adscripcion }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Grado</label>
-                                    <input type="text" class="form-control" id="grado" name="grado"
-                                        value="{{ $maestro->grado }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Observaciones</label>
-                                    <input type="text" class="form-control" id="observaciones" name="observaciones"
-                                        value="{{ $maestro->observaciones }}">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Guardar
-                                    Cambios</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
