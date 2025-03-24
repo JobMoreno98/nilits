@@ -7,7 +7,7 @@
         <h2 class="mb-4 text-light p-1 px-3" style="border-radius: 0px 10px;background-color: rgb(82, 82, 255)">Gestionar
             Alumnos</h2>
         <div class="d-flex flex-wrap mb-3 align-items-center justify-content-evenly">
-            <a href="{{ route('/alumnos/sintutor') }}"
+            <a href="{{ route('alumnos.sin-tutor') }}"
                 class="btn text-light col-md-2 me-1 btn-sm" style="background-color: rgb(0, 0, 169)">Ver alumnos sin
                 tutor</a>
 
@@ -86,7 +86,7 @@
                             @csrf
                             <!-- Código -->
                             <div class="form-group">
-                                <label for="codigo">Codigo</label>
+                                <label for="codigo">Código</label>
                                 <input type="text" class="form-control" name="codigo" id="codigo" required>
                             </div>
 
@@ -98,19 +98,19 @@
 
                             <!-- Teléfono -->
                             <div class="form-group">
-                                <label for="telefono">Telefono</label>
-                                <input type="text" name="telefono" class="form-control" id="telefono" pattern="[0-9]*">
+                                <label for="telefono">Télefono</label>
+                                <input type="text" name="telefono" class="form-control" id="telefono" >
                             </div>
 
                             <!-- Correo -->
                             <div class="form-group">
                                 <label for="correo">Correo</label>
-                                <input type="email" name="correo" class="form-control" id="correo">
+                                <input type="text" name="correo" class="form-control" id="correo">
                             </div>
 
                             <!-- Género -->
                             <div class="form-group">
-                                <label for="genero">Genero</label>
+                                <label for="genero">Género</label>
                                 <select class="form-control" name="sexo" id="sexo">
                                     <option value="0">Masculino</option>
                                     <option value="1">Femenino</option>
@@ -167,7 +167,7 @@
                                 <input type="text" class="form-control" id="dictamen" name="dictamen">
                             </div>
                             <div class="form-group">
-                                <label for="genero">estatus</label>
+                                <label for="genero">Estatus</label>
                                 <select class="form-control" name="estatus" id="estatus">
                                     <option value="1">Activo</option>
                                     <option value="4">Baja</option>
@@ -176,11 +176,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="genero">tutor</label>
+                                <label for="genero">Tutor</label>
                                 <select class="form-control" name="tutor" id="tutor">
                                     @foreach ($tutores as $tutor)
-                                        <option value="{{ $tutor->codigo }}">{{ $tutor->Nombre }}
-                                            {{ $alumno->tutor_apellido }}</option>
+                                        <option value="{{ $tutor->codigo }}">{{ $tutor->nombre }}
+                                            {{ $tutor->apellido }}</option>
                                     @endforeach
                                 </select>
                             </div>

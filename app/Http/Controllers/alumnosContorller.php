@@ -64,7 +64,7 @@ class alumnosContorller extends Controller
         $alumnos = alumnos_model::with('tutores')->get();
 
         // Listar a los maestros para poder asignarlos al crear un registro
-        $tutores = maestrosModel::all();
+        $tutores = maestrosModel::orderBy('nombre')->where('activo', 1)->get();
         return view('alumnos.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos', 'fechasTitulacion'));
     }
 
@@ -112,17 +112,14 @@ class alumnosContorller extends Controller
 
     //Mostrar alumnos sin tutor
 
-    public function alumnos_sin_tutor()
+    public function sin_tutor()
     {
-        $alumnos = DB::table('alumnos')
-            ->leftJoin('alumnos_maestros', 'alumnos.codigo', '=', 'alumnos_maestros.id_alumno')
-            ->leftJoin('maestros', 'alumnos_maestros.id_maestro', '=', 'maestros.codigo')
+        $alumnos = alumnos_model::leftJoin('alumno_maestro', 'alumnos.codigo', '=', 'alumno_maestro.alumno_id')
+            ->leftJoin('maestros', 'alumno_maestro.maestro_id', '=', 'maestros.codigo')
             ->whereNull('maestros.codigo')
             ->where('alumnos.estatus', '=', 1) // Filtrar por estatus igual a 1
             ->select('alumnos.*')
-            ->toSql();
-
-        dd($alumnos);
+            ->get();
 
         $tutores = maestrosModel::all();
 
