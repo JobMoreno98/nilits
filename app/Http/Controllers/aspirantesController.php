@@ -4,67 +4,96 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactanosMailable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\alumno_tutorModel;
 use App\Models\alumnos_model;
 use App\Models\maestrosModel;
 use Illuminate\Support\Facades\DB;
-use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Validation\Rule;
 
 class aspirantesController extends Controller
 {
-    // public function indexAs(){
-
-    //     return view('aspirantes.index');
-
-    //     return "hola";
-
+    public $estados = [
+        0 => 'Aguascalientes',
+        1 => 'Baja California',
+        2 => 'Baja California Sur',
+        3 => 'Campeche',
+        4 => 'Chiapas',
+        5 => 'Chihuahua',
+        6 => 'Ciudad de México',
+        7 => 'Coahuila',
+        8 => 'Colima',
+        9 => 'Durango',
+        10 => 'Guanajuato',
+        11 => 'Guerrero',
+        12 => 'Hidalgo',
+        13 => 'Jalisco',
+        14 => 'México',
+        15 => 'Michoacán',
+        16 => 'Morelos',
+        17 => 'Nayarit',
+        18 => 'Nuevo León',
+        19 => 'Oaxaca',
+        20 => 'Puebla',
+        21 => 'Querétaro',
+        22 => 'Quintana Roo',
+        23 => 'San Luis Potosí',
+        24 => 'Sinaloa',
+        25 => 'Sonora',
+        26 => 'Tabasco',
+        27 => 'Tamaulipas',
+        28 => 'Tlaxcala',
+        29 => 'Veracruz',
+        30 => 'Yucatán',
+        31 => 'Zacatecas',
+        32 => 'Desconocida'
+    ];
 
     public function index()
     {
-        return view('aspirantes.index');
+        return view('aspirantes.index')->with('estados', $this->estados);
     }
-
-
 
     // creación de un nuevo Aspirante
     public function store(Request $request)
     {
-
-
         // dd($request->all());
-        $validatedData = $request->validate([
-            'codigo' => 'required',
+        $validator = Validator::make($request->all(), [
+            'codigo' => 'required|unique:alumnos,codigo',
             'nombre' => 'required',
             'telefono' => 'required',
             'sexo' => 'required',
             'procedencia' => 'required',
-            'correo' => 'required',
+            'correo' => ['required', 'email', Rule::unique('alumnos')->where(fn(Builder $query) => $query->where('deleted_at', null))],
             'fechaNac' => 'required',
-            'dictamen' => 'required',
         ]);
 
-
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => true,
+                'message' => implode("<br/>", $validator->messages()->all()),
+            ])->withInput($request->all());
+        }
 
         $alumno = new alumnos_model();
 
-        $alumno->codigo = $validatedData['codigo'];
-        $alumno->Nombre = $validatedData['nombre'];
-        $alumno->telefono = $validatedData['telefono'];
-        $alumno->correo = $validatedData['correo'];
-        $alumno->sexo = $validatedData['sexo'];
-        $alumno->procedencia = $validatedData['procedencia'];
-        $alumno->fechaNac = $validatedData['fechaNac'];
-        $alumno->dictamen = $validatedData['dictamen'];
+        $alumno->codigo = $request['codigo'];
+        $alumno->Nombre = $request['nombre'];
+        $alumno->telefono = $request['telefono'];
+        $alumno->correo = $request['correo'];
+        $alumno->sexo = $request['sexo'];
+        $alumno->procedencia = $request['procedencia'];
+        $alumno->fechaNac = $request['fechaNac'];
+        $alumno->dictamen = null;
         $alumno->estatus = 1;
-
         $alumno->edad = ' ';
         $alumno->tipo = 'N/A';
         $alumno->modalidad = 'N/A';
         $alumno->evaluacion = 0;
         $alumno->tipoTitulacion = 'N/A';
-        $alumno->fechaTitulacion = $request->fechaTitulacion ?? '2000-01-01';
+        $alumno->fechaTitulacion = '2000-01-01';
         $alumno->calendarioTitulacion = ' ';
         $alumno->libro = ' ';
         $alumno->ingreso = ' ';
@@ -72,21 +101,22 @@ class aspirantesController extends Controller
         $alumno->libro = ' ';
         $alumno->revisado = 0;
         $alumno->carrera = 'NILITS';
-        $alumno->moda = 'No convencional';
         $alumno->ciclo = '';
 
         $alumno->save();
 
-
-
         Mail::to($alumno->correo)->send(new ContactanosMailable($alumno));
 
         return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente y correo de confirmación enviado.');
-
-        return redirect()->back()->with('success', 'ASPIRANTE creado exitosamente');
     }
 
 
+    public function admin()
+    {
+        $aspirantes = alumnos_model::where('revisado', 0)->get();
+        $tutores = maestrosModel::orderBy('nombre')->where('activo', 1)->get();
+        return view('aspirantes.listado', compact('aspirantes', 'tutores'))->with('estados', $this->estados);
+    }
     //funcion para solo poder ver a los alumnos
     public function alumnado_restringido()
     {
@@ -118,52 +148,7 @@ class aspirantesController extends Controller
         return view('almunado.index', compact('totalRegistros', 'tutores', 'totalEgresados', 'totalActivos', 'totalBajas', 'alumnos'));
     }
 
-
-
-    private function obtenerNombreEstado($procedencia)
-    {
-        $estados = [
-            0 => 'Aguascalientes',
-            1 => 'Baja California',
-            2 => 'Baja California Sur',
-            3 => 'Campeche',
-            4 => 'Chiapas',
-            5 => 'Chihuahua',
-            6 => 'Ciudad de México',
-            7 => 'Coahuila',
-            8 => 'Colima',
-            9 => 'Durango',
-            10 => 'Guanajuato',
-            11 => 'Guerrero',
-            12 => 'Hidalgo',
-            13 => 'Jalisco',
-            14 => 'México',
-            15 => 'Michoacán',
-            16 => 'Morelos',
-            17 => 'Nayarit',
-            18 => 'Nuevo León',
-            19 => 'Oaxaca',
-            20 => 'Puebla',
-            21 => 'Querétaro',
-            22 => 'Quintana Roo',
-            23 => 'San Luis Potosí',
-            24 => 'Sinaloa',
-            25 => 'Sonora',
-            26 => 'Tabasco',
-            27 => 'Tamaulipas',
-            28 => 'Tlaxcala',
-            29 => 'Veracruz',
-            30 => 'Yucatán',
-            31 => 'Zacatecas'
-        ];
-
-        return $estados[$procedencia] ?? 'Desconocido';
-    }
-
-
-
     //Mostrar alumnos sin tutor
-
     public function alumno_sin_tutor()
     {
         $alumnos = DB::table('alumnos')
@@ -186,49 +171,7 @@ class aspirantesController extends Controller
         return response()->json($alumno); // Devolver la vista parcial con los detalles del alumno
     }
 
-
-    public function asignar_tutor(Request $request)
-    {
-        $validatedData = $request->validate([
-            //'codigo' => 'required',
-            //'nombre' => 'required',
-            //'telefono' => 'required',
-            //'sexo' => 'required',
-            //'procedencia' => 'required',
-            //'correo' => 'required',
-            //'fechaNac' => 'required',
-            //'dictamen' => 'required',
-            //'estatus' => 'required',
-            //'tutor' => 'required'
-            // Agrega aquí el resto de las validaciones necesarias
-        ]);
-
-
-        $tutor_alumno = new alumno_tutorModel();
-        //$alumno->codigo = $validatedData['codigo'];
-        //$alumno->Nombre = $validatedData['nombre'];
-        //$alumno->telefono = $validatedData['telefono'];
-        //$alumno->correo = $validatedData['correo'];
-        //$alumno->sexo = $validatedData['sexo'];
-        //$alumno->procedencia = $validatedData['procedencia'];
-        //$alumno->fechaNac = $validatedData['fechaNac'];
-        //$alumno->dictamen = $validatedData['dictamen'];
-        //$alumno->estatus = $validatedData['estatus'];
-        $tutor_alumno->codigo = $request->codigo;
-        $tutor_alumno->id_tutor = $request->tutor;
-        $tutor_alumno->activo = 1;
-        // Asigna el resto de los campos
-        $tutor_alumno->save();
-        //$alumno->update();
-
-        return redirect()->back()->with('success', 'Alumno creado exitosamente');
-    }
-
-
     // Función para crear un nuevo Aspirante
-
-
-
     //update function
     public function editar(Request $request, $codigo)
     {
@@ -281,79 +224,6 @@ class aspirantesController extends Controller
         // Redireccionar o devolver una respuesta JSON según tu necesidad
         return redirect()->route('alumnos');
     }
-
-
-    public function buscar(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Realizar la consulta para buscar alumnos por nombre
-
-        $alumnos = alumnos_model::where('Nombre', 'like', '%' . $query . '%')
-            ->orWhere('alumnos.codigo', 'like', '%' . $query . '%')
-            ->paginate(10);
-        $tutores = maestrosModel::all();
-
-
-        // Devolver la vista con los resultados de la búsqueda
-        return view('alumnos.alumnos_sin_tutor', ['alumnos' => $alumnos, 'tutores' => $tutores]);
-    }
-
-    public function buscarAll(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Realizar la consulta para buscar alumnos por nombre
-        $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->where('alumnos.Nombre', 'like', '%' . $query . '%')
-            ->orWhere('alumnos.codigo', 'like', '%' . $query . '%')
-            ->paginate(10);
-
-
-        $totalRegistros = alumnos_model::count();
-        $totalEgresados = alumnos_model::where('estatus', 3)->count();
-        $totalActivos = alumnos_model::where('estatus', 1)->count();
-        $totalBajas = alumnos_model::where('estatus', 4)->count();
-
-        $tutores = maestrosModel::all();
-
-        // Devolver la vista con los resultados de la búsqueda
-        return view('alumnos.index', ['alumnos' => $alumnos, 'tutores' => $tutores, 'totalRegistros' => $totalRegistros, 'totalEgresados' => $totalEgresados, 'totalActivos' => $totalActivos, 'totalBajas' => $totalBajas]);
-    }
-
-
-    //busqueda en la seccion de ver alunado
-    public function buscarAllRestricted(Request $request)
-    {
-        $query = $request->input('query');
-
-
-        $alumnos = DB::table('alumnos')
-            ->leftJoin('alumno_tutor', 'alumnos.codigo', '=', 'alumno_tutor.codigo')
-            ->leftJoin('maestros', 'alumno_tutor.id_tutor', '=', 'maestros.codigo')
-            ->select('alumnos.*', 'maestros.Nombre as tutor_nombre', 'maestros.Apellido as tutor_apellido')
-            ->where('alumnos.Nombre', 'like', '%' . $query . '%')
-            ->orWhere('alumnos.codigo', 'like', '%' . $query . '%')
-            ->paginate(10);
-
-
-        $totalRegistros = alumnos_model::count();
-        $totalEgresados = alumnos_model::where('estatus', 3)->count();
-        $totalActivos = alumnos_model::where('estatus', 1)->count();
-        $totalBajas = alumnos_model::where('estatus', 4)->count();
-
-        foreach ($alumnos as $alumno) {
-            $alumno->nombre_estado = $this->obtenerNombreEstado($alumno->procedencia);
-        }
-        $tutores = maestrosModel::all();
-
-        // Devolver la vista con los resultados de la búsqueda
-        return view('almunado.index', ['alumnos' => $alumnos, 'tutores' => $tutores, 'totalRegistros' => $totalRegistros, 'totalEgresados' => $totalEgresados, 'totalActivos' => $totalActivos, 'totalBajas' => $totalBajas]);
-    }
-
 
     public function asignacion(Request $request)
     {

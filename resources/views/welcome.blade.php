@@ -3,6 +3,7 @@
 @section('title', 'Iniciar Sesión')
 
 @section('content')
+
     <div class="text-center mb-4">
         <img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt="Logo" style="width: 170px;">
     </div>
@@ -20,7 +21,6 @@
         <button class="btn btn-lg text-light" style="background-color: rgb(0, 0, 169)" type="submit">Iniciar
             Sesión</button>
     </form>
-
     <a class="btn btn-lg  text-light" style="background-color: rgb(0, 0, 169)" href="{{ route('registro-usuario') }}">Darme
         de
         Alta</a>

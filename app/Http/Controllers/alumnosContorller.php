@@ -61,7 +61,7 @@ class alumnosContorller extends Controller
 
         // Obtener las fechas de titulación únicas
         $fechasTitulacion = alumnos_model::select('fechaTitulacion')->distinct()->get();
-        $alumnos = alumnos_model::with('tutores')->get();
+        $alumnos = alumnos_model::with('tutores')->where('revisado', 1)->get();
 
         // Listar a los maestros para poder asignarlos al crear un registro
         $tutores = maestrosModel::orderBy('nombre')->where('activo', 1)->get();
@@ -114,14 +114,19 @@ class alumnosContorller extends Controller
 
     public function sin_tutor()
     {
-        $alumnos = alumnos_model::leftJoin('alumno_maestro', 'alumnos.codigo', '=', 'alumno_maestro.alumno_id')
-            ->leftJoin('maestros', 'alumno_maestro.maestro_id', '=', 'maestros.codigo')
-            ->whereNull('maestros.codigo')
-            ->where('alumnos.estatus', '=', 1) // Filtrar por estatus igual a 1
-            ->select('alumnos.*')
-            ->get();
+        $estatusPosibles = [
+            '1' => '<b class="text-success">Activo</b>',
+            '3' => '<b class="text-warning">Egresado</b>',
+            '4' => '<b class="text-danger">Baja</b>',
+        ];
 
-        $tutores = maestrosModel::all();
+        $alumnos = DB::table('alumnos_tutor')->where('tutor_nombre', null)->orderBy('nombre_alumno')->where('estatus', 1)->get();
+        foreach ($alumnos as $key => $value) {
+            $value->status = $estatusPosibles[$value->estatus];
+            $value->dictamen_actual = explode(".", $value->dictamen)[0];
+        }
+
+        $tutores = maestrosModel::where('activo', 1)->get();
 
         return view('alumnos.alumnos_sin_tutor', compact('alumnos', 'tutores'));
     }
@@ -174,6 +179,7 @@ class alumnosContorller extends Controller
         $alumno->revisado = 0;
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
+
         $tutor_alumno->codigo = $validatedData['codigo'];
         $tutor_alumno->id_tutor = $validatedData['tutor'];
         $tutor_alumno->activo = 1;
@@ -195,20 +201,17 @@ class alumnosContorller extends Controller
         }
         $request->validate([
             'nombre' => ['required', Rule::unique('alumnos')->ignore($alumno->id)->where(fn(Builder $query) => $query->where('deleted_at', null))],
-            'correo' => 'required|email',
-            'calendarioTitulacion' => 'required',
+            'correo' => ['required', 'email', Rule::unique('alumnos')->ignore($alumno->id)],
             'ingreso' => 'required',
             'dictamen' => 'required',
             'fechaNac' => 'date'
         ]);
         // Obtener el alumno a actualizar
-
-
         $alumno->update([
             'Nombre' => $request->nombre,
             'correo' => $request->correo,
             'ingreso' => $request->ingreso,
-            'calendarioTitulacion' =>  $request->calendarioTitulacion,
+            'calendarioTitulacion' =>  isset($request->calendarioTitulacion) ? $request->calendarioTitulacion : '',
             'sexo' => isset($request->sexo) ? $request->sexo : 2,
             'procedencia' => $request->procedencia,
             'fechaNac' => isset($request->fechaNac) ? $request->fechaNac : null,
@@ -218,6 +221,9 @@ class alumnosContorller extends Controller
             $alumno->dictamen = implode(".", array_filter($request->dictamen));
         }
 
+        if (isset($request->alumno)) {
+            $alumno->revisado = 1;
+        }
         // Verificar si el campo de estatus está presente en la solicitud y asignarlo al modelo
         if ($request->filled('estatus')) {
             $alumno->estatus = $request->estatus;
@@ -233,10 +239,9 @@ class alumnosContorller extends Controller
 
 
         //return $alumno;
-        toast('<span style="color:#fff;">Se actualizo el alumno</span>', 'success')
-            ->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
+        //toast('', 'success')->autoClose(5000)->timerProgressBar()->position('top-end')->background(' #198754')->toHtml();
         // Redireccionar o devolver una respuesta JSON según tu necesidad
-        return redirect()->route('alumnos.show', $alumno->id);
+        return redirect()->route('alumnos.show', $alumno->id)->with('success', '<span>Se actualizo el alumno</span>');
     }
 
 
@@ -367,7 +372,6 @@ class alumnosContorller extends Controller
     }
 
 
-
     public function LlenadoComboBoxEstatus()
     {
         $opciones = alumnos_model::distinct('estatus')->pluck('estatus');
@@ -444,9 +448,6 @@ class alumnosContorller extends Controller
                 $result['mujeres'] = $count->count;
             }
         }
-
-
-
 
         $filteredResult = [];
         if ($showHombres) {

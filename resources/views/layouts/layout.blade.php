@@ -17,8 +17,6 @@
     @yield('styles')
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link
@@ -42,8 +40,7 @@
 
 <body>
     <div id="preloader"></div>
-    @include('sweetalert::alert')
-    <nav class="navbar navbar-expand-md bg-light navbar-dark">
+    <nav class="navbar navbar-expand-md bg-light navbar-light w-100">
         <div class="container">
             <span class="me-2 pe-2 border-end border-dark">
                 <a href="{{ route('/') }}"><img src="{{ asset('imgs/logo_NILITS23_color.png') }}" alt=""
@@ -53,7 +50,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon "></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -77,7 +74,7 @@
                             class="text-decoration-none text-dark text-uppercase btn btn-border">numeralia</a>
                     @endcan
                     @can('Aspirantes#ver')
-                        <a href="{{ route('aspirante') }}"
+                        <a href="{{ route('aspirantes.admin') }}"
                             class="text-decoration-none text-dark text-uppercase btn btn-border">Aspirantes</a>
                     @endcan
                     @can('Normatividad#ver')
@@ -100,7 +97,7 @@
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link text-dark" href="{{ route('/') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
 
@@ -133,12 +130,11 @@
             </div>
         </div>
     </nav>
-    <div>
+    <div class="w-100">
         @yield('content')
     </div>
     <div id="footer">
-
-        <div class="col-sm-12 p-3 mt-4 bg-light">
+        <div class="col-sm-12 p-3 bg-light">
             <p class="text-center  m-0 text-uppercase">CENTRO UNIVERSITARIO DE CIENCIAS SOCIALES Y HUMANIDADES |
                 Nivelación a
                 la Licenciatura en Trabajo Social </p>
@@ -181,6 +177,33 @@
     </script>
 
     @yield('scripts')
+    <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
+    <script>
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            showCloseButton: true
+        });
+    </script>
+    @if (session('success'))
+        <script>
+            Toast.fire({
+                title: "{!! session('success') !!}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            Toast.fire({
+                title: "{!! session('message') !!}",
+                icon: "error"
+            });
+        </script>
+    @endif
     <script src="{{ asset('js/main.js') }}"></script>
 </body>
 

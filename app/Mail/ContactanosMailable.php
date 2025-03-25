@@ -35,7 +35,7 @@ class ContactanosMailable extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('ezequielmora.chk@gmail.com', 'Ezequiel Mora'),
+            from: new Address('coordinacion.nilits@academicos.udg.mx', 'Nivelación a la Licenciatura en Trabajo Social - CUCSH - UDG'),
             subject: 'Confirmación de Registro de Aspirante',
         );
     }

@@ -1,9 +1,8 @@
 @extends('layouts.layout')
 
-@section('title', 'Ver Alumno')
+@section('title', 'Editar Alumno')
 
 @section('content')
-
     <div class="container">
         <form method="POST" action="{{ Auth::user()->can('Alumnos#editar') ? route('/alumnos/update/', $alumno->id) : '' }}"
             id="formularioData">
@@ -106,6 +105,7 @@
                 <div class="form-group mx-1 col-sm-12 col-md-2">
                     <label for="estatus">Estatus</label>
                     <select class="form-control" id="estatus" name="estatus">
+                        <option disabled selected>Elegir</option>
                         <option {{ $alumno->estatus == 1 ? 'selected' : '' }} value="1">Activo</option>
                         <option {{ $alumno->estatus == 4 ? 'selected' : '' }} value="3">Egresado</option>
                         <option {{ $alumno->estatus == 3 ? 'selected' : '' }} value="4">Baja</option>
@@ -126,11 +126,16 @@
                     <input type="text" class="form-control" id="libro" value="{{ $alumno->libro }}"
                         name="libro">
                 </div>
+                @if ($alumno->revisado == 0)
+                    <div class="form-check form-switch col-sm-12 col-md-3">
+                        <input class="form-check-input" name="alumno" type="checkbox" role="switch" id="alumno">
+                        <label class="form-check-label" for="alumno">Alumno</label>
+                    </div>
+                @endif
 
                 <div class="col-sm-12">
                     <div class="form-group mx-1 d-flex flex-column">
                         <h4><label for="dictamen">Dictámenes</label></h4>
-
                         <div class="col-md-3 mx-1">
                             <p>Listado de dictamenes</p>
                             @can('Alumnos#editar')

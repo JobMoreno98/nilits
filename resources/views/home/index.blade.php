@@ -66,7 +66,7 @@
             @can('Aspirantes#ver')
                 <!-- Tarjeta Aspirantes -->
                 <div class="col-md-3 mb-4 mx-2">
-                    <a href="{{ route('aspirante') }}" style="color: black; font-family: arial; text-decoration: none ">
+                    <a href="{{ route('aspirantes.admin') }}" style="color: black; font-family: arial; text-decoration: none ">
                         <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">Aspirantes</h5>

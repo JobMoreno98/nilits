@@ -23,7 +23,7 @@
                     @foreach ($alumnos as $alumno)
                     <tr>
                         <td>{{ $alumno->codigo }}</td>
-                        <td>{{ $alumno->Nombre }}</td>
+                        <td>{{ $alumno->nombre_alumno }}</td>
                         <td>{{ $alumno->correo }}</td>
                         <td>
                             {!! $alumno->status !!}

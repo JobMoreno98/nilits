@@ -1,6 +1,5 @@
 <?php
 
-use App\Mail\ContactanosMailable;
 use App\Http\Controllers\alumnosContorller;
 use App\Http\Controllers\asesoresController;
 use App\Http\Controllers\aspirantesController;
@@ -95,51 +94,70 @@ Route::get('/buscar-alumno', [alumnosContorller::class, 'buscar'])->name('buscar
 
 
 //Busqueda
-
+/*
 Route::get('/buscar-alumno/restricted', [alumnosContorller::class, 'buscarAllRestricted'])->name('/buscar-alumno/restricted')->middleware(['auth']);
 
 Route::get('buscar-alumno/all', [alumnosContorller::class, 'buscarAll'])->name('buscarAlumno/all')->middleware(['auth']);
 
-Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'update'])->name('/alumnos/update/')->middleware(['auth']);
 
-
-//Ruta para el manejo de los maestros
-
-Route::get('asesores', [asesoresController::class, 'index'])->name('asesores')->middleware(['auth']);
-
-Route::get('tutor', [tutorController::class, 'index'])->name('tutor')->middleware(['auth']);
-
-Route::get('gestionar-tutores', [asesoresController::class, 'getionarT'])->name('gestionar-tutores')->middleware(['auth']);
-
-Route::get('/maestros/tutorados/{maestroId}', [asesoresController::class, 'getTutorados'])->name('/maestros/tutorados/')->middleware(['auth']);
-
-Route::put('/maestros/update/{codigo}', [asesoresController::class, 'actualizarMaestro'])->name('/maestros/update/');
-
-Route::post('/maestros/store', [asesoresController::class, 'store'])->name('/maestros/store');
-
-//PDF controller
-
-Route::get('/generar-oficio-asignacion/{codigo}', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion');
-Route::get('/generar-constancia-tutoria/{codigo}', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria')->middleware(['auth', isAdmin::class]);
+*/
 
 
 //Ruta numeralia
+Route::middleware('auth')->group(function () {
+    Route::put('/alumnos/update/{codigo}', [alumnosContorller::class, 'update'])->name('/alumnos/update/')->middleware([isAdmin::class]);
 
-Route::get('numeralia', [numeraliaController::class, 'index'])->name('numeralia');
+    Route::get('numeralia', [numeraliaController::class, 'index'])->name('numeralia');
 
-Route::get('grafica', [alumnosContorller::class, 'obtenerDatosGrafica'])->name('grafica');
+    Route::get('grafica', [alumnosContorller::class, 'obtenerDatosGrafica'])->name('grafica');
 
-Route::get('grafica-combo', [alumnosContorller::class, 'LlenadoComboBox'])->name('grafica-combo');
+    Route::get('grafica-combo', [alumnosContorller::class, 'LlenadoComboBox'])->name('grafica-combo');
 
-Route::get('grafica-dictamen', [alumnosContorller::class, 'LlenadoComboBoxDictamen'])->name('grafica-dictamen');
+    Route::get('grafica-dictamen', [alumnosContorller::class, 'LlenadoComboBoxDictamen'])->name('grafica-dictamen');
 
-Route::get('grafica-estatus', [alumnosContorller::class, 'LlenadoComboBoxEstatus'])->name('grafica-estatus');
+    Route::get('grafica-estatus', [alumnosContorller::class, 'LlenadoComboBoxEstatus'])->name('grafica-estatus');
 
-Route::get('grafica-ciclo', [alumnosContorller::class, 'LlenadoComboBoxCiclo'])->name('grafica-ciclo');
+    Route::get('grafica-ciclo', [alumnosContorller::class, 'LlenadoComboBoxCiclo'])->name('grafica-ciclo');
 
-Route::get('grafica-ingreso', [alumnosContorller::class, 'LlenadoComboBoxIngreso'])->name('grafica-ingreso');
+    Route::get('grafica-ingreso', [alumnosContorller::class, 'LlenadoComboBoxIngreso'])->name('grafica-ingreso');
 
-Route::get('export-grafica', [alumnosContorller::class, 'exportGrafica'])->name('export-grafica');
+    Route::get('export-grafica', [alumnosContorller::class, 'exportGrafica'])->name('export-grafica');
+    //Ruta normatividad
+
+    Route::get('normatividad', [normatividadController::class, 'indexNo'])->name('normatividad');
+
+
+    // Asesores
+
+    Route::get('asesor/{asesor}', [asesoresController::class, 'show'])->middleware('auth')->name('asesor.show');
+
+    Route::put('/asesor/{id}/delete', [asesoresController::class, 'delete'])->name('asesor.delete')->middleware([isAdmin::class]);
+
+    Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name('alumnos.sin-tutor');
+
+    Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');
+
+    //PDF controller
+    Route::get('/generar-oficio-asignacion/{codigo}', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion')->middleware([isAdmin::class]);
+
+    Route::get('/generar-constancia-tutoria/{codigo}', [PDFController::class, 'constanciaTutoria'])->name('generar-constancia-tutoria')->middleware([isAdmin::class]);
+
+    //Ruta para el manejo de los maestros
+    Route::get('asesores', [asesoresController::class, 'index'])->name('asesores')->middleware(['auth']);
+
+    Route::get('tutor', [tutorController::class, 'index'])->name('tutor')->middleware(['auth']);
+
+    Route::get('gestionar-tutores', [asesoresController::class, 'getionarT'])->name('gestionar-tutores')->middleware(['auth']);
+
+    Route::get('/maestros/tutorados/{maestroId}', [asesoresController::class, 'getTutorados'])->name('/maestros/tutorados/')->middleware(['auth']);
+
+    Route::put('/maestros/update/{codigo}', [asesoresController::class, 'actualizarMaestro'])->name('/maestros/update/');
+
+    Route::post('/maestros/store', [asesoresController::class, 'store'])->name('/maestros/store');
+
+    Route::get('/aspirantes-admin', [aspirantesController::class, 'admin'])->name('aspirantes.admin');
+});
+
 
 
 // Route::get('/export', [alumnosContorller::class, 'export'])->name('export');
@@ -148,7 +166,7 @@ Route::get('export-grafica', [alumnosContorller::class, 'exportGrafica'])->name(
 
 //!Ruta aspirantes
 
-Route::get('aspirante', [aspirantesController::class, 'index'])->name('aspirante');
+Route::get('aspirante', [aspirantesController::class, 'index'])->name('aspirantes.index');
 
 Route::post('/aspirante/crear', [aspirantesController::class, 'store'])->name('aspirantes.store');
 
@@ -159,21 +177,7 @@ Route::get('contactanos', function () {
 
 
 
-//Ruta normatividad
 
-Route::get('normatividad', [normatividadController::class, 'indexNo'])->name('normatividad');
-
-
-// Asesores
-
-Route::get('asesor/{asesor}', [asesoresController::class, 'show'])->middleware('auth')->name('asesor.show');
-
-Route::put('/asesor/{id}/delete', [asesoresController::class, 'delete'])->name('asesor.delete')->middleware(['auth', isAdmin::class]);
-
-Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name('alumnos.sin-tutor');
-
-
-Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');
 
 
 Route::post('/alumnos-asigandos/{id}', [asesoresController::class, 'alumnos_asigandos'])->name('asigandos-alumnos')->middleware(['auth', isAdmin::class]);
