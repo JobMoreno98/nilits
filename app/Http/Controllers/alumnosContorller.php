@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GraficaExport;
+use App\Models\alumno_maestro;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
@@ -155,7 +156,6 @@ class alumnosContorller extends Controller
         ]);
 
         $alumno = new alumnos_model();
-        $tutor_alumno = new alumnos_maestrosModel();
         $alumno->codigo = $validatedData['codigo'];
         $alumno->Nombre = $validatedData['nombre'];
         $alumno->telefono = $validatedData['telefono'];
@@ -173,19 +173,22 @@ class alumnosContorller extends Controller
         $alumno->fechaTitulacion = $request->fechaTitulacion ?? '2000-01-01';
         $alumno->calendarioTitulacion = ' ';
         $alumno->libro = ' ';
-        $alumno->ingreso = $validatedData['ingreso'];
+        $alumno->ingreso = '';
         $alumno->acta = ' ';
         $alumno->libro = ' ';
         $alumno->revisado = 0;
+        $alumno->ciclo = $request->ciclo;
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
-
-        $tutor_alumno->codigo = $validatedData['codigo'];
-        $tutor_alumno->id_tutor = $validatedData['tutor'];
-        $tutor_alumno->activo = 1;
-        // Asigna el resto de los campos
-        $tutor_alumno->save();
         $alumno->save();
+
+        alumno_maestro::create([
+            'alumno_id' => $alumno->id,
+            'maestro_id' => $request->tutor,
+            'activo' => 1,
+            'revisado' => 1
+        ]);
+
 
         alert()->success('Exito', 'Se regsitro de forma correcta al alumno');
         return redirect()->back()->with('success', 'Alumno creado exitosamente');

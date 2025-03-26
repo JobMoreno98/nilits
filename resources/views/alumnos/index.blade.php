@@ -167,8 +167,17 @@
                                 <input type="text" class="form-control" id="dictamen" name="dictamen">
                             </div>
                             <div class="form-group">
+                                <label for="dictamenes">Ciclo</label>
+                                <select name="ciclo" class="form-control" id="">
+                                    <option selected disabled>Elegir</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="genero">Estatus</label>
                                 <select class="form-control" name="estatus" id="estatus">
+                                    <option selected disabled>Elegir</option>
                                     <option value="1">Activo</option>
                                     <option value="4">Baja</option>
                                     <option value="3">Egresado</option>
@@ -179,11 +188,12 @@
                                 <label for="genero">Tutor</label>
                                 <select class="form-control" name="tutor" id="tutor">
                                     @foreach ($tutores as $tutor)
-                                        <option value="{{ $tutor->codigo }}">{{ $tutor->nombre }}
+                                        <option value="{{ $tutor->id }}">{{ $tutor->nombre }}
                                             {{ $tutor->apellido }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            
 
                             <button type="submit" class="btn btn-primary">Crear registro</button>
                         </form>

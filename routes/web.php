@@ -135,7 +135,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/alumnos-sin-tutor', [alumnosContorller::class, 'sin_tutor'])->name('alumnos.sin-tutor');
 
-    Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');
 
     //PDF controller
     Route::get('/generar-oficio-asignacion/{codigo}', [PDFController::class, 'oficioAsignacion'])->name('oficio.asignacion')->middleware([isAdmin::class]);
@@ -162,6 +161,7 @@ Route::middleware('auth')->group(function () {
 
 // Route::get('/export', [alumnosContorller::class, 'export'])->name('export');
 
+Route::get('/registro-usuarios', [usuarioController::class, 'registro_usuarios'])->name('registro-usuario');
 
 
 //!Ruta aspirantes
