@@ -13,10 +13,6 @@
                     <div class="card-body">
                         <h5 class="card-title">Código de Conducta</h5>
                         <p class="card-text"> </p>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
                         <a href="https://secgral.udg.mx/sites/default/files/Normatividad_general/codigo-de-conducta-julio-2021.pdf" class="btn btn-primary">Ver</a>
                     </div>
                 </div>

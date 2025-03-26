@@ -5,7 +5,7 @@
 
     @section('content')
         <div class="container mt-5 p-0">
-            <h2 class="mb-4 text-light" style="background-color: rgb(82, 82, 255)">Numeralia</h2>
+            <h2 class="mb-4 text-light p-1 px-3" style="border-radius: 0px 10px;background-color: rgb(82, 82, 255)">Numeralia</h2>
 
             <div class="d-flex">
                 <div class="me-3">
@@ -26,24 +26,21 @@
                         </label>
                     </div>
                     <br>
-
+                    <label for="">Estatus</label>
                     <select class="form-control" id="estatus" name="estatus">
 
                     </select>
-
+                    <label for="">Ciclo</label>
                     <select class="form-control" id="ciclo" name="ciclo">
 
                     </select>
-
+                    <label for="">Ingreso</label>
                     <select class="form-control" id="ingreso" name="ingreso">
 
                     </select>
-
+                    <label for="">Dictamen</label>
                     <select class="form-control" id="dictamen" name="dictamen">
-
-
                     </select>
-                    <br>
 
                     <h4>Modalidades de titulación</h4>
                     <select class="form-control" id="tipoTitulacion" name="tipoTitulacion">
@@ -106,24 +103,16 @@
                         url: '{{ route('grafica-combo') }}',
                         method: 'GET',
                         success: function(response) {
-
-
                             $('#tipoTitulacion').append(response);
                         },
                         error: function(xhr, status, error) {
                             console.error('Error al obtener los datos:', error);
                         }
                     });
-
-
-                    console.log('s2332');
                     $.ajax({
-                        url: '{{ route('grafica-dictamen') }}',
+                        url: '{{ route("grafica-dictamen") }}',
                         method: 'GET',
                         success: function(response) {
-
-                            // console.log("datos data update:" + data.dictamen)
-                            // console.log($dictamen)
                             $('#dictamen').append(response);
                         },
                         error: function(xhr, status, error) {
@@ -360,7 +349,7 @@
                     const encodedUri = encodeURI(csvContent);
                     const link = document.createElement("a");
                     link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "numeralia.csv");
+                    link.setAttribute("download", "numeralia.xlsx");
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

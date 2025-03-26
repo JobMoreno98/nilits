@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GraficaExport;
 use App\Models\alumno_maestro;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 
@@ -331,17 +332,16 @@ class alumnosContorller extends Controller
 
     public function LlenadoComboBoxDictamen()
     {
-        $opciones = alumnos_model::distinct('dictamen')->pluck('dictamen');
-        $opcionesHtml = "";
+        $opciones = alumnos_model::distinct('dictamen')->pluck('dictamen')->toArray();
 
-        $opcion = 'Dictamen';
-        $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
-
-        foreach ($opciones as $opcion) {
-            $opcionesHtml .= "<option value='" . $opcion . "'>" . $opcion . "</option>";
+        $final = array_unique(explode(".", implode("", $opciones)));
+        $sorted = Arr::sort($final);
+        $select = "";
+        $select .= "<option value='Dictamen'>Dictamen</option>";
+        foreach ($sorted as $key => $value) {
+            $select .= "<option value='" . $value . "'>" . $value . "</option>";
         }
-
-        return response($opcionesHtml);
+        return response($select);
     }
 
     public function LlenadoComboBoxCiclo()
@@ -361,7 +361,9 @@ class alumnosContorller extends Controller
 
     public function LlenadoComboBoxIngreso()
     {
-        $opciones = alumnos_model::distinct('ingreso')->pluck('ingreso');
+        $opciones = alumnos_model::distinct('ingreso')
+            ->where('ingreso', '!=', '')->orderBy('ingreso')
+            ->pluck('ingreso');
         $opcionesHtml = "";
 
         $opcion = 'Ingreso';
