@@ -16,7 +16,7 @@ class tutorController extends Controller
 
     // Obtener los alumnos asociados al tutor actual y ordenarlos por 'dictamen' de manera descendente
     $alumnos = maestrosModel::with('tutorados')->where('codigo',$user->nombre)->first();
-    $alumnos = $alumnos->tutorados;
+    $alumnos = isset($alumnos->tutorados)?$alumnos->tutorados:[];
     // Mapear los resultados para incluir el nombre del estado
     foreach ($alumnos as $alumno) {
         $alumno->nombre_estado = $this->obtenerNombreEstado($alumno->procedencia);

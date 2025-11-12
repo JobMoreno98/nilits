@@ -98,9 +98,9 @@
                 </div>
 
                 <div class="form-group mx-1 col-sm-12 col-md-3">
-                    <label for="opcionTitulacion">Opción de Titulacion</label>
-                    <input type="text" class="form-control" id="opcionTitulacion" value="{{ $alumno->tipoTitulacion }}"
-                        name="opcionTitulacion">
+                    <label for="tipoTitulacion">Opción de Titulacion</label>
+                    <input type="text" class="form-control" id="tipoTitulacion" value="{{ $alumno->tipoTitulacion }}"
+                        name="tipoTitulacion">
                 </div>
 
                 <div class="form-group mx-1 col-sm-12 col-md-2">
@@ -136,11 +136,11 @@
                 <div class="d-flex col-12">
                     <div class="col-md-4 col-sm-12 mx-1">
                         <label for="">Asesor del Modulo XI</label>
-                        <input class="form-control" type="text" name="director" id="director">
+                        <input class="form-control" type="text" value="{{ $alumno->asesor }}" name="asesor" id="asesor">
                     </div>
                     <div class="col-md-4 col-sm-12 mx-1">
                         <label for="">Director de Tésis</label>
-                        <input class="form-control" type="text" name="director" id="director">
+                        <input class="form-control" type="text" value="{{ $alumno->director }}"  name="director" id="director">
                     </div>
                 </div>
                 <div class="col-sm-12">

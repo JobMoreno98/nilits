@@ -163,7 +163,7 @@ class alumnosContorller extends Controller
         $alumno->correo = $validatedData['correo'];
         $alumno->sexo = $validatedData['sexo'];
         $alumno->procedencia = $validatedData['procedencia'];
-        $alumno->fechaNac = isset($validatedData['fechaNac']) ? validatedData['fechaNac'] : null;
+        $alumno->fechaNac = isset($validatedData['fechaNac']) ? $validatedData['fechaNac'] : null;
         $alumno->dictamen = $validatedData['dictamen'];
         $alumno->estatus = $validatedData['estatus'];
         $alumno->edad = '0';
@@ -181,6 +181,8 @@ class alumnosContorller extends Controller
         $alumno->ciclo = $request->ciclo;
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
+        $alumno->asesor = isset($request->asesor) ? $request->asesor : null;
+        $alumno->director = isset($request->director) ? $request->director : null;
         $alumno->save();
 
         alumno_maestro::create([
@@ -211,17 +213,7 @@ class alumnosContorller extends Controller
             //'fechaNac' => 'date'
         ]);
         // Obtener el alumno a actualizar
-        $alumno->update([
-            'Nombre' => $request->nombre,
-            'correo' => $request->correo,
-            'ingreso' => $request->ingreso,
-            'calendarioTitulacion' =>  isset($request->calendarioTitulacion) ? $request->calendarioTitulacion : '',
-            'sexo' => isset($request->sexo) ? $request->sexo : 2,
-            'procedencia' => $request->procedencia,
-            'fechaNac' => isset($request->fechaNac) ? $request->fechaNac : null,
-            "tipoTitulacion" => $request->opcionTitulacion,
-            "codigo" => $request->codigo,
-        ]);
+        $alumno->update($request->except(['dictamen','alumno','alumno','telefono','_token']));
         // Verificar si el campo de dictamen está presente en la solicitud y asignarlo al modelo
         if ($request->filled('dictamen')) {
             $alumno->dictamen = implode(".", array_filter($request->dictamen));
