@@ -32,7 +32,7 @@
 
                 <div class="form-group mx-1 col-sm-12 col-md-4">
                     <label for="correo">Correo</label>
-                    <input type="email" class="form-control" id="correo" value="{{ $alumno->correo }}" name="correo">
+                    <input type="text" class="form-control" id="correo" value="{{ $alumno->correo }}" name="correo">
                 </div>
 
                 <div class="form-group mx-1 col-sm-12 col-md-3">
@@ -99,7 +99,8 @@
 
                 <div class="form-group mx-1 col-sm-12 col-md-3">
                     <label for="opcionTitulacion">Opción de Titulacion</label>
-                    <input type="text" class="form-control" id="opcionTitulacion" name="opcionTitulacion">
+                    <input type="text" class="form-control" id="opcionTitulacion" value="{{ $alumno->tipoTitulacion }}"
+                        name="opcionTitulacion">
                 </div>
 
                 <div class="form-group mx-1 col-sm-12 col-md-2">
@@ -107,8 +108,8 @@
                     <select class="form-control" id="estatus" name="estatus">
                         <option disabled selected>Elegir</option>
                         <option {{ $alumno->estatus == 1 ? 'selected' : '' }} value="1">Activo</option>
-                        <option {{ $alumno->estatus == 4 ? 'selected' : '' }} value="3">Egresado</option>
-                        <option {{ $alumno->estatus == 3 ? 'selected' : '' }} value="4">Baja</option>
+                        <option {{ $alumno->estatus == 3 ? 'selected' : '' }} value="3">Graduado</option>
+                        <option {{ $alumno->estatus == 4 ? 'selected' : '' }} value="4">Baja</option>
                     </select>
                 </div>
                 <div class="form-group mx-1 col-sm-12 col-md-3">
@@ -132,7 +133,16 @@
                         <label class="form-check-label" for="alumno">Alumno</label>
                     </div>
                 @endif
-
+                <div class="d-flex col-12">
+                    <div class="col-md-4 col-sm-12 mx-1">
+                        <label for="">Asesor del Modulo XI</label>
+                        <input class="form-control" type="text" name="director" id="director">
+                    </div>
+                    <div class="col-md-4 col-sm-12 mx-1">
+                        <label for="">Director de Tésis</label>
+                        <input class="form-control" type="text" name="director" id="director">
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="form-group mx-1 d-flex flex-column">
                         <h4><label for="dictamen">Dictámenes</label></h4>
@@ -149,6 +159,8 @@
                     </div>
                 </div>
             </div>
+
+
             @can('Alumnos#editar')
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary mx-1">Guardar Cambios</button>

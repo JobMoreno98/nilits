@@ -43,7 +43,7 @@
                             {{ $dictamenActual }}
                         </td>
                         <td>
-                            <a href="{{ route('alumnos.show', $alumno->codigo) }}"><i class="fas fa-edit edit-alumno-btn"
+                            <a href="{{ route('alumnos.show', $alumno->id) }}"><i class="fas fa-edit edit-alumno-btn"
                                     role="button"></i></a>
                         </td>
                     </tr>

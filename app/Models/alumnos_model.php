@@ -19,7 +19,7 @@ class alumnos_model extends Model
 
     protected $estatusPosibles = [
         '1' => '<b class="text-success">Activo</b>',
-        '3' => '<b class="text-warning">Egresado</b>',
+        '3' => '<b class="text-warning">Graduado</b>',
         '4' => '<b class="text-danger">Baja</b>',
     ];
 

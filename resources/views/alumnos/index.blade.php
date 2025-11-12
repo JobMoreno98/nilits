@@ -29,7 +29,16 @@
                 <span>Total de Bajas: {{ $totalBajas }}</span>
             </div>
         </div>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+ 
         <!-- Tabla de alumnos -->
         <div class="table-responsive">
             <table class="table table-striped" id="example">
@@ -42,6 +51,7 @@
                         <th>Ultimo Dictamen</th>
                         <th>Tutor</th>
                         <th>Datos</th>
+			<th>Dictamenes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,6 +78,7 @@
                                 <a href="{{ route('alumnos.show', $alumno->id) }}"><i class="fas fa-edit edit-alumno-btn"
                                         role="button"></i></a>
                             </td>
+<td>{{$alumno->dictamen}}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -170,8 +181,14 @@
                                 <label for="dictamenes">Ciclo</label>
                                 <select name="ciclo" class="form-control" id="">
                                     <option selected disabled>Elegir</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
+                        @php
+                            $startYear = 1990;
+                            $endYear = date('Y');
+                        @endphp
+                        @for ($year = $startYear; $year <= $endYear; $year++)
+                            <option value="{{ $year }} A">{{ $year }} A</option>
+                            <option value="{{ $year }} B">{{ $year }} B</option>
+                        @endfor
                                 </select>
                             </div>
                             <div class="form-group">
@@ -180,7 +197,7 @@
                                     <option selected disabled>Elegir</option>
                                     <option value="1">Activo</option>
                                     <option value="4">Baja</option>
-                                    <option value="3">Egresado</option>
+                                    <option value="3">Graduado</option>
                                 </select>
                             </div>
 
@@ -247,7 +264,7 @@
                     extend: 'excelHtml5',
                     title: 'Alumnos con tutor',
                     exportOptions: {
-                        columns: [1, 2, 3, 4, 5]
+                        columns: [1, 2, 3, 4, 5,7]
                     }
                 },
                 {
@@ -256,7 +273,7 @@
                     orientation: 'landscape',
                     pageSize: 'LETTER',
                     exportOptions: {
-                        columns: [1, 2, 3, 4, 5]
+                        columns: [1, 2, 3, 4, 5,7]
                     }
                 }
             ]

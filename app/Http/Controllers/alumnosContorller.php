@@ -76,8 +76,8 @@ class alumnosContorller extends Controller
         //in_array($alumno->procedencia, $estados);
         $alumno->procedencia = in_array($alumno->procedencia, array_values($estados)) ? $alumno->procedencia : null;
 
-
-        return view('alumnos.show', compact('alumno', 'estados'));
+        $asesores = maestrosModel::where('activo', 1)->orderBy('nombre')->get();
+        return view('alumnos.show', compact('alumno', 'estados', 'asesores'));
     }
     //funcion para solo poder ver a los alumnos
     public function alumnado_restringido()
@@ -149,7 +149,7 @@ class alumnosContorller extends Controller
             'sexo' => 'required',
             'procedencia' => 'required',
             'correo' => 'required',
-            'fechaNac' => 'required',
+            'ciclo' => 'required',
             'dictamen' => 'required',
             'estatus' => 'required',
             'tutor' => 'required'
@@ -163,7 +163,7 @@ class alumnosContorller extends Controller
         $alumno->correo = $validatedData['correo'];
         $alumno->sexo = $validatedData['sexo'];
         $alumno->procedencia = $validatedData['procedencia'];
-        $alumno->fechaNac = $validatedData['fechaNac'];
+        $alumno->fechaNac = isset($validatedData['fechaNac']) ? validatedData['fechaNac'] : null;
         $alumno->dictamen = $validatedData['dictamen'];
         $alumno->estatus = $validatedData['estatus'];
         $alumno->edad = '0';
@@ -177,7 +177,7 @@ class alumnosContorller extends Controller
         $alumno->ingreso = '';
         $alumno->acta = ' ';
         $alumno->libro = ' ';
-        $alumno->revisado = 0;
+        $alumno->revisado = 1;
         $alumno->ciclo = $request->ciclo;
         $alumno->carrera = 'NILITS';
         $alumno->moda = 'No convencional';
@@ -205,10 +205,10 @@ class alumnosContorller extends Controller
         }
         $request->validate([
             'nombre' => ['required', Rule::unique('alumnos')->ignore($alumno->id)->where(fn(Builder $query) => $query->where('deleted_at', null))],
-            'correo' => ['required', 'email', Rule::unique('alumnos')->ignore($alumno->id)],
+            //'correo' => ['required'],
             'ingreso' => 'required',
             'dictamen' => 'required',
-            'fechaNac' => 'date'
+            //'fechaNac' => 'date'
         ]);
         // Obtener el alumno a actualizar
         $alumno->update([
@@ -219,6 +219,8 @@ class alumnosContorller extends Controller
             'sexo' => isset($request->sexo) ? $request->sexo : 2,
             'procedencia' => $request->procedencia,
             'fechaNac' => isset($request->fechaNac) ? $request->fechaNac : null,
+            "tipoTitulacion" => $request->opcionTitulacion,
+            "codigo" => $request->codigo,
         ]);
         // Verificar si el campo de dictamen está presente en la solicitud y asignarlo al modelo
         if ($request->filled('dictamen')) {
@@ -384,7 +386,7 @@ class alumnosContorller extends Controller
 
         $opcionesMap = [
             1 => 'Activo',
-            3 => 'Egresado',
+            3 => 'Graduado',
             4 => 'Baja'
         ];
 
